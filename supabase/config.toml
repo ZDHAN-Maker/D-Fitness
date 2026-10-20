@@ -1,0 +1,23 @@
+# Minimal local config for `supabase start`. The CLI fills in every other default.
+project_id = "personal-fitness-os"
+
+[api]
+enabled = true
+schemas = ["public", "graphql_public"]   # "private" is intentionally NOT exposed
+
+[db]
+major_version = 17
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/auth/callback"]
+enable_signup = true
+
+[auth.email]
+enable_confirmations = false   # set true in production
+
+# Enable after creating Google OAuth credentials, then set NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true
+# [auth.external.google]
+# enabled = true
+# client_id = "env(GOOGLE_CLIENT_ID)"
+# secret = "env(GOOGLE_CLIENT_SECRET)"

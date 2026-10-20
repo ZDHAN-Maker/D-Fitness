@@ -1,0 +1,75 @@
+{
+  "_readme": "Describe where each master table lives in your starter JSON files. Paths are relative to scripts/starter-data/. 'rows' is a dot path to the array inside the file ('' = file is the array). Each column maps a DB column to a JSON field name, or { \"const\": value }, or { \"field\": \"name\", \"transform\": \"number|string|boolean|array|slug\" }. 'id' preserves the ORIGINAL dataset ID. If IDs are not numeric, map them to source_id instead and omit 'id'. Tables are imported in dependency order; remove any table you do not have data for.",
+  "tables": {
+    "units": {
+      "file": "units.json", "rows": "",
+      "id": "id",
+      "columns": { "code": "code", "name": "name", "kind": "kind", "base_unit_code": "base_unit", "to_base_factor": { "field": "factor", "transform": "number" } }
+    },
+    "food_categories": {
+      "file": "food_categories.json", "rows": "",
+      "id": "id",
+      "columns": { "slug": { "field": "name", "transform": "slug" }, "name": "name" }
+    },
+    "food_items": {
+      "file": "foods.json", "rows": "",
+      "id": "id",
+      "columns": {
+        "category_id": "category_id", "name": "name", "brand": "brand",
+        "base_quantity": { "const": 100 }, "base_unit": { "const": "g" },
+        "calories": { "field": "calories", "transform": "number" },
+        "protein_g": { "field": "protein", "transform": "number" },
+        "carbs_g": { "field": "carbs", "transform": "number" },
+        "fat_g": { "field": "fat", "transform": "number" },
+        "fiber_g": { "field": "fiber", "transform": "number" },
+        "data_source": { "const": "starter" }
+      }
+    },
+    "food_servings": {
+      "file": "food_servings.json", "rows": "",
+      "id": "id",
+      "columns": {
+        "food_item_id": "food_id", "label": "label", "unit_code": "unit",
+        "quantity": { "field": "quantity", "transform": "number" },
+        "base_amount": { "field": "grams", "transform": "number" },
+        "is_default": { "field": "is_default", "transform": "boolean" }
+      }
+    },
+    "exercise_categories": {
+      "file": "exercise_categories.json", "rows": "",
+      "id": "id",
+      "columns": { "slug": { "field": "name", "transform": "slug" }, "name": "name" }
+    },
+    "exercises": {
+      "file": "exercises.json", "rows": "",
+      "id": "id",
+      "columns": {
+        "category_id": "category_id", "name": "name", "primary_muscle": "primary_muscle",
+        "secondary_muscles": { "field": "secondary_muscles", "transform": "array" },
+        "equipment": "equipment", "difficulty": "difficulty", "movement_type": "movement_type",
+        "tracking_mode": "tracking_mode", "instructions": "instructions", "image_url": "image", "video_url": "video",
+        "data_source": { "const": "starter" }
+      }
+    },
+    "activity_types": {
+      "file": "activities.json", "rows": "",
+      "id": "id",
+      "columns": {
+        "slug": { "field": "name", "transform": "slug" }, "name": "name", "category": "category",
+        "met_value": { "field": "met", "transform": "number" },
+        "tracks_distance": { "field": "tracks_distance", "transform": "boolean" },
+        "tracks_pace": { "field": "tracks_pace", "transform": "boolean" }
+      }
+    },
+    "goal_templates": {
+      "file": "goal_templates.json", "rows": "",
+      "id": "id",
+      "columns": { "goal_type": "type", "title": "title", "description": "description", "metric": "metric", "direction": "direction", "default_unit": "unit", "default_target": { "field": "target", "transform": "number" } }
+    },
+    "achievement_definitions": {
+      "file": "achievements.json", "rows": "",
+      "id": "id",
+      "columns": { "code": "code", "name": "name", "description": "description", "category": "category", "icon": "icon", "metric": "metric", "threshold": { "field": "threshold", "transform": "number" } }
+    }
+  }
+}

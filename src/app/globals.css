@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design tokens ("Track" palette)
+  One accent (cobalt) carries every primary action; each nutrition metric owns a fixed
+  colour so charts and progress bars read the same everywhere.
+*/
+@layer base {
+  :root {
+    --background: 210 22% 96%;
+    --foreground: 215 27% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 27% 9%;
+    --primary: 225 91% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 213 24% 93%;
+    --secondary-foreground: 215 27% 12%;
+    --muted: 213 24% 93%;
+    --muted-foreground: 213 11% 38%;
+    --accent: 225 100% 96%;
+    --accent-foreground: 225 80% 32%;
+    --destructive: 355 70% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 213 20% 88%;
+    --input: 213 20% 84%;
+    --ring: 225 91% 52%;
+    --radius: 0.75rem;
+
+    --protein: 225 91% 52%;
+    --carbs: 38 100% 40%;
+    --fat: 4 74% 52%;
+    --fiber: 158 67% 30%;
+    --water: 192 87% 36%;
+  }
+
+  .dark {
+    --background: 220 39% 8%;
+    --foreground: 217 29% 93%;
+    --card: 222 34% 12%;
+    --card-foreground: 217 29% 93%;
+    --primary: 227 100% 72%;
+    --primary-foreground: 220 39% 8%;
+    --secondary: 222 32% 17%;
+    --secondary-foreground: 217 29% 93%;
+    --muted: 222 32% 17%;
+    --muted-foreground: 215 16% 66%;
+    --accent: 224 40% 20%;
+    --accent-foreground: 227 100% 86%;
+    --destructive: 0 72% 64%;
+    --destructive-foreground: 220 39% 8%;
+    --border: 220 30% 21%;
+    --input: 220 30% 26%;
+    --ring: 227 100% 72%;
+
+    --protein: 227 100% 72%;
+    --carbs: 41 96% 58%;
+    --fat: 4 86% 66%;
+    --fiber: 158 56% 52%;
+    --water: 190 85% 55%;
+  }
+
+  * { @apply border-border; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  h1, h2, h3 { @apply font-display tracking-tight; }
+  /* Numbers in data views line up in columns. */
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  :focus-visible { @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}

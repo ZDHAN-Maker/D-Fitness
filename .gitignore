@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+supabase/.branches
+supabase/.temp
+coverage
+supabase/migrations/012_starter_dataset.sql.bak
