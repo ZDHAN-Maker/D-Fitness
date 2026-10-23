@@ -7,11 +7,21 @@ import { ThemeProvider } from "@/components/theme-provider";
 export const metadata: Metadata = {
   title: { default: "Personal Fitness OS", template: "%s · Personal Fitness OS" },
   description: "Training, nutrition, recovery and body tracking in one place.",
+  applicationName: "Fitness OS",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Fitness OS",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f4f6f8" },

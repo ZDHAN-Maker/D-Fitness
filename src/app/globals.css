@@ -62,9 +62,13 @@
   }
 
   * { @apply border-border; }
-  html { -webkit-text-size-adjust: 100%; }
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
   body {
     @apply bg-background font-sans text-foreground antialiased;
+    overscroll-behavior-y: contain;
   }
   h1, h2, h3 { @apply font-display tracking-tight; }
   /* Numbers in data views line up in columns. */

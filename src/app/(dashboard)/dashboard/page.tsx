@@ -38,7 +38,7 @@ export default async function DashboardPage() {
     <div className="mx-auto grid max-w-6xl gap-8 xl:grid-cols-[1fr_20rem]">
       <div className="flex flex-col gap-6">
         <header>
-          <h1 className="text-3xl font-bold md:text-4xl">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
             {greetingForHour(hourInTimeZone(tz))}, {name}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">{formatLongDate(today)}</p>

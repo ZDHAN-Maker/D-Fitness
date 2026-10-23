@@ -24,9 +24,9 @@ export function NutritionToday({ nutrition, targets, title = "Calories" }: { nut
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
         <div>
-          <p className="tabular font-display text-5xl font-bold leading-none">
+          <p className="tabular font-display text-4xl font-bold leading-none sm:text-5xl">
             {formatInt(nutrition.calories)}
-            <span className="ml-2 text-lg font-medium text-muted-foreground">/ {formatInt(targets.calorie_target)} kcal</span>
+            <span className="ml-2 text-base font-medium text-muted-foreground sm:text-lg">/ {formatInt(targets.calorie_target)} kcal</span>
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             {nutrition.items_count === 0

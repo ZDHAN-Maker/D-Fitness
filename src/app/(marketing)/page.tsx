@@ -17,7 +17,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="flex items-center justify-between px-4 py-3 md:px-8">
+      <header className="flex items-center justify-between px-4 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:px-8">
         <span className="flex items-center gap-2 font-display text-lg font-bold">
           <span className="grid size-8 place-items-center rounded-md bg-primary text-sm text-primary-foreground">OS</span>
           Personal Fitness OS
@@ -32,11 +32,11 @@ export default async function HomePage() {
 
       <main id="main" className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center gap-14 px-4 py-14 md:px-8">
         <section className="max-w-2xl">
-          <h1 className="text-balance text-4xl font-bold leading-[1.05] md:text-6xl">Training, food and recovery in one log.</h1>
-          <p className="mt-5 max-w-xl text-lg text-muted-foreground">
+          <h1 className="text-balance text-3xl font-bold leading-tight sm:text-4xl md:text-6xl">Training, food and recovery in one log.</h1>
+          <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
             Everything you record stays private to your account, and every number on screen is calculated from what you actually logged.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link href="/register" className={cn(buttonVariants({ size: "lg" }))}>
               Create your account
             </Link>
