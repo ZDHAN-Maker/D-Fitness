@@ -45,13 +45,13 @@ export function Sidebar({ displayName, unread = 0 }: { displayName: string; unre
   const labelClass = pref === "collapsed" ? "hidden" : pref === "expanded" ? "inline" : "hidden lg:inline";
 
   return (
-    <aside className={cn("sticky top-0 hidden h-dvh shrink-0 flex-col border-r bg-card py-4 transition-[width] duration-200 md:flex", widthClass)}>
+    <aside className={cn("sticky top-0 hidden h-screen max-h-screen shrink-0 flex-col border-r bg-card py-4 transition-[width] duration-200 md:flex", widthClass)}>
       <div className="flex items-center gap-2 px-4 pb-4">
         <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary font-display text-sm font-bold text-primary-foreground">OS</span>
         <span className={cn("truncate font-display text-base font-bold", labelClass)}>Fitness OS</span>
       </div>
 
-      <nav aria-label="Main" className="flex-1 overflow-y-auto px-3">
+      <nav aria-label="Main" className="min-h-0 flex-1 overflow-y-auto px-3">
         <ul className="flex flex-col gap-1">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;

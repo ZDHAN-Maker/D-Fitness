@@ -42,11 +42,11 @@ export function SetRow({ index, set, mode, prev, showDetails, error, onSave, onT
   const [rpe, setRpe] = useState(text(set.rpe));
 
   // Re-sync when the server returns a different value (e.g. "use suggestion").
-  useEffect(() => setWeight(text(set.weight_kg)), [set.weight_kg]);
-  useEffect(() => setReps(text(set.reps)), [set.reps]);
+  useEffect(() => { setWeight(text(set.weight_kg)); }, [set.weight_kg]);
+  useEffect(() => { setReps(text(set.reps)); }, [set.reps]);
   useEffect(() => { setSecs(text(set.duration_sec)); setMins(text(set.duration_sec, 60)); }, [set.duration_sec]);
-  useEffect(() => setKm(text(set.distance_m, 1000)), [set.distance_m]);
-  useEffect(() => setRpe(text(set.rpe)), [set.rpe]);
+  useEffect(() => { setKm(text(set.distance_m, 1000)); }, [set.distance_m]);
+  useEffect(() => { setRpe(text(set.rpe)); }, [set.rpe]);
 
   const hasWeight = mode === "weight_reps" || mode === "weight_duration";
   const hasReps = mode === "weight_reps" || mode === "reps_only";

@@ -45,7 +45,9 @@ export function CoachChat({ initial, disabled }: { initial: { id: string; messag
   const [error, setError] = useState<string>();
   const [pending, startTransition] = useTransition();
   const end = useRef<HTMLDivElement>(null);
-  useEffect(() => end.current?.scrollIntoView({ block: "nearest", behavior: "smooth" }), [messages.length, pending]);
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [messages.length, pending]);
 
   const send = (message: string) => {
     const q = message.trim();

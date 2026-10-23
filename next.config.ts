@@ -27,6 +27,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: { bodySizeLimit: '8mb' }, // photo uploads
+    optimizePackageImports: ['lucide-react', 'recharts'],
   },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
