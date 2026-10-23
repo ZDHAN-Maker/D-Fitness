@@ -24,10 +24,10 @@ export function MobileNav({ unread = 0 }: { unread?: number }) {
   const tab = (item: (typeof NAV_ITEMS)[number]) => {
     const Icon = item.icon;
     const active = pathname === item.href || pathname.startsWith(item.href + "/");
-    const cls = "flex h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-medium";
+    const cls = "flex h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-medium active:scale-95 transition-transform select-none";
     return isAvailable(item) ? (
-      <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={cn(cls, active ? "text-primary" : "text-muted-foreground")}>
-        <Icon className="size-5" aria-hidden="true" />
+      <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={cn(cls, active ? "text-primary font-semibold" : "text-muted-foreground")}>
+        <Icon className={cn("size-5", active ? "stroke-[2.5]" : "")} aria-hidden="true" />
         {item.label}
       </Link>
     ) : (
@@ -46,12 +46,12 @@ export function MobileNav({ unread = 0 }: { unread?: number }) {
       >
         {primary.slice(0, 2).map(tab)}
         <div className="flex flex-1 justify-center">
-          <Button size="icon" className="-mt-5 size-14 rounded-full shadow-lg" onClick={() => setSheet("quick")} aria-label="Quick add">
+          <Button size="icon" className="-mt-5 size-14 rounded-full shadow-lg active:scale-95 transition-transform" onClick={() => setSheet("quick")} aria-label="Quick add">
             <Plus className="!size-6" />
           </Button>
         </div>
         {primary.slice(2, 3).map(tab)}
-        <button type="button" onClick={() => setSheet("more")} className="flex h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-medium text-muted-foreground">
+        <button type="button" onClick={() => setSheet("more")} className="flex h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-medium text-muted-foreground active:scale-95 transition-transform select-none">
           <span className="relative">
             <Ellipsis className="size-5" aria-hidden="true" />
             {unread > 0 ? <span className="absolute -right-1 -top-1 size-2.5 rounded-full bg-primary" role="img" aria-label={`${unread} unread notifications`} /> : null}

@@ -117,7 +117,7 @@ export function ActiveWorkout({ session, previous: initialPrevious, facets, cate
 
   return (
     <div className="flex flex-col gap-4 pb-24">
-      <header className="sticky top-0 z-20 -mx-4 flex items-center gap-3 border-b bg-background/95 px-4 py-3 backdrop-blur md:static md:mx-0 md:rounded-lg md:border md:bg-card">
+      <header className="sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-20 -mx-4 flex items-center gap-3 border-b bg-background/95 px-4 py-3 backdrop-blur md:static md:top-auto md:mx-0 md:rounded-lg md:border md:bg-card">
         <div className="min-w-0 flex-1">
           <h1 className="truncate font-display text-xl font-bold">{session.name}</h1>
           <p className="tabular flex items-center gap-3 text-xs text-muted-foreground">

@@ -111,7 +111,7 @@ export function SetRow({ index, set, mode, prev, showDetails, error, onSave, onT
           aria-pressed={done}
           aria-label={done ? `Mark set ${index + 1} not done` : `Complete set ${index + 1}`}
           onClick={() => onToggle(current())}
-          className={cn("grid size-11 place-items-center rounded-md border", done ? "border-fiber bg-fiber text-background" : "bg-card text-muted-foreground hover:bg-accent")}
+          className={cn("grid size-11 place-items-center rounded-md border active:scale-95 transition-transform select-none", done ? "border-fiber bg-fiber text-background" : "bg-card text-muted-foreground hover:bg-accent")}
         >
           <Check className="size-5" aria-hidden="true" />
         </button>

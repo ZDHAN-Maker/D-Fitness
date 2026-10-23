@@ -14,9 +14,9 @@ export function WaterToday({ currentMl, targetMl, date }: { currentMl: number; t
         <Droplets className="size-5 text-water" aria-hidden="true" />
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <p className="tabular font-display text-4xl font-bold leading-none">
+        <p className="tabular font-display text-3xl font-bold leading-none sm:text-4xl">
           {formatWater(p.currentMl)}
-          <span className="ml-2 text-base font-medium text-muted-foreground">/ {formatWater(p.targetMl)}</span>
+          <span className="ml-2 text-sm font-medium text-muted-foreground sm:text-base">/ {formatWater(p.targetMl)}</span>
         </p>
         <ProgressBar value={p.currentMl} max={p.targetMl} colorClass="bg-water" label="Water today" />
         <p className="text-sm text-muted-foreground">{p.remainingMl > 0 ? `${formatWater(p.remainingMl)} to go` : "Target reached"}</p>
