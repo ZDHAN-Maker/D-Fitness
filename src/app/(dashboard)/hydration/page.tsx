@@ -10,7 +10,6 @@ import { formatLongDate, todayInTimeZone } from "@/utils/date";
 import { formatWater } from "@/utils/format";
 
 export const metadata: Metadata = { title: "Hydration" };
-const short = (iso: string) => formatLongDate(iso).replace(/^\w+, /, "");
 
 export default async function HydrationPage() {
   const user = await requireUser();
@@ -55,7 +54,7 @@ export default async function HydrationPage() {
           <div className="rounded-lg bg-muted p-3 text-center"><dd className="tabular text-lg font-semibold">{daysHit} / 7</dd><dt className="text-xs text-muted-foreground">Days at target</dt></div>
         </dl>
         <div className="rounded-lg border bg-card p-3">
-          <BarsChart data={week.map((d) => ({ date: d.date, ml: d.totalMl }))} xKey="date" xFormat={short} unit="ml" ariaLabel="Water intake per day over the last 7 days" reference={{ y: target, label: `target ${formatWater(target)}` }} bars={[{ key: "ml", label: "Water", color: "hsl(var(--water))" }]} />
+          <BarsChart data={week.map((d) => ({ date: d.date, ml: d.totalMl }))} xKey="date" unit="ml" ariaLabel="Water intake per day over the last 7 days" reference={{ y: target, label: `target ${formatWater(target)}` }} bars={[{ key: "ml", label: "Water", color: "hsl(var(--water))" }]} />
         </div>
       </section>
     </div>

@@ -16,7 +16,6 @@ import { formatDuration, formatInt, formatWater } from "@/utils/format";
 import type { UserSettings } from "@/types/domain";
 
 export const metadata: Metadata = { title: "Analytics" };
-const short = (iso: string) => formatLongDate(iso).replace(/^\w+, /, "");
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 type Ctx = { from: string; to: string; days: number; settings: UserSettings; exercise?: number };
@@ -66,10 +65,10 @@ async function WorkoutTab({ from, to, settings, exercise, range }: Ctx & { range
         { label: "Weeks on target", value: `${hit.hit} / ${hit.total}` },
       ]} />
       <Panel title="Workout frequency" note="Workouts per week. The first and last bars may be partial weeks.">
-        <BarsChart data={weekly.map((w) => ({ date: w.week, workouts: w.workouts }))} xKey="date" xFormat={short} unit="workouts" ariaLabel="Workouts per week" reference={target > 0 ? { y: target, label: `target ${target}` } : undefined} bars={[{ key: "workouts", label: "Workouts", color: "hsl(var(--primary))" }]} />
+        <BarsChart data={weekly.map((w) => ({ date: w.week, workouts: w.workouts }))} xKey="date" unit="workouts" ariaLabel="Workouts per week" reference={target > 0 ? { y: target, label: `target ${target}` } : undefined} bars={[{ key: "workouts", label: "Workouts", color: "hsl(var(--primary))" }]} />
       </Panel>
       <Panel title="Training volume" note="Total weight lifted (sets × reps × kg), per week.">
-        <BarsChart data={weekly.map((w) => ({ date: w.week, volume: Math.round(w.volume_kg) }))} xKey="date" xFormat={short} unit="kg" ariaLabel="Training volume per week" bars={[{ key: "volume", label: "Volume", color: "hsl(var(--protein))" }]} />
+        <BarsChart data={weekly.map((w) => ({ date: w.week, volume: Math.round(w.volume_kg) }))} xKey="date" unit="kg" ariaLabel="Training volume per week" bars={[{ key: "volume", label: "Volume", color: "hsl(var(--protein))" }]} />
       </Panel>
       <Panel title="Muscle distribution" note="Share of your finished working sets by primary muscle.">
         <HBarList rows={wa.muscles.map((m) => ({ label: cap(m.muscle), value: m.sets, display: `${Math.round((m.sets / Math.max(setsTotal, 1)) * 100)}%` }))} />
@@ -87,12 +86,12 @@ async function WorkoutTab({ from, to, settings, exercise, range }: Ctx & { range
             ))}
           </ul>
           {progress.length >= 2 ? (
-            <TrendChart data={progress.map((p) => ({ date: p.date, e1rm: p.e1rm }))} xKey="date" xFormat={short} unit="kg" ariaLabel={`${selectedName}: estimated one-rep max per session`} yDomain={["dataMin", "dataMax"]} lines={[{ key: "e1rm", label: "Estimated 1RM", color: "hsl(var(--primary))" }]} />
+            <TrendChart data={progress.map((p) => ({ date: p.date, e1rm: p.e1rm }))} xKey="date" unit="kg" ariaLabel={`${selectedName}: estimated one-rep max per session`} yDomain={["dataMin", "dataMax"]} lines={[{ key: "e1rm", label: "Estimated 1RM", color: "hsl(var(--primary))" }]} />
           ) : <p className="text-sm text-muted-foreground">Log {selectedName} in at least two workouts to see progression.</p>}
           {prs.length >= 2 ? (
             <div className="mt-4">
               <p className="mb-1 text-sm font-medium">PR progression</p>
-              <TrendChart height={180} data={prs.map((p) => ({ date: p.date, pr: p.value }))} xKey="date" xFormat={short} unit="kg" ariaLabel={`${selectedName}: personal record history`} yDomain={["dataMin", "dataMax"]} lines={[{ key: "pr", label: "1RM record", color: "hsl(var(--carbs))" }]} />
+              <TrendChart height={180} data={prs.map((p) => ({ date: p.date, pr: p.value }))} xKey="date" unit="kg" ariaLabel={`${selectedName}: personal record history`} yDomain={["dataMin", "dataMax"]} lines={[{ key: "pr", label: "1RM record", color: "hsl(var(--carbs))" }]} />
             </div>
           ) : null}
         </Panel>
@@ -120,10 +119,10 @@ async function NutritionTab({ from, to, days, settings }: Ctx) {
       <p className="-mt-2 text-xs text-muted-foreground">Averages cover only the days you logged food; a day without logs is unknown, not zero.</p>
 
       <Panel title="Calories per day">
-        <TrendChart data={na.daily.map((d) => ({ date: d.date, kcal: Math.round(d.calories) }))} xKey="date" xFormat={short} unit="kcal" ariaLabel="Calories logged per day" reference={{ y: settings.calorie_target, label: `target ${formatInt(settings.calorie_target)}` }} lines={[{ key: "kcal", label: "Calories", color: "hsl(var(--primary))" }]} />
+        <TrendChart data={na.daily.map((d) => ({ date: d.date, kcal: Math.round(d.calories) }))} xKey="date" unit="kcal" ariaLabel="Calories logged per day" reference={{ y: settings.calorie_target, label: `target ${formatInt(settings.calorie_target)}` }} lines={[{ key: "kcal", label: "Calories", color: "hsl(var(--primary))" }]} />
       </Panel>
       <Panel title="Protein per day">
-        <TrendChart data={na.daily.map((d) => ({ date: d.date, protein: Math.round(d.protein_g) }))} xKey="date" xFormat={short} unit="g" ariaLabel="Protein logged per day" reference={{ y: settings.protein_target_g, label: `target ${settings.protein_target_g} g` }} lines={[{ key: "protein", label: "Protein", color: "hsl(var(--protein))" }]} />
+        <TrendChart data={na.daily.map((d) => ({ date: d.date, protein: Math.round(d.protein_g) }))} xKey="date" unit="g" ariaLabel="Protein logged per day" reference={{ y: settings.protein_target_g, label: `target ${settings.protein_target_g} g` }} lines={[{ key: "protein", label: "Protein", color: "hsl(var(--protein))" }]} />
       </Panel>
       {dist ? (
         <Panel title="Macro distribution" note={`Where your calories come from, on average (${summary.protein_g} g protein · ${summary.carbs_g} g carbs · ${summary.fat_g} g fat per day).`}>
@@ -176,22 +175,22 @@ async function LifestyleTab({ from, to, days, settings }: Ctx) {
 
       {weights.length ? (
         <Panel title="Weight trend" note={wTrend ? `${formatSigned(wTrend.change)} kg over ${wTrend.days} days` : "Add another weigh-in to see the change."}>
-          <TrendChart data={weights.map((w, i) => ({ date: w.date, weight: w.weightKg, average: wAvg[i]!.value }))} xKey="date" xFormat={short} unit="kg" ariaLabel="Weight over the selected period" yDomain={["dataMin", "dataMax"]} lines={[{ key: "weight", label: "Weight", color: "hsl(var(--muted-foreground))" }, { key: "average", label: "7-entry average", color: "hsl(var(--primary))" }]} />
+          <TrendChart data={weights.map((w, i) => ({ date: w.date, weight: w.weightKg, average: wAvg[i]!.value }))} xKey="date" unit="kg" ariaLabel="Weight over the selected period" yDomain={["dataMin", "dataMax"]} lines={[{ key: "weight", label: "Weight", color: "hsl(var(--muted-foreground))" }, { key: "average", label: "7-entry average", color: "hsl(var(--primary))" }]} />
         </Panel>
       ) : null}
       {sleepMins.length ? (
         <Panel title="Sleep">
-          <BarsChart data={dates.map((d) => ({ date: d, hours: sleepByDate.get(d) ?? null }))} xKey="date" xFormat={short} unit="h" ariaLabel="Hours slept per night" reference={{ y: settings.sleep_target_minutes / 60, label: `target ${settings.sleep_target_minutes / 60}h` }} bars={[{ key: "hours", label: "Sleep", color: "hsl(var(--primary))" }]} />
+          <BarsChart data={dates.map((d) => ({ date: d, hours: sleepByDate.get(d) ?? null }))} xKey="date" unit="h" ariaLabel="Hours slept per night" reference={{ y: settings.sleep_target_minutes / 60, label: `target ${settings.sleep_target_minutes / 60}h` }} bars={[{ key: "hours", label: "Sleep", color: "hsl(var(--primary))" }]} />
         </Panel>
       ) : null}
       {waterDays.length ? (
         <Panel title="Water">
-          <BarsChart data={water.map((d) => ({ date: d.date, ml: d.totalMl }))} xKey="date" xFormat={short} unit="ml" ariaLabel="Water intake per day" reference={{ y: settings.water_target_ml, label: `target ${formatWater(settings.water_target_ml)}` }} bars={[{ key: "ml", label: "Water", color: "hsl(var(--water))" }]} />
+          <BarsChart data={water.map((d) => ({ date: d.date, ml: d.totalMl }))} xKey="date" unit="ml" ariaLabel="Water intake per day" reference={{ y: settings.water_target_ml, label: `target ${formatWater(settings.water_target_ml)}` }} bars={[{ key: "ml", label: "Water", color: "hsl(var(--water))" }]} />
         </Panel>
       ) : null}
       {scores.length ? (
         <Panel title="Recovery score">
-          <TrendChart data={dates.map((d) => ({ date: d, score: scoreByDate.get(d) ?? null }))} xKey="date" xFormat={short} unit="/100" ariaLabel="Recovery score over time" yDomain={[0, 100]} lines={[{ key: "score", label: "Recovery", color: "hsl(var(--fiber))" }]} />
+          <TrendChart data={dates.map((d) => ({ date: d, score: scoreByDate.get(d) ?? null }))} xKey="date" unit="/100" ariaLabel="Recovery score over time" yDomain={[0, 100]} lines={[{ key: "score", label: "Recovery", color: "hsl(var(--fiber))" }]} />
         </Panel>
       ) : null}
     </div>

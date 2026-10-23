@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Training, nutrition, recovery and body tracking in one place.",
     start_url: "/dashboard",
     display: "standalone",
-    background_color: "#0d1220",
-    theme_color: "#2563eb",
+    background_color: "#19080c",
+    theme_color: "#881337",
     orientation: "portrait",
     icons: [
       {

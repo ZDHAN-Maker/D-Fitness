@@ -67,7 +67,7 @@ export default async function MeasurementsPage({ searchParams }: { searchParams:
             <span className="font-medium">{metric.label} ({metric.unit})</span>
             {trend ? <span className="tabular text-muted-foreground">{formatSigned(trend.change)} {metric.unit} over {trend.days} days</span> : <span className="text-muted-foreground">Add another entry to see a trend</span>}
           </p>
-          <TrendChart data={series.map((p) => ({ date: p.date, value: p.value }))} xKey="date" xFormat={short} unit={metric.unit} ariaLabel={`${metric.label} over time`} yDomain={["dataMin", "dataMax"]} lines={[{ key: "value", label: metric.label, color: "hsl(var(--primary))" }]} />
+          <TrendChart data={series.map((p) => ({ date: p.date, value: p.value }))} xKey="date" unit={metric.unit} ariaLabel={`${metric.label} over time`} yDomain={["dataMin", "dataMax"]} lines={[{ key: "value", label: metric.label, color: "hsl(var(--primary))" }]} />
         </div>
       )}
 

@@ -19,6 +19,18 @@ type Common = {
 
 const AXIS = { stroke: "hsl(var(--muted-foreground))", fontSize: 12, tickLine: false, axisLine: false } as const;
 
+function defaultDateFormat(v: unknown): string {
+  if (typeof v !== "string") return String(v ?? "");
+  if (!/^\d{4}-\d{2}-\d{2}/.test(v)) return v;
+  try {
+    const [y, m, d] = v.slice(0, 10).split("-").map(Number);
+    const date = new Date(Date.UTC(y ?? 1970, (m ?? 1) - 1, d ?? 1, 12));
+    return new Intl.DateTimeFormat("en-US", { timeZone: "UTC", month: "short", day: "numeric" }).format(date);
+  } catch {
+    return v;
+  }
+}
+
 function Frame({ data, xKey, series, unit, ariaLabel, children }: { data: Datum[]; xKey: string; series: Series[]; unit: string; ariaLabel: string; children: React.ReactNode }) {
   return (
     <figure role="img" aria-label={ariaLabel} className="m-0">
@@ -52,14 +64,15 @@ function Frame({ data, xKey, series, unit, ariaLabel, children }: { data: Datum[
 const tooltipStyle = { background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 13, color: "hsl(var(--foreground))" };
 
 export function TrendChart({ lines, data, xKey, unit, ariaLabel, height = 260, xFormat, yDomain, reference }: Common & { lines: Series[] }) {
+  const formatTick = xFormat ?? defaultDateFormat;
   return (
     <Frame data={data} xKey={xKey} series={lines} unit={unit} ariaLabel={ariaLabel}>
       <ResponsiveContainer width="100%" height={height}>
         <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -12 }}>
           <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey={xKey} tickFormatter={xFormat} minTickGap={24} {...AXIS} />
+          <XAxis dataKey={xKey} tickFormatter={formatTick} minTickGap={24} {...AXIS} />
           <YAxis domain={yDomain ?? ["auto", "auto"]} width={44} {...AXIS} />
-          <Tooltip contentStyle={tooltipStyle} labelFormatter={(l) => (xFormat ? xFormat(String(l)) : String(l))} formatter={(v, n) => [`${v} ${unit}`, n]} />
+          <Tooltip contentStyle={tooltipStyle} labelFormatter={(l) => formatTick(String(l))} formatter={(v, n) => [`${v} ${unit}`, n]} />
           {lines.length > 1 ? <Legend iconType="plainline" wrapperStyle={{ fontSize: 12 }} /> : null}
           {reference ? <ReferenceLine y={reference.y} stroke="hsl(var(--muted-foreground))" strokeDasharray="4 4" label={{ value: reference.label, fill: "hsl(var(--muted-foreground))", fontSize: 11, position: "insideTopRight" }} /> : null}
           {lines.map((l) => (
@@ -72,14 +85,15 @@ export function TrendChart({ lines, data, xKey, unit, ariaLabel, height = 260, x
 }
 
 export function BarsChart({ bars, data, xKey, unit, ariaLabel, height = 220, xFormat, yDomain, reference }: Common & { bars: Series[] }) {
+  const formatTick = xFormat ?? defaultDateFormat;
   return (
     <Frame data={data} xKey={xKey} series={bars} unit={unit} ariaLabel={ariaLabel}>
       <ResponsiveContainer width="100%" height={height}>
         <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -12 }}>
           <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey={xKey} tickFormatter={xFormat} minTickGap={12} {...AXIS} />
+          <XAxis dataKey={xKey} tickFormatter={formatTick} minTickGap={12} {...AXIS} />
           <YAxis domain={yDomain ?? [0, "auto"]} width={44} {...AXIS} />
-          <Tooltip cursor={{ fill: "hsl(var(--muted))" }} contentStyle={tooltipStyle} labelFormatter={(l) => (xFormat ? xFormat(String(l)) : String(l))} formatter={(v, n) => [`${v} ${unit}`, n]} />
+          <Tooltip cursor={{ fill: "hsl(var(--muted))" }} contentStyle={tooltipStyle} labelFormatter={(l) => formatTick(String(l))} formatter={(v, n) => [`${v} ${unit}`, n]} />
           {reference ? <ReferenceLine y={reference.y} stroke="hsl(var(--muted-foreground))" strokeDasharray="4 4" label={{ value: reference.label, fill: "hsl(var(--muted-foreground))", fontSize: 11, position: "insideTopRight" }} /> : null}
           {bars.map((b) => (
             <Bar key={b.key} dataKey={b.key} name={b.label} fill={b.color} radius={[4, 4, 0, 0]} isAnimationActive={false} />
