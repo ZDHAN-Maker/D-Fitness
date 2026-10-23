@@ -9,26 +9,26 @@
 */
 @layer base {
   :root {
-    --background: 210 22% 96%;
-    --foreground: 215 27% 9%;
+    --background: 0 0% 100%;
+    --foreground: 350 25% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 215 27% 9%;
-    --primary: 225 91% 52%;
+    --card-foreground: 350 25% 12%;
+    --primary: 348 83% 36%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 213 24% 93%;
-    --secondary-foreground: 215 27% 12%;
-    --muted: 213 24% 93%;
-    --muted-foreground: 213 11% 38%;
-    --accent: 225 100% 96%;
-    --accent-foreground: 225 80% 32%;
+    --secondary: 350 25% 96%;
+    --secondary-foreground: 348 83% 25%;
+    --muted: 350 20% 95%;
+    --muted-foreground: 350 12% 44%;
+    --accent: 350 50% 96%;
+    --accent-foreground: 348 83% 32%;
     --destructive: 355 70% 46%;
     --destructive-foreground: 0 0% 100%;
-    --border: 213 20% 88%;
-    --input: 213 20% 84%;
-    --ring: 225 91% 52%;
+    --border: 350 15% 90%;
+    --input: 350 15% 85%;
+    --ring: 348 83% 36%;
     --radius: 0.75rem;
 
-    --protein: 225 91% 52%;
+    --protein: 348 83% 38%;
     --carbs: 38 100% 40%;
     --fat: 4 74% 52%;
     --fiber: 158 67% 30%;
@@ -36,25 +36,25 @@
   }
 
   .dark {
-    --background: 220 39% 8%;
-    --foreground: 217 29% 93%;
-    --card: 222 34% 12%;
-    --card-foreground: 217 29% 93%;
-    --primary: 227 100% 72%;
-    --primary-foreground: 220 39% 8%;
-    --secondary: 222 32% 17%;
-    --secondary-foreground: 217 29% 93%;
-    --muted: 222 32% 17%;
-    --muted-foreground: 215 16% 66%;
-    --accent: 224 40% 20%;
-    --accent-foreground: 227 100% 86%;
+    --background: 350 35% 7%;
+    --foreground: 350 15% 96%;
+    --card: 350 25% 11%;
+    --card-foreground: 350 15% 96%;
+    --primary: 348 85% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 350 20% 17%;
+    --secondary-foreground: 350 15% 96%;
+    --muted: 350 20% 17%;
+    --muted-foreground: 350 12% 66%;
+    --accent: 350 30% 19%;
+    --accent-foreground: 348 85% 85%;
     --destructive: 0 72% 64%;
-    --destructive-foreground: 220 39% 8%;
-    --border: 220 30% 21%;
-    --input: 220 30% 26%;
-    --ring: 227 100% 72%;
+    --destructive-foreground: 350 35% 7%;
+    --border: 350 20% 20%;
+    --input: 350 20% 25%;
+    --ring: 348 85% 60%;
 
-    --protein: 227 100% 72%;
+    --protein: 348 85% 60%;
     --carbs: 41 96% 58%;
     --fat: 4 86% 66%;
     --fiber: 158 56% 52%;

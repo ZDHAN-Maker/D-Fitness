@@ -57,7 +57,6 @@ export default async function WeightPage({ searchParams }: { searchParams: Promi
             <TrendChart
               data={chart}
               xKey="date"
-              xFormat={short}
               unit="kg"
               ariaLabel={`Weight over time, latest ${latest!.weightKg} kilograms`}
               yDomain={["dataMin", "dataMax"]}

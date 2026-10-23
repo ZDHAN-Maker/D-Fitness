@@ -12,7 +12,6 @@ import { addDays, formatLongDate, todayInTimeZone } from "@/utils/date";
 import { formatDuration } from "@/utils/format";
 
 export const metadata: Metadata = { title: "Recovery" };
-const short = (iso: string) => formatLongDate(iso).replace(/^\w+, /, "");
 
 export default async function RecoveryPage({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
   const user = await requireUser();
@@ -55,11 +54,11 @@ export default async function RecoveryPage({ searchParams }: { searchParams: Pro
         </dl>
         <div className="rounded-lg border bg-card p-3">
           <p className="mb-1 px-1 text-sm font-medium">Sleep (hours)</p>
-          <BarsChart data={sleepData} xKey="date" xFormat={short} unit="h" ariaLabel="Hours slept per night over the last 14 days" reference={{ y: targetH, label: `target ${targetH}h` }} bars={[{ key: "hours", label: "Sleep", color: "hsl(var(--primary))" }]} />
+          <BarsChart data={sleepData} xKey="date" unit="h" ariaLabel="Hours slept per night over the last 14 days" reference={{ y: targetH, label: `target ${targetH}h` }} bars={[{ key: "hours", label: "Sleep", color: "hsl(var(--primary))" }]} />
         </div>
         <div className="rounded-lg border bg-card p-3">
           <p className="mb-1 px-1 text-sm font-medium">Recovery score</p>
-          <TrendChart data={scoreData} xKey="date" xFormat={short} unit="/100" ariaLabel="Recovery score over the last 14 days" yDomain={[0, 100]} lines={[{ key: "score", label: "Recovery", color: "hsl(var(--fiber))" }]} />
+          <TrendChart data={scoreData} xKey="date" unit="/100" ariaLabel="Recovery score over the last 14 days" yDomain={[0, 100]} lines={[{ key: "score", label: "Recovery", color: "hsl(var(--fiber))" }]} />
         </div>
       </section>
     </div>

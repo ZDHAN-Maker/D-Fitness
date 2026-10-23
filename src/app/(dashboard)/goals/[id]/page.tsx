@@ -79,7 +79,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ id:
           <p className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">The chart appears once there are two or more days of progress.</p>
         ) : (
           <div className="rounded-lg border bg-card p-3">
-            <TrendChart data={chart} xKey="date" xFormat={short} unit={goal.unit ?? ""} ariaLabel={`${goal.title}: progress over time`} yDomain={["dataMin", "dataMax"]} reference={{ y: goal.target_value, label: "target" }} lines={[{ key: "value", label: goal.title, color: "hsl(var(--primary))" }]} />
+            <TrendChart data={chart} xKey="date" unit={goal.unit ?? ""} ariaLabel={`${goal.title}: progress over time`} yDomain={["dataMin", "dataMax"]} reference={{ y: goal.target_value, label: "target" }} lines={[{ key: "value", label: goal.title, color: "hsl(var(--primary))" }]} />
           </div>
         )}
       </section>

@@ -1452,9 +1452,56 @@ from (values
   ('hanging-knee-raise',     'core',      'Hanging Knee Raise',     'abs',        array['hip flexors'],                  'bodyweight', 'intermediate','core',   'reps_only'),
   ('treadmill-run',          'cardio',    'Treadmill Run',          'cardio',     array[]::text[],                       'machine',    'beginner',    'cardio', 'distance_duration'),
   ('rowing-machine',         'cardio',    'Rowing Machine',         'cardio',     array['back','legs'],                  'machine',    'beginner',    'cardio', 'distance_duration'),
-  ('jump-rope',              'cardio',    'Jump Rope',              'cardio',     array['calves'],                       'bodyweight', 'beginner',    'cardio', 'duration')
+  ('jump-rope',              'cardio',    'Jump Rope',              'cardio',     array['calves'],                       'bodyweight', 'beginner',    'cardio', 'duration'),
+  -- Gym additions
+  ('incline-barbell-bench-press', 'chest',     'Incline Barbell Bench Press', 'chest',        array['shoulders','triceps'],        'barbell',    'intermediate','push',   'weight_reps'),
+  ('cable-chest-fly',            'chest',     'Cable Chest Fly',             'chest',        array['shoulders'],                  'cable',      'beginner',    'push',   'weight_reps'),
+  ('pec-deck-machine',           'chest',     'Pec Deck Machine',            'chest',        array['shoulders'],                  'machine',    'beginner',    'push',   'weight_reps'),
+  ('chest-dips',                 'chest',     'Chest Dips',                  'chest',        array['triceps','shoulders'],        'bodyweight', 'intermediate','push',   'reps_only'),
+  ('t-bar-row',                  'back',      'T-Bar Row',                   'lats',         array['biceps','mid back'],          'barbell',    'intermediate','pull',   'weight_reps'),
+  ('straight-arm-cable-pulldown','back',      'Straight-Arm Cable Pulldown', 'lats',         array['triceps','abs'],              'cable',      'beginner',    'pull',   'weight_reps'),
+  ('single-arm-dumbbell-row',    'back',      'Single-Arm Dumbbell Row',     'lats',         array['biceps','rear delts'],        'dumbbell',   'beginner',    'pull',   'weight_reps'),
+  ('cable-face-pull',            'shoulders', 'Cable Face Pull',             'rear delts',   array['traps','rotator cuff'],       'cable',      'beginner',    'pull',   'weight_reps'),
+  ('barbell-overhead-press',     'shoulders', 'Barbell Overhead Press',      'shoulders',    array['triceps','core'],             'barbell',    'intermediate','push',   'weight_reps'),
+  ('cable-lateral-raise',        'shoulders', 'Cable Lateral Raise',         'shoulders',    array[]::text[],                     'cable',      'beginner',    'push',   'weight_reps'),
+  ('reverse-pec-deck',           'shoulders', 'Reverse Pec Deck',            'rear delts',   array['traps'],                      'machine',    'beginner',    'pull',   'weight_reps'),
+  ('dumbbell-front-raise',       'shoulders', 'Dumbbell Front Raise',        'shoulders',    array[]::text[],                     'dumbbell',   'beginner',    'push',   'weight_reps'),
+  ('leg-extension',              'legs',      'Leg Extension',               'quadriceps',   array[]::text[],                     'machine',    'beginner',    'squat',  'weight_reps'),
+  ('lying-leg-curl',             'legs',      'Lying Leg Curl',              'hamstrings',   array['calves'],                     'machine',    'beginner',    'hinge',  'weight_reps'),
+  ('seated-calf-raise',          'legs',      'Seated Calf Raise',           'calves',       array[]::text[],                     'machine',    'beginner',    'squat',  'weight_reps'),
+  ('hack-squat',                 'legs',      'Hack Squat',                  'quadriceps',   array['glutes','hamstrings'],        'machine',    'intermediate','squat',  'weight_reps'),
+  ('bulgarian-split-squat',      'legs',      'Bulgarian Split Squat',       'quadriceps',   array['glutes','hamstrings'],        'dumbbell',   'intermediate','squat',  'weight_reps'),
+  ('tricep-rope-pushdown',       'arms',      'Tricep Rope Pushdown',        'triceps',      array[]::text[],                     'cable',      'beginner',    'push',   'weight_reps'),
+  ('skull-crusher',              'arms',      'Skull Crusher (EZ Bar)',      'triceps',      array[]::text[],                     'barbell',    'intermediate','push',   'weight_reps'),
+  ('preacher-curl',              'arms',      'Preacher Curl',               'biceps',       array['forearms'],                   'barbell',    'beginner',    'pull',   'weight_reps'),
+  ('hammer-curl',                'arms',      'Hammer Curl',                 'biceps',       array['forearms'],                   'dumbbell',   'beginner',    'pull',   'weight_reps'),
+  -- Home & Bodyweight additions
+  ('diamond-push-up',            'chest',     'Diamond Push-up',             'triceps',      array['chest','core'],               'bodyweight', 'intermediate','push',   'reps_only'),
+  ('wide-grip-push-up',          'chest',     'Wide-Grip Push-up',           'chest',        array['shoulders','triceps'],        'bodyweight', 'beginner',    'push',   'reps_only'),
+  ('incline-push-up',            'chest',     'Incline Push-up',             'chest',        array['triceps'],                    'bodyweight', 'beginner',    'push',   'reps_only'),
+  ('dumbbell-floor-press',       'chest',     'Dumbbell Floor Press',        'chest',        array['triceps','shoulders'],        'dumbbell',   'beginner',    'push',   'weight_reps'),
+  ('pike-push-up',               'shoulders', 'Pike Push-up',                'shoulders',    array['triceps','upper chest'],      'bodyweight', 'intermediate','push',   'reps_only'),
+  ('chair-dips',                 'arms',      'Chair / Bench Dips',          'triceps',      array['shoulders','chest'],          'bodyweight', 'beginner',    'push',   'reps_only'),
+  ('air-squats',                 'legs',      'Air Squats',                  'quadriceps',   array['glutes','core'],              'bodyweight', 'beginner',    'squat',  'reps_only'),
+  ('jump-squats',                'legs',      'Jump Squats',                 'quadriceps',   array['glutes','calves'],            'bodyweight', 'intermediate','squat',  'reps_only'),
+  ('glute-bridge',               'legs',      'Glute Bridge',                'glutes',       array['hamstrings','core'],          'bodyweight', 'beginner',    'hinge',  'reps_only'),
+  ('single-leg-calf-raise',      'legs',      'Single-Leg Calf Raise',       'calves',       array[]::text[],                     'bodyweight', 'beginner',    'squat',  'reps_only'),
+  ('wall-sit',                   'legs',      'Wall Sit',                    'quadriceps',   array['glutes','calves'],            'bodyweight', 'beginner',    'squat',  'duration'),
+  ('bicycle-crunches',           'core',      'Bicycle Crunches',            'abs',          array['obliques'],                   'bodyweight', 'beginner',    'core',   'reps_only'),
+  ('mountain-climbers',          'core',      'Mountain Climbers',           'abs',          array['shoulders','quadriceps'],     'bodyweight', 'beginner',    'core',   'duration'),
+  ('russian-twist',              'core',      'Russian Twist',               'obliques',     array['abs'],                        'bodyweight', 'beginner',    'core',   'reps_only'),
+  ('leg-raises',                 'core',      'Leg Raises',                  'abs',          array['hip flexors'],                'bodyweight', 'beginner',    'core',   'reps_only'),
+  ('deadbug',                    'core',      'Deadbug',                     'abs',          array['lower back'],                 'bodyweight', 'beginner',    'core',   'reps_only'),
+  ('side-plank',                 'core',      'Side Plank',                  'obliques',     array['shoulders','glutes'],         'bodyweight', 'beginner',    'core',   'duration'),
+  ('burpees',                    'cardio',    'Burpees',                     'cardio',       array['chest','quadriceps','core'],  'bodyweight', 'intermediate','cardio', 'reps_only'),
+  ('jumping-jacks',              'cardio',    'Jumping Jacks',               'cardio',       array['calves','shoulders'],         'bodyweight', 'beginner',    'cardio', 'duration'),
+  ('high-knees',                 'cardio',    'High Knees',                  'cardio',       array['quadriceps','calves'],        'bodyweight', 'beginner',    'cardio', 'duration'),
+  ('band-pull-apart',            'back',      'Band Pull-Apart',             'rear delts',   array['traps','mid back'],           'band',       'beginner',    'pull',   'reps_only'),
+  ('banded-lateral-raise',       'shoulders', 'Banded Lateral Raise',        'shoulders',    array[]::text[],                     'band',       'beginner',    'push',   'reps_only'),
+  ('banded-bicep-curl',          'arms',      'Banded Bicep Curl',           'biceps',       array['forearms'],                   'band',       'beginner',    'pull',   'reps_only')
 ) as v(slug, cat, name, muscle, secondary, equipment, difficulty, movement, mode)
-join public.exercise_categories c on c.slug = v.cat;
+join public.exercise_categories c on c.slug = v.cat
+on conflict (source_id) do nothing;
 
 -- Activity types (MET values from the Compendium of Physical Activities, rounded) -----------------------------------
 insert into public.activity_types (source_id, slug, name, category, met_value, tracks_distance, tracks_pace, icon)
