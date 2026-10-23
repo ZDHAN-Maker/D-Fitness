@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AppError } from "@/lib/errors";
@@ -21,12 +22,12 @@ export async function listNotifications(limit = 50): Promise<NotificationItem[]>
   return (data ?? []).map((r) => ({ id: r.id as string, type: r.type as string, title: r.title as string, body: (r.body as string) ?? null, readAt: (r.read_at as string) ?? null, createdAt: r.created_at as string, data: (r.data as Record<string, unknown>) ?? {} }));
 }
 
-export async function unreadCount(): Promise<number> {
+export const unreadCount = cache(async (): Promise<number> => {
   const supabase = await createClient();
   const { count, error } = await supabase.from("notifications").select("id", { count: "exact", head: true }).is("read_at", null);
   if (error) throw error;
   return count ?? 0;
-}
+});
 
 export async function markRead(id: string) {
   const supabase = await createClient();

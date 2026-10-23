@@ -7,6 +7,15 @@ const matches = (path: string, prefix: string) => path === prefix || path.starts
 
 /** Refreshes the Supabase session cookie on every request and enforces route protection. */
 export async function updateSession(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+  const isProtected = PROTECTED_PREFIXES.some((p) => matches(path, p));
+  const isAuthRoute = AUTH_ROUTES.some((p) => matches(path, p));
+
+  // Skip remote auth roundtrip for public paths that don't need route protection or auth redirection.
+  if (!isProtected && !isAuthRoute) {
+    return NextResponse.next({ request });
+  }
+
   const env = getPublicEnv();
   let response = NextResponse.next({ request });
 
@@ -25,10 +34,6 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const path = request.nextUrl.pathname;
-  const isProtected = PROTECTED_PREFIXES.some((p) => matches(path, p));
-  const isAuthRoute = AUTH_ROUTES.some((p) => matches(path, p));
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();

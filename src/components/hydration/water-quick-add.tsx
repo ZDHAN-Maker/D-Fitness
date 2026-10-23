@@ -21,7 +21,9 @@ export function WaterQuickAdd({ date, totalMl, targetMl, compact = false }: Prop
   const [error, setError] = useState<string>();
   const [note, setNote] = useState<string>();
   const [pending, startTransition] = useTransition();
-  useEffect(() => setTotal(totalMl), [totalMl]);
+  useEffect(() => {
+    setTotal(totalMl);
+  }, [totalMl]);
 
   const add = (ml: number) => {
     setError(undefined);
