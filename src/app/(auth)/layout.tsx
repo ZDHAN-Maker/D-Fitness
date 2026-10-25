@@ -6,8 +6,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <div className="flex min-h-dvh flex-col">
       <header className="flex items-center justify-between px-4 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:px-8">
         <Link href="/" className="flex items-center gap-2 font-display text-lg font-bold">
-          <span className="grid size-8 place-items-center rounded-md bg-primary text-sm text-primary-foreground">OS</span>
-          Personal Fitness OS
+          <span className="grid size-8 place-items-center rounded-md bg-primary text-sm text-primary-foreground">DG</span>
+          D&apos;GYM
         </Link>
         <ThemeToggle />
       </header>

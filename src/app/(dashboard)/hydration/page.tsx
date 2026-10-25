@@ -6,7 +6,7 @@ import { deleteWaterAction } from "@/features/hydration/actions";
 import { WaterQuickAdd } from "@/components/hydration/water-quick-add";
 import { BarsChart } from "@/components/charts/lazy-charts";
 import { DeleteButton } from "@/components/ui/delete-button";
-import { formatLongDate, todayInTimeZone } from "@/utils/date";
+import { todayInTimeZone } from "@/utils/date";
 import { formatWater } from "@/utils/format";
 
 export const metadata: Metadata = { title: "Hydration" };

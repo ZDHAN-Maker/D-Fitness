@@ -17,8 +17,8 @@ export function AppShell({ displayName, unreadCount = 0, children }: { displayNa
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between border-b bg-background/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden">
           <Link href="/dashboard" className="flex items-center gap-2 font-display text-base font-bold">
-            <span className="grid size-8 place-items-center rounded-lg bg-primary text-xs font-extrabold text-primary-foreground shadow-sm">OS</span>
-            Fitness OS
+            <span className="grid size-8 place-items-center rounded-lg bg-primary text-xs font-extrabold text-primary-foreground shadow-sm">DG</span>
+            D&apos;GYM
           </Link>
           <div className="flex items-center gap-1">
             <Link

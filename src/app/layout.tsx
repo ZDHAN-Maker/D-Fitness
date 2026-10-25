@@ -5,13 +5,13 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: { default: "Personal Fitness OS", template: "%s · Personal Fitness OS" },
+  title: { default: "D'GYM", template: "%s · D'GYM" },
   description: "Training, nutrition, recovery and body tracking in one place.",
-  applicationName: "Fitness OS",
+  applicationName: "D'GYM",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Fitness OS",
+    title: "D'GYM",
   },
   formatDetection: {
     telephone: false,

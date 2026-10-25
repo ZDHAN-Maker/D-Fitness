@@ -11,7 +11,7 @@ import { recentTotals } from "@/features/hydration/service";
 import { listWeights } from "@/features/body/service";
 import { RANGE_DAYS, average, consistencyPct, macroDistribution, summarizeNutrition, weeksOnTarget, zeroFillWeeks, type AnalyticsRange } from "@/lib/calculations/analytics";
 import { calculateMovingAverage, calculateTrend, formatSigned } from "@/lib/calculations/body";
-import { addDays, formatLongDate, todayInTimeZone } from "@/utils/date";
+import { addDays, todayInTimeZone } from "@/utils/date";
 import { formatDuration, formatInt, formatWater } from "@/utils/format";
 import type { UserSettings } from "@/types/domain";
 
