@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ExerciseVisual } from "@/components/workout/exercise-visual";
 import type { ExerciseFacets } from "@/features/workout/exercises";
 import type { Exercise } from "@/types/domain";
 
@@ -116,6 +117,14 @@ export function ExerciseBrowser({ facets, categories, onSelect, initialQuery = "
         {items.map((e) => {
           const body = (
             <>
+              <ExerciseVisual
+                name={e.name}
+                primaryMuscle={e.primary_muscle}
+                equipment={e.equipment}
+                movementType={e.movement_type}
+                imageUrl={e.image_url}
+                size="md"
+              />
               <span className="flex min-w-0 flex-1 flex-col gap-0.5 text-left">
                 <span className="truncate font-medium">{e.name}</span>
                 <span className="truncate text-xs text-muted-foreground">{[e.primary_muscle, e.equipment].filter(Boolean).map((x) => cap(x as string)).join(" · ")}</span>

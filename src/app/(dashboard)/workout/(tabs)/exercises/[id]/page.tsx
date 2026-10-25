@@ -5,6 +5,7 @@ import { ArrowLeft, Trophy } from "lucide-react";
 import { z } from "zod";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ExerciseVisual } from "@/components/workout/exercise-visual";
 import { getExercise } from "@/features/workout/exercises";
 import { RECORD_LABEL, getExerciseHistory, listRecords } from "@/features/workout/records";
 import { calculateEstimatedOneRepMax, formatSetShort, topWorkingSet } from "@/lib/calculations/workout";
@@ -35,11 +36,14 @@ export default async function ExerciseDetailPage({ params }: { params: Promise<{
         {exercise.secondary_muscles.length ? <p className="mt-2 text-sm text-muted-foreground">Also works: {exercise.secondary_muscles.map(cap).join(", ")}</p> : null}
       </header>
 
-      {exercise.image_url ? (
-        // External dataset URL: a plain <img> avoids whitelisting unknown hosts in next/image.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={exercise.image_url} alt={`${exercise.name} demonstration`} loading="lazy" className="max-h-72 w-full rounded-lg border object-contain" />
-      ) : null}
+      <ExerciseVisual
+        name={exercise.name}
+        primaryMuscle={exercise.primary_muscle}
+        equipment={exercise.equipment}
+        movementType={exercise.movement_type}
+        imageUrl={exercise.image_url}
+        size="xl"
+      />
 
       <Card>
         <CardHeader><CardTitle>How to</CardTitle></CardHeader>

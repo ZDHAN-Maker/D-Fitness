@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Lightbulb, Plus, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/ui/delete-button";
+import { ExerciseVisual } from "@/components/workout/exercise-visual";
 import { SetRow, type SetValues } from "@/components/workout/set-row";
 import { formatSetShort, suggestProgression } from "@/lib/calculations/workout";
 import { removeExerciseAction } from "@/features/workout/actions";
@@ -40,7 +41,13 @@ export function SessionExerciseCard({ ex, previous, errors, onSave, onToggle, on
 
   return (
     <section aria-label={ex.exercise.name} className="rounded-lg border bg-card p-3">
-      <header className="flex items-start gap-2">
+      <header className="flex items-center gap-2.5">
+        <ExerciseVisual
+          name={ex.exercise.name}
+          primaryMuscle={ex.exercise.primary_muscle}
+          equipment={ex.exercise.equipment}
+          size="sm"
+        />
         <div className="min-w-0 flex-1">
           <h2 className="truncate font-display text-lg font-semibold">{ex.exercise.name}</h2>
           <p className="text-xs text-muted-foreground">{[ex.exercise.primary_muscle, ex.exercise.equipment, targetText].filter(Boolean).join(" · ")}</p>

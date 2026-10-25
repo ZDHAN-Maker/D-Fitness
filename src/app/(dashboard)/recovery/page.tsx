@@ -8,7 +8,7 @@ import { DateNav } from "@/components/nutrition/date-nav";
 import { BarsChart, TrendChart } from "@/components/charts/lazy-charts";
 import { calculateSleepAverage } from "@/lib/calculations/body";
 import { isoDate } from "@/lib/validations/nutrition";
-import { addDays, formatLongDate, todayInTimeZone } from "@/utils/date";
+import { addDays, todayInTimeZone } from "@/utils/date";
 import { formatDuration } from "@/utils/format";
 
 export const metadata: Metadata = { title: "Recovery" };

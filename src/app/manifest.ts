@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Personal Fitness OS",
-    short_name: "Fitness OS",
+    name: "D'GYM - Workout & Fitness",
+    short_name: "D'GYM",
     description: "Training, nutrition, recovery and body tracking in one place.",
     start_url: "/dashboard",
     display: "standalone",

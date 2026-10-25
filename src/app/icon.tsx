@@ -24,7 +24,7 @@ export default function Icon() {
           fontFamily: "system-ui, -apple-system, sans-serif",
         }}
       >
-        OS
+        DG
       </div>
     ),
     {
