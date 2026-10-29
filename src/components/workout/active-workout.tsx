@@ -33,6 +33,15 @@ function useElapsed(startedAt: string) {
   return Math.max(0, Math.floor((now - start) / 1000));
 }
 
+function WorkoutClock({ startedAt }: { startedAt: string }) {
+  const elapsed = useElapsed(startedAt);
+  return (
+    <span className="flex items-center gap-1">
+      <Timer className="size-3.5" aria-hidden="true" /> {formatClock(elapsed)}
+    </span>
+  );
+}
+
 export function ActiveWorkout({ session, previous: initialPrevious, facets, categories }: Props) {
   const router = useRouter();
   const [exercises, setExercises] = useState<SessionExerciseView[]>(session.exercises);
@@ -43,7 +52,6 @@ export function ActiveWorkout({ session, previous: initialPrevious, facets, cate
   const [finishing, setFinishing] = useState(false);
   const [result, setResult] = useState<CompletionResult | null>(null);
   const [globalError, setGlobalError] = useState<string>();
-  const elapsed = useElapsed(session.started_at);
 
   const allSets = exercises.flatMap((e) => e.sets);
   const doneCount = allSets.filter((s) => s.is_completed).length;
@@ -115,13 +123,21 @@ export function ActiveWorkout({ session, previous: initialPrevious, facets, cate
     if (prev.ok && prev.data) setPrevious((p) => ({ ...p, [exerciseId]: prev.data! }));
   };
 
+  const handleCloseFinish = useCallback(() => {
+    setFinishing(false);
+    if (result) {
+      router.push(`/workout/session/${session.id}`);
+      router.refresh();
+    }
+  }, [result, router, session.id]);
+
   return (
     <div className="flex flex-col gap-4 pb-24">
       <header className="sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-20 -mx-4 flex items-center gap-3 border-b bg-background/95 px-4 py-3 backdrop-blur md:static md:top-auto md:mx-0 md:rounded-lg md:border md:bg-card">
         <div className="min-w-0 flex-1">
           <h1 className="truncate font-display text-xl font-bold">{session.name}</h1>
           <p className="tabular flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><Timer className="size-3.5" aria-hidden="true" /> {formatClock(elapsed)}</span>
+            <WorkoutClock startedAt={session.started_at} />
             <span>{doneCount} sets</span>
             <span>{formatInt(volume)} kg volume</span>
           </p>
@@ -174,7 +190,7 @@ export function ActiveWorkout({ session, previous: initialPrevious, facets, cate
 
       <FinishSheet
         open={finishing}
-        onClose={() => { setFinishing(false); if (result) { router.push(`/workout/session/${session.id}`); router.refresh(); } }}
+        onClose={handleCloseFinish}
         sessionId={session.id}
         doneCount={doneCount}
         volume={volume}
