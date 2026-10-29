@@ -49,9 +49,14 @@ describe("resolveExerciseMuscles", () => {
   it("infers muscles from exercise name when primary is full-body or null", () => {
     expect(resolveExerciseMuscles("Dumbbell Bicep Curl").primary).toBe("biceps");
     expect(resolveExerciseMuscles("Skull Crusher").primary).toBe("triceps");
+    expect(resolveExerciseMuscles("Overhead Dumbbell Triceps Extension").primary).toBe("triceps");
+    expect(resolveExerciseMuscles("Dumbbell Tricep Kickback").primary).toBe("triceps");
     expect(resolveExerciseMuscles("Romanian Deadlift").primary).toBe("hamstrings");
+    expect(resolveExerciseMuscles("Trap Bar / Hex Bar Deadlift").primary).toBe("hamstrings");
     expect(resolveExerciseMuscles("Overhead Press").primary).toBe("shoulders");
     expect(resolveExerciseMuscles("Plank Hold").primary).toBe("abs");
+    expect(resolveExerciseMuscles("Ab Wheel Rollout").primary).toBe("abs");
+    expect(resolveExerciseMuscles("Cable Woodchoppers").primary).toBe("abs");
     expect(resolveExerciseMuscles("Standing Calf Raise").primary).toBe("calves");
     expect(resolveExerciseMuscles("Hip Thrust").primary).toBe("glutes");
     expect(resolveExerciseMuscles("Treadmill Run").primary).toBe("cardio");
@@ -63,11 +68,15 @@ describe("resolveStudioArchetype", () => {
     expect(resolveStudioArchetype("Barbell Bench Press", "chest", "barbell", "push")).toBe("bench-press");
     expect(resolveStudioArchetype("Push-up", "chest", "bodyweight", "push")).toBe("bench-press");
     expect(resolveStudioArchetype("Incline Dumbbell Press", "chest", "dumbbell", "push")).toBe("incline-press");
+    expect(resolveStudioArchetype("Close-Grip Barbell Bench Press", "triceps", "barbell", "push")).toBe("bench-press");
   });
 
   it("resolves squat and hinge movements", () => {
     expect(resolveStudioArchetype("Back Squat", "quads", "barbell", "squat")).toBe("squat");
     expect(resolveStudioArchetype("Romanian Deadlift", "hamstrings", "barbell", "hinge")).toBe("deadlift");
+    expect(resolveStudioArchetype("Sumo Deadlift", "glutes", "barbell", "hinge")).toBe("deadlift");
+    expect(resolveStudioArchetype("Trap Bar / Hex Bar Deadlift", "quadriceps", "barbell", "hinge")).toBe("deadlift");
+    expect(resolveStudioArchetype("Rack Pulls", "traps", "barbell", "hinge")).toBe("deadlift");
     expect(resolveStudioArchetype("Barbell Hip Thrust", "glutes", "barbell", "hinge")).toBe("hip-thrust");
     expect(resolveStudioArchetype("Walking Lunge", "quads", "dumbbell", "lunge")).toBe("lunge");
   });
@@ -76,13 +85,19 @@ describe("resolveStudioArchetype", () => {
     expect(resolveStudioArchetype("Pull-up", "lats", "bodyweight", "pull")).toBe("pull-up");
     expect(resolveStudioArchetype("Bent-Over Barbell Row", "lats", "barbell", "pull")).toBe("row");
     expect(resolveStudioArchetype("Overhead Press", "shoulders", "barbell", "push")).toBe("overhead-press");
+    expect(resolveStudioArchetype("Arnold Press", "shoulders", "dumbbell", "push")).toBe("overhead-press");
     expect(resolveStudioArchetype("Dumbbell Lateral Raise", "shoulders", "dumbbell", "push")).toBe("lateral-raise");
     expect(resolveStudioArchetype("Dumbbell Bicep Curl", "biceps", "dumbbell", "pull")).toBe("bicep-curl");
     expect(resolveStudioArchetype("Tricep Pushdown", "triceps", "cable", "push")).toBe("tricep-extension");
+    expect(resolveStudioArchetype("Dumbbell Tricep Kickback", "triceps", "dumbbell", "push")).toBe("tricep-extension");
+    expect(resolveStudioArchetype("Overhead Cable Triceps Extension", "triceps", "cable", "push")).toBe("tricep-extension");
   });
 
   it("resolves core and cardio movements", () => {
     expect(resolveStudioArchetype("Forearm Plank", "abs", "bodyweight", "core")).toBe("plank");
+    expect(resolveStudioArchetype("Ab Wheel Rollout", "abs", "bodyweight", "core")).toBe("plank");
+    expect(resolveStudioArchetype("Cable Rope Crunch", "abs", "cable", "core")).toBe("plank");
+    expect(resolveStudioArchetype("Cable Woodchoppers", "obliques", "cable", "core")).toBe("plank");
     expect(resolveStudioArchetype("Treadmill Running", "cardio", "machine", "cardio")).toBe("cardio");
   });
 });

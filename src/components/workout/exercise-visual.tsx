@@ -86,16 +86,16 @@ export function resolveExerciseMuscles(
   // Name inference fallbacks if primary muscle is generic
   if (prim === "full-body") {
     if (n.includes("bench") || n.includes("push-up") || n.includes("fly") || n.includes("pec")) prim = "chest";
-    else if (n.includes("squat") || n.includes("leg press") || n.includes("extension") || n.includes("lunge")) prim = "quads";
+    else if (n.includes("squat") || n.includes("leg press") || n.includes("leg extension") || n.includes("lunge")) prim = "quads";
     else if (n.includes("deadlift") || n.includes("rdl") || n.includes("leg curl")) prim = "hamstrings";
     else if (n.includes("pull-up") || n.includes("pulldown") || n.includes("row")) prim = "lats";
-    else if (n.includes("overhead") || n.includes("shoulder press") || n.includes("lateral raise")) prim = "shoulders";
+    else if ((n.includes("overhead") && !n.includes("tricep")) || n.includes("shoulder press") || n.includes("lateral raise")) prim = "shoulders";
     else if (n.includes("curl")) prim = "biceps";
-    else if (n.includes("tricep") || n.includes("dip") || n.includes("skull")) prim = "triceps";
-    else if (n.includes("plank") || n.includes("crunch") || n.includes("twist") || n.includes("abs")) prim = "abs";
+    else if (n.includes("tricep") || n.includes("dip") || n.includes("skull") || n.includes("kickback") || n.includes("french press")) prim = "triceps";
+    else if (n.includes("plank") || n.includes("crunch") || n.includes("twist") || n.includes("abs") || n.includes("rollout") || n.includes("dragon") || n.includes("woodchopper") || n.includes("pallof") || n.includes("toes to bar")) prim = "abs";
     else if (n.includes("calf")) prim = "calves";
     else if (n.includes("hip thrust") || n.includes("glute")) prim = "glutes";
-    else if (n.includes("run") || n.includes("rope") || n.includes("burpee") || n.includes("cardio")) prim = "cardio";
+    else if ((/\b(run|running)\b/).test(n) || n.includes("jump rope") || n.includes("burpee") || n.includes("cardio")) prim = "cardio";
   }
 
   const sec = (secondaryMuscles ?? []).map(normalizeMuscle).filter((m) => m !== prim);
@@ -125,9 +125,9 @@ export function resolveStudioArchetype(
 
   // Cardio movements
   if (
-    n.includes("run") ||
+    (/\b(run|running)\b/).test(n) ||
     n.includes("treadmill") ||
-    n.includes("rope") ||
+    (n.includes("jump rope") || (n.includes("rope") && !n.includes("crunch") && !n.includes("pushdown") && !n.includes("curl") && !n.includes("extension"))) ||
     n.includes("rowing") ||
     n.includes("burpee") ||
     n.includes("cardio") ||
@@ -160,7 +160,7 @@ export function resolveStudioArchetype(
   }
 
   // Deadlift & Hinges
-  if (n.includes("deadlift") || n.includes("rdl") || n.includes("good morning") || (m.includes("hamstring") && mov === "hinge")) {
+  if (n.includes("deadlift") || n.includes("rdl") || n.includes("rack pull") || n.includes("good morning") || (m.includes("hamstring") && mov === "hinge")) {
     return "deadlift";
   }
 
@@ -175,7 +175,7 @@ export function resolveStudioArchetype(
   }
 
   // Overhead press / Shoulders
-  if (n.includes("overhead") || n.includes("shoulder press") || n.includes("military") || n.includes("arnold") || n.includes("pike push")) {
+  if ((n.includes("overhead") && !n.includes("tricep") && !m.includes("tricep")) || n.includes("shoulder press") || n.includes("military") || n.includes("arnold") || n.includes("pike push")) {
     return "overhead-press";
   }
   if (n.includes("lateral raise") || n.includes("front raise") || n.includes("face pull") || n.includes("rear delt")) {
@@ -196,12 +196,12 @@ export function resolveStudioArchetype(
   if (n.includes("curl") || m.includes("bicep")) {
     return "bicep-curl";
   }
-  if (n.includes("tricep") || n.includes("skull") || n.includes("dip") || n.includes("pushdown") || m.includes("tricep")) {
+  if (n.includes("tricep") || n.includes("skull") || n.includes("dip") || n.includes("pushdown") || n.includes("kickback") || n.includes("french press") || m.includes("tricep")) {
     return "tricep-extension";
   }
 
   // Core & Plank
-  if (n.includes("plank") || n.includes("hollow") || n.includes("hold") || n.includes("crunch") || n.includes("sit-up")) {
+  if (n.includes("plank") || n.includes("hollow") || n.includes("hold") || n.includes("crunch") || n.includes("sit-up") || n.includes("rollout") || n.includes("dragon") || n.includes("woodchopper") || n.includes("pallof") || n.includes("toes to bar") || mov === "core" || m === "abs" || m === "obliques") {
     return "plank";
   }
 
