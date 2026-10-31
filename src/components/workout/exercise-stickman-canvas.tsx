@@ -48,7 +48,54 @@ type PropItem =
   | { type: "cable_machine"; pulleyX: number; pulleyY: number; handX: number; handY: number; weightLift: number }
   | { type: "bench_box"; x: number; y: number; w: number; h: number }
   | { type: "incline_bench"; x1: number; y1: number; x2: number; y2: number; x3: number; y3: number }
-  | { type: "preacher_bench"; seatX: number; seatY: number; padX1: number; padY1: number; padX2: number; padY2: number };
+  | { type: "preacher_bench"; seatX: number; seatY: number; padX1: number; padY1: number; padX2: number; padY2: number }
+  | { type: "jump_rope"; handL: [number, number]; handR: [number, number]; peakY: number; behind: boolean }
+  | { type: "rowing_machine"; seatX: number; handleX: number; handleY: number; spin: number }
+  | { type: "treadmill"; beltOffset: number }
+  | { type: "step_block"; x: number; y: number; w: number; h: number }
+  | { type: "balance_post"; x: number; y1: number; y2: number }
+  | { type: "seated_calf_machine"; seatX: number; seatY: number; kneeX: number; kneeY: number; t: number }
+  | { type: "standing_calf_machine"; shoulderX: number; shoulderY: number; t: number };
+
+type KeyframePose = {
+  head: [number, number];
+  shoulder: [number, number];
+  hip: [number, number];
+  elbowL: [number, number];
+  handL: [number, number];
+  elbowR: [number, number];
+  handR: [number, number];
+  kneeL: [number, number];
+  footL: [number, number];
+  kneeR: [number, number];
+  footR: [number, number];
+  intensity: number;
+};
+
+function multiPoseLerp(poses: KeyframePose[], cycle: number) {
+  const n = poses.length;
+  const scaled = (cycle % 1) * n;
+  const idx = Math.floor(scaled);
+  const frac = scaled - idx;
+  const s = frac * frac * (3 - 2 * frac);
+  const pA = poses[idx % n] ?? poses[0]!;
+  const pB = poses[(idx + 1) % n] ?? poses[0]!;
+
+  return {
+    head: lerpPt(pA.head, pB.head, s),
+    shoulder: lerpPt(pA.shoulder, pB.shoulder, s),
+    hip: lerpPt(pA.hip, pB.hip, s),
+    elbowL: lerpPt(pA.elbowL, pB.elbowL, s),
+    handL: lerpPt(pA.handL, pB.handL, s),
+    elbowR: lerpPt(pA.elbowR, pB.elbowR, s),
+    handR: lerpPt(pA.handR, pB.handR, s),
+    kneeL: lerpPt(pA.kneeL, pB.kneeL, s),
+    footL: lerpPt(pA.footL, pB.footL, s),
+    kneeR: lerpPt(pA.kneeR, pB.kneeR, s),
+    footR: lerpPt(pA.footR, pB.footR, s),
+    intensity: lerp(pA.intensity, pB.intensity, s),
+  };
+}
 
 type Pose = {
   props: PropItem[];
@@ -64,6 +111,12 @@ type Pose = {
   kneeR: [number, number];
   footR: [number, number];
   contraction: number;
+  heelL?: [number, number];
+  toeL?: [number, number];
+  heelR?: [number, number];
+  toeR?: [number, number];
+  frontView?: boolean;
+  nonWorkingLeg?: boolean;
 };
 
 /**
@@ -462,7 +515,301 @@ function getPose(exercise: ExerciseProps, t: number, rawTime: number): Pose {
   }
 
   // ==========================================
-  // 3. CHEST & PUSH-UP / BENCH PRESS ARCHETYPE
+  // 3. CARDIO CATALOG (6 GERAKAN KHUSUS)
+  // ==========================================
+  if (id === 67 || n.includes("burpee")) {
+    const cycle = (rawTime * 0.65) % 1;
+    const keyframes: KeyframePose[] = [
+      {
+        head: [94, 72], shoulder: [90, 86], hip: [72, 108],
+        elbowL: [94, 106], handL: [98, 128],
+        elbowR: [92, 106], handR: [96, 128],
+        kneeL: [94, 108], footL: [84, 128],
+        kneeR: [90, 108], footR: [80, 128],
+        intensity: 0.7,
+      },
+      {
+        head: [118, 96], shoulder: [104, 102], hip: [68, 108],
+        elbowL: [96, 114], handL: [102, 128],
+        elbowR: [94, 114], handR: [100, 128],
+        kneeL: [46, 118], footL: [26, 128],
+        kneeR: [44, 118], footR: [24, 128],
+        intensity: 1.0,
+      },
+      {
+        head: [98, 68], shoulder: [92, 82], hip: [74, 106],
+        elbowL: [94, 102], handL: [100, 122],
+        elbowR: [92, 102], handR: [98, 122],
+        kneeL: [96, 106], footL: [86, 128],
+        kneeR: [92, 106], footR: [82, 128],
+        intensity: 0.75,
+      },
+      {
+        head: [92, 22], shoulder: [92, 36], hip: [92, 70],
+        elbowL: [88, 18], handL: [86, 6],
+        elbowR: [96, 18], handR: [98, 6],
+        kneeL: [90, 92], footL: [88, 112],
+        kneeR: [94, 92], footR: [96, 112],
+        intensity: 1.0,
+      },
+    ];
+    const pose = multiPoseLerp(keyframes, cycle);
+    return {
+      props: [{ type: "floor", y: 130 }],
+      ...pose,
+      frontView: false,
+      contraction: pose.intensity,
+    };
+  }
+
+  if (id === 65 || n.includes("high knee")) {
+    const s = Math.sin(rawTime * Math.PI * 2.6);
+    const nRatio = (s + 1) / 2;
+    const bounce = Math.abs(Math.cos(rawTime * Math.PI * 2.6)) * 5;
+
+    const head: [number, number] = [96, 26 - bounce];
+    const shoulder: [number, number] = [94, 42 - bounce];
+    const hip: [number, number] = [92, 78 - bounce];
+
+    const kneeL = lerpPt([122, 66 - bounce], [90, 104 - bounce], nRatio);
+    const footL = lerpPt([116, 96 - bounce], [88, 128 - bounce * 0.4], nRatio);
+    const kneeR = lerpPt([90, 104 - bounce], [122, 66 - bounce], nRatio);
+    const footR = lerpPt([88, 128 - bounce * 0.4], [116, 96 - bounce], nRatio);
+
+    const elbowL = lerpPt([78, 58 - bounce], [108, 56 - bounce], nRatio);
+    const handL = lerpPt([68, 48 - bounce], [118, 40 - bounce], nRatio);
+    const elbowR = lerpPt([108, 56 - bounce], [78, 58 - bounce], nRatio);
+    const handR = lerpPt([118, 40 - bounce], [68, 48 - bounce], nRatio);
+
+    return {
+      props: [{ type: "floor", y: 130 }],
+      head, shoulder, hip,
+      elbowL, handL, elbowR, handR,
+      kneeL, footL, kneeR, footR,
+      frontView: false,
+      contraction: 0.65 + 0.35 * Math.abs(s),
+    };
+  }
+
+  if (id === 23 || n.includes("jump rope") || n.includes("skipping")) {
+    const angle = (rawTime * Math.PI * 2.8) % (Math.PI * 2);
+    const jumpFactor = Math.max(0, -Math.cos(angle));
+    const lift = jumpFactor * 14;
+
+    const head: [number, number] = [100, 32 - lift];
+    const shoulder: [number, number] = [100, 48 - lift];
+    const hip: [number, number] = [100, 82 - lift];
+
+    const wristCircle = Math.sin(angle) * 3;
+    const elbowL: [number, number] = [82, 66 - lift];
+    const handL: [number, number] = [74, 74 - lift + wristCircle];
+    const elbowR: [number, number] = [118, 66 - lift];
+    const handR: [number, number] = [126, 74 - lift + wristCircle];
+
+    const kneeL: [number, number] = [94, 104 - lift];
+    const footL: [number, number] = [94, 128 - lift * 1.1];
+    const kneeR: [number, number] = [106, 104 - lift];
+    const footR: [number, number] = [106, 128 - lift * 1.1];
+
+    const ropePeakY = 70 + Math.cos(angle) * 66 - lift * 0.4;
+    const ropeBehind = Math.sin(angle) < 0;
+
+    return {
+      props: [
+        { type: "floor", y: 132 },
+        { type: "jump_rope", handL, handR, peakY: ropePeakY, behind: ropeBehind },
+      ],
+      head, shoulder, hip,
+      elbowL, handL, elbowR, handR,
+      kneeL, footL, kneeR, footR,
+      frontView: true,
+      contraction: 0.55 + 0.45 * jumpFactor,
+    };
+  }
+
+  if (id === 66 || n.includes("jumping jack")) {
+    const tJack = (1 - Math.cos(rawTime * Math.PI * 2.4)) / 2;
+    const bounce = Math.sin(tJack * Math.PI) * 7;
+
+    const head: [number, number] = [100, 32 - bounce];
+    const shoulder: [number, number] = [100, 48 - bounce];
+    const hip: [number, number] = [100, 82 - bounce];
+
+    const elbowL = lerpPt([84, 68 - bounce], [76, 30 - bounce], tJack);
+    const handL = lerpPt([80, 86 - bounce], [94, 12 - bounce], tJack);
+    const elbowR = lerpPt([116, 68 - bounce], [124, 30 - bounce], tJack);
+    const handR = lerpPt([120, 86 - bounce], [106, 12 - bounce], tJack);
+
+    const kneeL = lerpPt([95, 106 - bounce], [80, 104 - bounce], tJack);
+    const footL = lerpPt([95, 128 - bounce * 0.5], [66, 128 - bounce * 0.3], tJack);
+    const kneeR = lerpPt([105, 106 - bounce], [120, 104 - bounce], tJack);
+    const footR = lerpPt([105, 128 - bounce * 0.5], [134, 128 - bounce * 0.3], tJack);
+
+    return {
+      props: [{ type: "floor", y: 130 }],
+      head, shoulder, hip,
+      elbowL, handL, elbowR, handR,
+      kneeL, footL, kneeR, footR,
+      frontView: true,
+      contraction: 0.45 + 0.55 * tJack,
+    };
+  }
+
+  if (id === 22 || n.includes("rowing machine") || n.includes("rower")) {
+    const tRow = (1 - Math.cos(rawTime * Math.PI * 1.6)) / 2;
+    const foot: [number, number] = [64, 118];
+    const hip = lerpPt([88, 104], [138, 104], tRow);
+    const knee = lerpPt([76, 80], [102, 106], tRow);
+    const shoulder = lerpPt([76, 66], [150, 68], tRow);
+    const head = lerpPt([74, 50], [154, 52], tRow);
+    const hand = lerpPt([56, 76], [134, 82], tRow);
+    const elbow = lerpPt([66, 72], [156, 80], tRow);
+
+    return {
+      props: [
+        { type: "floor", y: 132 },
+        { type: "rowing_machine", seatX: hip[0], handleX: hand[0], handleY: hand[1], spin: rawTime * 10 },
+      ],
+      head, shoulder, hip,
+      elbowL: elbow, handL: hand,
+      elbowR: elbow, handR: hand,
+      kneeL: knee, footL: foot,
+      kneeR: [knee[0] - 2, knee[1] - 2], footR: foot,
+      frontView: false,
+      contraction: 0.4 + 0.6 * tRow,
+    };
+  }
+
+  if (id === 21 || n.includes("treadmill") || (exercise.primary_muscle === "cardio" && !n.includes("burpee"))) {
+    const s = Math.sin(rawTime * Math.PI * 2.6);
+    const cVal = Math.cos(rawTime * Math.PI * 2.6);
+    const nRatio = (s + 1) / 2;
+    const bounce = Math.abs(cVal) * 4.5;
+
+    const hip: [number, number] = [94, 78 - bounce];
+    const shoulder: [number, number] = [100, 44 - bounce];
+    const head: [number, number] = [104, 28 - bounce];
+
+    const kneeL = lerpPt([116, 94 - bounce], [78, 96 - bounce], nRatio);
+    const footL = lerpPt([126, 116 - Math.max(0, cVal) * 8], [62, 114 - Math.max(0, -cVal) * 12], nRatio);
+    const kneeR = lerpPt([78, 96 - bounce], [116, 94 - bounce], nRatio);
+    const footR = lerpPt([62, 114 - Math.max(0, -cVal) * 12], [126, 116 - Math.max(0, cVal) * 8], nRatio);
+
+    const elbowL = lerpPt([84, 62 - bounce], [112, 60 - bounce], nRatio);
+    const handL = lerpPt([96, 52 - bounce], [124, 48 - bounce], nRatio);
+    const elbowR = lerpPt([112, 60 - bounce], [84, 62 - bounce], nRatio);
+    const handR = lerpPt([124, 48 - bounce], [96, 52 - bounce], nRatio);
+
+    return {
+      props: [
+        { type: "floor", y: 132 },
+        { type: "treadmill", beltOffset: (rawTime * 60) % 18 },
+      ],
+      head, shoulder, hip,
+      elbowL, handL, elbowR, handR,
+      kneeL, footL, kneeR, footR,
+      frontView: false,
+      contraction: 0.75 + 0.25 * Math.abs(s),
+    };
+  }
+
+  // ==========================================
+  // 4. CALVES / BETIS CATALOG (3 GERAKAN KHUSUS)
+  // ==========================================
+  if (id === 56 || n.includes("seated calf raise")) {
+    const hip: [number, number] = [62, 86];
+    const shoulder: [number, number] = [60, 48];
+    const head: [number, number] = [60, 32];
+    const toe: [number, number] = [126, 120];
+    const heel = lerpPt([111, 127], [115, 106], t);
+    const knee = lerpPt([111, 88], [114, 68], t);
+    const elbow: [number, number] = [74, 70];
+    const hand = lerpPt([98, 76], [100, 64], t);
+
+    return {
+      props: [
+        { type: "floor", y: 134 },
+        { type: "step_block", x: 118, y: 120, w: 22, h: 14 },
+        { type: "seated_calf_machine", seatX: 46, seatY: 90, kneeX: knee[0], kneeY: knee[1], t },
+      ],
+      head, shoulder, hip,
+      elbowL: elbow, handL: hand,
+      elbowR: elbow, handR: hand,
+      kneeL: knee, footL: toe,
+      kneeR: [knee[0] - 3, knee[1] - 2], footR: [toe[0] - 2, toe[1] - 1],
+      heelL: heel, toeL: toe,
+      heelR: [heel[0] - 3, heel[1] - 1], toeR: [toe[0] - 2, toe[1] - 1],
+      nonWorkingLeg: false,
+      contraction: t,
+    };
+  }
+
+  if (id === 50 || n.includes("single-leg calf raise")) {
+    const lift = lerp(4, -15, t);
+    const toe: [number, number] = [104, 118];
+    const heel = lerpPt([89, 126], [93, 105], t);
+    const knee: [number, number] = [95, 84 + lift];
+    const hip: [number, number] = [94, 56 + lift];
+    const shoulder: [number, number] = [95, 28 + lift];
+    const head: [number, number] = [95, 15 + lift];
+
+    const elbow: [number, number] = [110, 42 + lift * 0.7];
+    const hand: [number, number] = [132, 46 + lift * 0.3];
+
+    const kneeIdle: [number, number] = [91, 86 + lift];
+    const heelIdle: [number, number] = [74, 96 + lift];
+    const toeIdle: [number, number] = [72, 106 + lift];
+
+    return {
+      props: [
+        { type: "floor", y: 134 },
+        { type: "step_block", x: 98, y: 118, w: 26, h: 16 },
+        { type: "balance_post", x: 136, y1: 18, y2: 134 },
+      ],
+      head, shoulder, hip,
+      elbowL: elbow, handL: hand,
+      elbowR: elbow, handR: hand,
+      kneeL: knee, footL: toe,
+      kneeR: kneeIdle, footR: toeIdle,
+      heelL: heel, toeL: toe,
+      heelR: heelIdle, toeR: toeIdle,
+      nonWorkingLeg: true,
+      contraction: t,
+    };
+  }
+
+  if (id === 117 || n.includes("standing machine calf") || exercise.primary_muscle === "calves") {
+    const lift = lerp(4, -15, t);
+    const toe: [number, number] = [106, 118];
+    const heel = lerpPt([91, 126], [95, 105], t);
+    const knee: [number, number] = [97, 84 + lift];
+    const hip: [number, number] = [95, 56 + lift];
+    const shoulder: [number, number] = [96, 30 + lift];
+    const head: [number, number] = [96, 17 + lift];
+
+    const elbow: [number, number] = [84, 42 + lift];
+    const hand: [number, number] = [98, 28 + lift];
+
+    return {
+      props: [
+        { type: "floor", y: 134 },
+        { type: "step_block", x: 100, y: 118, w: 24, h: 16 },
+        { type: "standing_calf_machine", shoulderX: shoulder[0], shoulderY: shoulder[1], t },
+      ],
+      head, shoulder, hip,
+      elbowL: elbow, handL: hand,
+      elbowR: elbow, handR: hand,
+      kneeL: knee, footL: toe,
+      kneeR: [knee[0] - 4, knee[1] - 1], footR: [toe[0] - 3, toe[1] - 1],
+      heelL: heel, toeL: toe,
+      heelR: [heel[0] - 4, heel[1] - 1], toeR: [toe[0] - 3, toe[1] - 1],
+      nonWorkingLeg: false,
+      contraction: t,
+    };
+  }
+
+  // ==========================================
+  // 5. CHEST & PUSH-UP / BENCH PRESS ARCHETYPE
   // ==========================================
   if (
     n.includes("bench press") ||
@@ -738,7 +1085,7 @@ export function ExerciseStickmanCanvas({
       ctx.translate(offsetX, offsetY);
       ctx.scale(scale, scale);
 
-      const pose = getPose(exercise, phase, animTime * 0.625);
+      const pose = getPose(exercise, phase, animTime);
       const sec = exercise.secondary_muscles || [];
       const c = pose.contraction;
 
@@ -754,6 +1101,183 @@ export function ExerciseStickmanCanvas({
           ctx.moveTo(15, p.y);
           ctx.lineTo(185, p.y);
           ctx.stroke();
+        } else if (p.type === "jump_rope" && p.behind) {
+          ctx.save();
+          ctx.strokeStyle = "#475569";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([3, 2]);
+          ctx.beginPath();
+          ctx.moveTo(p.handL[0], p.handL[1]);
+          ctx.quadraticCurveTo(100, p.peakY, p.handR[0], p.handR[1]);
+          ctx.stroke();
+          ctx.restore();
+        } else if (p.type === "rowing_machine") {
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(45, 114);
+          ctx.lineTo(168, 114);
+          ctx.stroke();
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(52, 114);
+          ctx.lineTo(48, 132);
+          ctx.moveTo(160, 114);
+          ctx.lineTo(164, 132);
+          ctx.stroke();
+
+          // Flywheel at [40, 82]
+          ctx.fillStyle = "#0f172a";
+          ctx.strokeStyle = "#38bdf8";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(40, 82, 14, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          for (let i = 0; i < 3; i++) {
+            const a = p.spin + (i * Math.PI) / 1.5;
+            ctx.strokeStyle = "#0284c7";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(40 + Math.cos(a) * 11, 82 + Math.sin(a) * 11);
+            ctx.lineTo(40 - Math.cos(a) * 11, 82 - Math.sin(a) * 11);
+            ctx.stroke();
+          }
+
+          // Sliding seat
+          ctx.fillStyle = "#38bdf8";
+          ctx.fillRect(p.seatX - 7, 107, 14, 5);
+
+          // Chain handle
+          ctx.strokeStyle = "#94a3b8";
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([2, 2]);
+          ctx.beginPath();
+          ctx.moveTo(52, 76);
+          ctx.lineTo(p.handleX, p.handleY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else if (p.type === "treadmill") {
+          ctx.fillStyle = "#0f172a";
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 3.5;
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(42, 118, 110, 11, 5);
+          } else {
+            ctx.rect(42, 118, 110, 11);
+          }
+          ctx.fill();
+          ctx.stroke();
+
+          // Moving belt hashes
+          ctx.strokeStyle = "#38bdf8";
+          ctx.lineWidth = 2;
+          for (let x = 50; x < 145; x += 18) {
+            const bx = 145 - ((x + p.beltOffset) % 95);
+            ctx.beginPath();
+            ctx.moveTo(bx, 119);
+            ctx.lineTo(bx - 4, 127);
+            ctx.stroke();
+          }
+
+          // Console column & monitor
+          ctx.strokeStyle = "#475569";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(142, 118);
+          ctx.lineTo(154, 48);
+          ctx.lineTo(136, 48);
+          ctx.stroke();
+          ctx.fillStyle = "#38bdf8";
+          ctx.beginPath();
+          ctx.moveTo(148, 46);
+          ctx.lineTo(162, 34);
+          ctx.lineTo(156, 30);
+          ctx.lineTo(142, 42);
+          ctx.closePath();
+          ctx.fill();
+        } else if (p.type === "step_block") {
+          ctx.fillStyle = "#1e293b";
+          ctx.strokeStyle = "#64748b";
+          ctx.lineWidth = 2;
+          ctx.fillRect(p.x, p.y, p.w, p.h);
+          ctx.strokeRect(p.x, p.y, p.w, p.h);
+          ctx.strokeStyle = "#38bdf8";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(p.x + 2, p.y);
+          ctx.lineTo(p.x + p.w - 2, p.y);
+          ctx.stroke();
+        } else if (p.type === "balance_post") {
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y1);
+          ctx.lineTo(p.x, p.y2);
+          ctx.stroke();
+        } else if (p.type === "seated_calf_machine") {
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(p.seatX, p.seatY);
+          ctx.lineTo(p.seatX + 30, p.seatY);
+          ctx.stroke();
+          ctx.lineWidth = 3.5;
+          ctx.beginPath();
+          ctx.moveTo(p.seatX + 12, p.seatY);
+          ctx.lineTo(p.seatX + 12, 134);
+          ctx.stroke();
+
+          const pivotX = 148;
+          const pivotY = 86;
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(pivotX, 55);
+          ctx.lineTo(pivotX, 134);
+          ctx.stroke();
+
+          ctx.strokeStyle = "#475569";
+          ctx.lineWidth = 3.5;
+          ctx.beginPath();
+          ctx.moveTo(pivotX, pivotY);
+          ctx.lineTo(p.kneeX, p.kneeY - 7);
+          ctx.stroke();
+
+          const platePos = lerpPt([pivotX, pivotY], [p.kneeX, p.kneeY - 7], 0.45);
+          ctx.fillStyle = "#38bdf8";
+          ctx.strokeStyle = "#0284c7";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(platePos[0], platePos[1], 8.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#38bdf8";
+          ctx.fillRect(p.kneeX - 10, p.kneeY - 10, 18, 6);
+        } else if (p.type === "standing_calf_machine") {
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(142, 12);
+          ctx.lineTo(142, 134);
+          ctx.stroke();
+
+          const stackY = 98 - p.t * 24;
+          ctx.fillStyle = "#38bdf8";
+          ctx.fillRect(134, stackY, 16, 18);
+
+          ctx.strokeStyle = "#475569";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(142, p.shoulderY - 4);
+          ctx.lineTo(p.shoulderX - 6, p.shoulderY - 4);
+          ctx.stroke();
+
+          ctx.fillStyle = "#38bdf8";
+          ctx.fillRect(p.shoulderX - 9, p.shoulderY - 8, 18, 6.5);
         } else if (p.type === "wheel") {
           ctx.strokeStyle = "#64748b";
           ctx.lineWidth = 2.5;
@@ -938,25 +1462,150 @@ export function ExerciseStickmanCanvas({
       const isBiceps = primary === "biceps";
       const isTriceps = primary === "triceps";
       const isAbs = primary === "abs" || primary === "obliques";
+      const isCalves = primary === "calves";
+      const isCardio = primary === "cardio";
 
       const neutralColor = "#94a3b8";
       const secondaryColor = "#f59e0b"; // Amber
       const primaryColor = "#ef4444"; // Glowing Red
 
+      const hasQuadsOrLegs = sec.includes("quadriceps") || sec.includes("legs");
+      const hasCalvesOrLegs = sec.includes("calves") || sec.includes("legs");
+      const hasChest = sec.includes("chest");
+      const hasCore = sec.includes("core");
+      const hasBack = sec.includes("back");
+      const hasShoulders = sec.includes("shoulders");
+
       // Legs
-      const legColor = isLegs ? primaryColor : sec.includes("quadriceps") ? secondaryColor : neutralColor;
-      const legGlow = isLegs ? 10 * c : 0;
-      drawLimb(pose.hip, pose.kneeL, legColor, 4.5, isLegs ? primaryColor : null, legGlow);
-      drawLimb(pose.kneeL, pose.footL, neutralColor, 4);
-      drawLimb(pose.hip, pose.kneeR, legColor, 4.5, isLegs ? primaryColor : null, legGlow);
-      drawLimb(pose.kneeR, pose.footR, neutralColor, 4);
+      if (isCalves) {
+        const heelL = pose.heelL || pose.footL;
+        const toeL = pose.toeL || [heelL[0] + 12, heelL[1]];
+        const heelR = pose.heelR || pose.footR;
+        const toeR = pose.toeR || [heelR[0] + 12, heelR[1]];
+
+        // Inactive back leg
+        drawLimb(pose.hip, pose.kneeR, "#475569", 4.2);
+        if (pose.nonWorkingLeg) {
+          drawLimb(pose.kneeR, heelR, "#475569", 3.8);
+          drawLimb(heelR, toeR, "#475569", 3.5);
+        } else {
+          drawLimb(pose.kneeR, heelR, "#b91c1c", 4.2);
+          drawLimb(heelR, toeR, "#475569", 3.8);
+        }
+
+        // Active front thigh
+        drawLimb(pose.hip, pose.kneeL, neutralColor, 5);
+
+        // Calves shin (knee -> heel) in glowing primary red
+        drawLimb(pose.kneeL, heelL, primaryColor, 5.5 + 1.8 * c, primaryColor, 10 + 14 * c);
+
+        // Calf muscle belly bulge (Gastrocnemius/Soleus)
+        const bellyRatio = lerp(0.45, 0.34, c);
+        const calfAnchor = lerpPt(pose.kneeL, heelL, bellyRatio);
+        const dx = heelL[0] - pose.kneeL[0];
+        const dy = heelL[1] - pose.kneeL[1];
+        const len = Math.hypot(dx, dy) || 1;
+        const backX = -dy / len;
+        const backY = dx / len;
+        const bulgePos: [number, number] = [
+          calfAnchor[0] + backX * (3.5 + 3.2 * c),
+          calfAnchor[1] + backY * (3.5 + 3.2 * c),
+        ];
+
+        ctx.save();
+        ctx.fillStyle = primaryColor;
+        ctx.shadowColor = "#ef4444";
+        ctx.shadowBlur = 12 + 12 * c;
+        ctx.beginPath();
+        ctx.ellipse(
+          bulgePos[0],
+          bulgePos[1],
+          3.2 + 2.8 * c,
+          6.5 - 1.0 * c,
+          Math.atan2(dy, dx) - Math.PI / 2,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+        ctx.restore();
+
+        // Pulse halo
+        ctx.save();
+        ctx.strokeStyle = `rgba(239, 68, 68, ${0.25 + 0.55 * c})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(bulgePos[0], bulgePos[1], 6.5 + 4.5 * c, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        // Foot sole (heel -> toe)
+        drawLimb(heelL, toeL, "#f8fafc", 4.2);
+
+        // Ankle & toe pivots
+        ctx.fillStyle = "#fbbf24";
+        ctx.beginPath();
+        ctx.arc(heelL[0], heelL[1], 2.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#38bdf8";
+        ctx.beginPath();
+        ctx.arc(toeL[0], toeL[1], 2.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Heel lift indicator arrow
+        const arrowX = heelL[0] - 14;
+        const arrowY = heelL[1];
+        ctx.save();
+        ctx.strokeStyle = c > 0.5 ? "#ef4444" : "#64748b";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(arrowX, 126);
+        ctx.lineTo(arrowX, arrowY);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(arrowX - 3, arrowY + 3);
+        ctx.lineTo(arrowX, arrowY - 1);
+        ctx.lineTo(arrowX + 3, arrowY + 3);
+        ctx.stroke();
+        ctx.restore();
+      } else if (isCardio) {
+        const thighCol = hasQuadsOrLegs ? secondaryColor : neutralColor;
+        const calfCol = hasCalvesOrLegs ? secondaryColor : neutralColor;
+
+        if (pose.frontView) {
+          drawLimb(pose.hip, pose.kneeR, thighCol, 4.5, secondaryColor, hasQuadsOrLegs ? 7 * c : 0);
+          drawLimb(pose.kneeR, pose.footR, calfCol, 4.2, secondaryColor, hasCalvesOrLegs ? 8 * c : 0);
+          drawLimb(pose.hip, pose.kneeL, thighCol, 4.8, secondaryColor, hasQuadsOrLegs ? 8 * c : 0);
+          drawLimb(pose.kneeL, pose.footL, calfCol, 4.4, secondaryColor, hasCalvesOrLegs ? 8 * c : 0);
+        } else {
+          drawLimb(pose.hip, pose.kneeR, hasQuadsOrLegs ? "#b45309" : "#64748b", 4.2);
+          drawLimb(pose.kneeR, pose.footR, hasCalvesOrLegs ? "#b45309" : "#64748b", 3.8);
+          drawLimb(pose.hip, pose.kneeL, thighCol, 4.8, secondaryColor, hasQuadsOrLegs ? 8 * c : 0);
+          drawLimb(pose.kneeL, pose.footL, calfCol, 4.4, secondaryColor, hasCalvesOrLegs ? 8 * c : 0);
+        }
+      } else {
+        const legColor = isLegs ? primaryColor : sec.includes("quadriceps") ? secondaryColor : neutralColor;
+        const legGlow = isLegs ? 10 * c : 0;
+        drawLimb(pose.hip, pose.kneeL, legColor, 4.5, isLegs ? primaryColor : null, legGlow);
+        drawLimb(pose.kneeL, pose.footL, neutralColor, 4);
+        drawLimb(pose.hip, pose.kneeR, legColor, 4.5, isLegs ? primaryColor : null, legGlow);
+        drawLimb(pose.kneeR, pose.footR, neutralColor, 4);
+      }
 
       // Torso
       const midTorso = lerpPt(pose.shoulder, pose.hip, 0.35);
       const hasLats = sec.includes("lats") || isBack;
-      const upperTorsoColor = isChest || isBack ? primaryColor : hasLats ? secondaryColor : "#cbd5e1";
-      const upperTorsoGlow = isChest || isBack ? 12 * c : hasLats ? 8 * c : 0;
-      drawLimb(pose.shoulder, midTorso, upperTorsoColor, 6, isChest || isBack || hasLats ? upperTorsoColor : null, upperTorsoGlow);
+      const torsoGlowCardio = isCardio && (hasBack || hasCore || hasChest);
+      const upperTorsoColor = isChest || isBack ? primaryColor : hasLats || torsoGlowCardio ? secondaryColor : "#cbd5e1";
+      const upperTorsoGlow = isChest || isBack ? 12 * c : hasLats || torsoGlowCardio ? 8 * c : 0;
+      drawLimb(
+        pose.shoulder,
+        midTorso,
+        upperTorsoColor,
+        6,
+        isChest || isBack || hasLats || torsoGlowCardio ? upperTorsoColor : null,
+        upperTorsoGlow
+      );
 
       // Core / Abs
       const coreColor = isAbs ? primaryColor : neutralColor;
@@ -973,18 +1622,84 @@ export function ExerciseStickmanCanvas({
         ctx.restore();
       }
 
-      // Arms (Forearms & Biceps/Triceps)
+      // Cardio Heartbeat Pulse & Mini EKG
+      if (isCardio) {
+        const heartPos = lerpPt(pose.shoulder, pose.hip, 0.32);
+        const beat = (Math.sin(animTime * Math.PI * 4.2) + 1) / 2;
+
+        ctx.save();
+        ctx.strokeStyle = `rgba(239, 68, 68, ${0.65 - beat * 0.45})`;
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.arc(heartPos[0], heartPos[1], 6 + beat * 9, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.save();
+        ctx.fillStyle = primaryColor;
+        ctx.shadowColor = primaryColor;
+        ctx.shadowBlur = 12 + beat * 10;
+        ctx.beginPath();
+        ctx.arc(heartPos[0], heartPos[1], 4.5 + beat * 2.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.strokeStyle = "rgba(239, 68, 68, 0.75)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        const ekgX = 148;
+        const ekgY = 20;
+        ctx.moveTo(ekgX, ekgY);
+        ctx.lineTo(ekgX + 6, ekgY);
+        ctx.lineTo(ekgX + 9, ekgY - 7 * beat);
+        ctx.lineTo(ekgX + 13, ekgY + 6 * beat);
+        ctx.lineTo(ekgX + 17, ekgY - 3 * beat);
+        ctx.lineTo(ekgX + 20, ekgY);
+        ctx.lineTo(ekgX + 28, ekgY);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Arms (Forearms & Biceps/Triceps/Cardio)
       const hasForearms = sec.includes("forearms");
       const forearmColor = hasForearms ? secondaryColor : neutralColor;
       const forearmThick = exercise.name.toLowerCase().includes("hammer") ? 5.2 : 4.2;
-      drawLimb(pose.elbowL, pose.handL, forearmColor, forearmThick, hasForearms ? secondaryColor : null, hasForearms ? 5 + 8 * c : 0);
-      drawLimb(pose.elbowR, pose.handR, forearmColor, forearmThick, hasForearms ? secondaryColor : null, hasForearms ? 5 + 8 * c : 0);
+      const armColCardio = hasChest || hasShoulders ? secondaryColor : neutralColor;
 
-      const upperArmColor = isBiceps || isTriceps || isShoulders ? primaryColor : sec.includes("shoulders") ? secondaryColor : neutralColor;
-      const upperArmThick = isBiceps ? 6.2 + 2.2 * c : 4.5;
-      const armGlow = isBiceps || isTriceps || isShoulders ? 10 + 12 * c : 0;
-      drawLimb(pose.shoulder, pose.elbowL, upperArmColor, upperArmThick, upperArmColor, armGlow);
-      drawLimb(pose.shoulder, pose.elbowR, upperArmColor, upperArmThick, upperArmColor, armGlow);
+      if (isCardio) {
+        if (!pose.frontView) {
+          drawLimb(pose.shoulder, pose.elbowR, "#64748b", 3.8);
+          drawLimb(pose.elbowR, pose.handR, "#64748b", 3.5);
+        }
+        drawLimb(pose.shoulder, pose.elbowL, armColCardio, 4.2, secondaryColor, hasChest || hasShoulders ? 7 * c : 0);
+        drawLimb(pose.elbowL, pose.handL, neutralColor, 3.8);
+
+        if (pose.frontView) {
+          drawLimb(pose.shoulder, pose.elbowR, armColCardio, 4.2, secondaryColor, hasChest || hasShoulders ? 7 * c : 0);
+          drawLimb(pose.elbowR, pose.handR, neutralColor, 3.8);
+        }
+
+        if (hasShoulders) {
+          ctx.save();
+          ctx.fillStyle = secondaryColor;
+          ctx.shadowColor = secondaryColor;
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(pose.shoulder[0], pose.shoulder[1], 4.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      } else {
+        drawLimb(pose.elbowL, pose.handL, forearmColor, forearmThick, hasForearms ? secondaryColor : null, hasForearms ? 5 + 8 * c : 0);
+        drawLimb(pose.elbowR, pose.handR, forearmColor, forearmThick, hasForearms ? secondaryColor : null, hasForearms ? 5 + 8 * c : 0);
+
+        const upperArmColor = isBiceps || isTriceps || isShoulders ? primaryColor : sec.includes("shoulders") ? secondaryColor : neutralColor;
+        const upperArmThick = isBiceps ? 6.2 + 2.2 * c : 4.5;
+        const armGlow = isBiceps || isTriceps || isShoulders ? 10 + 12 * c : 0;
+        drawLimb(pose.shoulder, pose.elbowL, upperArmColor, upperArmThick, upperArmColor, armGlow);
+        drawLimb(pose.shoulder, pose.elbowR, upperArmColor, upperArmThick, upperArmColor, armGlow);
+      }
 
       // Biceps Peak Bulge (Tonjolan Otot Biceps saat Fleksi Siku)
       if (isBiceps) {
@@ -1067,6 +1782,22 @@ export function ExerciseStickmanCanvas({
       ctx.fill();
       ctx.stroke();
       ctx.restore();
+
+      // Jump Rope (Foreground pass when rope swings in front of body)
+      pose.props.forEach((p) => {
+        if (p.type === "jump_rope" && !p.behind) {
+          ctx.save();
+          ctx.strokeStyle = "#38bdf8";
+          ctx.lineWidth = 2.6;
+          ctx.shadowColor = "#38bdf8";
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.moveTo(p.handL[0], p.handL[1]);
+          ctx.quadraticCurveTo(100, p.peakY, p.handR[0], p.handR[1]);
+          ctx.stroke();
+          ctx.restore();
+        }
+      });
 
       ctx.restore();
 

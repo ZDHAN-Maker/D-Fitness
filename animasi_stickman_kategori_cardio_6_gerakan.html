@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Animasi Stickman - Kategori Cardio (6 Gerakan)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.3), 0 0 12px -5px rgba(245, 158, 11, 0.2);
+            border-color: rgba(239, 68, 68, 0.45);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
+
+    <!-- Header & Controls -->
+    <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3.5 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex items-start sm:items-center justify-between gap-3">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-sm">
+                            04
+                        </span>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                            Kategori: <span class="text-red-500">Cardio / Kardiovaskular</span>
+                        </h1>
+                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            6 Gerakan
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Animasi stickman ritmis dengan indikator detak jantung (Cardio Core) serta sorotan otot sekunder dinamis.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Legend & Interactive Toolbar -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3">
+                <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] animate-ping"></span>
+                        <span class="font-medium text-slate-200">Utama: Cardio (Detak Jantung)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></span>
+                        <span class="font-medium text-slate-300">Otot Sekunder Aktif</span>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <span class="w-3 h-1.5 rounded bg-sky-400"></span>
+                        <span class="text-slate-400">Mesin / Tali</span>
+                    </div>
+                </div>
+
+                <!-- Speed & Play Controls -->
+                <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+                    <button id="btnPlayPause" onclick="togglePlay()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition flex items-center gap-1.5">
+                        <span id="playIcon">⏸</span> <span id="playText">Jeda</span>
+                    </button>
+                    <button onclick="setSpeed(0.5)" id="spd-0.5" class="spd-btn px-2 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">0.5x</button>
+                    <button onclick="setSpeed(1)" id="spd-1" class="spd-btn px-2 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition">1x</button>
+                    <button onclick="setSpeed(1.5)" id="spd-1.5" class="spd-btn px-2 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">1.5x</button>
+                    <button onclick="setSpeed(2)" id="spd-2" class="spd-btn px-2 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">2x</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter, Search & Batch Download Bar -->
+    <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-5 pb-2">
+        <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between bg-slate-900/60 border border-slate-800/80 p-3 rounded-2xl">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs text-slate-400 mr-1 font-medium">Filter:</span>
+                <button onclick="setFilter('all')" data-flt="all" class="flt-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition">Semua (6)</button>
+                <button onclick="setFilter('bodyweight')" data-flt="bodyweight" class="flt-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Bodyweight (4)</button>
+                <button onclick="setFilter('machine')" data-flt="machine" class="flt-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Machine (2)</button>
+                <span class="text-slate-700 mx-1">|</span>
+                <button onclick="setFilter('duration')" data-flt="duration" class="flt-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">⏱ Duration (3)</button>
+                <button onclick="setFilter('distance_duration')" data-flt="distance_duration" class="flt-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">📏 Distance+Duration (2)</button>
+                <button onclick="setFilter('reps_only')" data-flt="reps_only" class="flt-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">🔢 Reps Only (1)</button>
+            </div>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 lg:max-w-md justify-end">
+                <div class="relative flex-1">
+                    <input type="text" id="searchInput" oninput="renderGrid()" placeholder="Cari gerakan atau ID (#67, Burpees...)" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                </div>
+                <button onclick="downloadAllSVGs()" class="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shrink-0 shadow-lg shadow-red-600/20">
+                    <span>⬇</span> Unduh Semua SVG (6)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Exercises Grid -->
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 flex-1">
+        <div id="exerciseGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Cards injected via JS -->
+        </div>
+    </main>
+
+    <!-- Modal Detail / Fokus View & Export SVG -->
+    <div id="focusModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+                <div>
+                    <span id="modalId" class="text-xs font-bold text-red-400 uppercase tracking-wider">ID #67</span>
+                    <h2 id="modalTitle" class="text-lg font-bold text-white">Burpees</h2>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <div class="p-5">
+                <div class="relative bg-slate-950 rounded-xl border border-slate-800 h-72 w-full overflow-hidden">
+                    <canvas id="modalCanvas"></canvas>
+                    <div id="modalPhaseBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300">
+                        Fase Gerakan
+                    </div>
+                    <div class="absolute bottom-3 left-3 flex items-center gap-2 px-2.5 py-1 rounded-md bg-red-950/80 border border-red-500/40 text-red-300 text-[11px] font-bold">
+                        <span class="animate-pulse">❤️</span> <span id="modalBpm">145 BPM • Zona Aerobik</span>
+                    </div>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-3 text-xs">
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
+                        <span class="text-slate-400 block mb-1">Target Utama (Merah):</span>
+                        <span id="modalPrimary" class="font-bold text-red-400 uppercase">CARDIO (Jantung & Paru)</span>
+                    </div>
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
+                        <span class="text-slate-400 block mb-1">Otot Sekunder (Kuning):</span>
+                        <span id="modalSecondary" class="font-semibold text-amber-400">Chest, Quadriceps, Core</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 justify-end">
+                    <button onclick="exportAnimatedSVG(currentModalExerciseId)" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+                        <span>⬇</span> Unduh File Animasi Ringan (.SVG)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2">
+        <span>✓</span> <span id="toastMsg">File SVG berhasil diunduh!</span>
+    </div>
+
+    <script>
+        // ============================================================================
+        // 1. DATA KATALOG 6 GERAKAN CARDIO (Sesuai File exercises_catalog.json)
+        // ============================================================================
+        const CARDIO_EXERCISES = [
+            {
+                id: 67,
+                name: "Burpees",
+                primary_muscle: "cardio",
+                secondary_muscles: ["chest", "quadriceps", "core"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "cardio",
+                tracking_mode: "reps_only",
+                bpm_label: "165 BPM • HIIT Explosif",
+                desc: "Gerakan kombo seluruh tubuh: turun jongkok (squat), tendang kaki ke belakang (plank/push-up), kembali jongkok, dan melompat vertikal."
+            },
+            {
+                id: 65,
+                name: "High Knees",
+                primary_muscle: "cardio",
+                secondary_muscles: ["quadriceps", "calves"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "cardio",
+                tracking_mode: "duration",
+                bpm_label: "152 BPM • Sprint Ditempat",
+                desc: "Berlari cepat di tempat sambil mengangkat lutut bergantian setinggi pinggul disertai ayunan lengan aktif."
+            },
+            {
+                id: 23,
+                name: "Jump Rope",
+                primary_muscle: "cardio",
+                secondary_muscles: ["calves"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "cardio",
+                tracking_mode: "duration",
+                bpm_label: "148 BPM • Ritme Engkel",
+                desc: "Melompat ringan dan cepat menggunakan pantulan ujung kaki (otot betis) sembari memutar tali melewati atas kepala dan bawah kaki."
+            },
+            {
+                id: 66,
+                name: "Jumping Jacks",
+                primary_muscle: "cardio",
+                secondary_muscles: ["calves", "shoulders"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "cardio",
+                tracking_mode: "duration",
+                bpm_label: "138 BPM • Kalistenik Ritmis",
+                desc: "Melompat membuka kedua kaki selebar bahu bersamaan dengan mengayunkan kedua tangan ke atas kepala, lalu kembali merapat."
+            },
+            {
+                id: 22,
+                name: "Rowing Machine",
+                primary_muscle: "cardio",
+                secondary_muscles: ["back", "legs"],
+                equipment: "machine",
+                difficulty: "beginner",
+                movement_type: "cardio",
+                tracking_mode: "distance_duration",
+                bpm_label: "155 BPM • Daya Tahan Total",
+                desc: "Mendayung di atas mesin ergometer: dorong pijakan dengan kekuatan kaki (legs), tarik handle ke perut dengan punggung (back), lalu meluncur kembali."
+            },
+            {
+                id: 21,
+                name: "Treadmill Run",
+                primary_muscle: "cardio",
+                secondary_muscles: [],
+                equipment: "machine",
+                difficulty: "beginner",
+                movement_type: "cardio",
+                tracking_mode: "distance_duration",
+                bpm_label: "150 BPM • Lari Kardio Murni",
+                desc: "Berlari dengan langkah konstan di atas sabuk mesin treadmill yang berputar untuk melatih daya tahan jantung dan paru-paru."
+            }
+        ];
+
+        // ============================================================================
+        // 2. KINEMATIKA SENDI STICKMAN UNTUK 6 GERAKAN CARDIO (200x150 Viewport)
+        // ============================================================================
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+
+        // Interpolasi multi-keyframe (untuk gerakan kompleks seperti Burpees)
+        function multiPoseLerp(poses, cycle) {
+            const n = poses.length;
+            const scaled = (cycle % 1) * n;
+            const idx = Math.floor(scaled);
+            const frac = scaled - idx;
+            // Smoothstep agar transisi antar-fase tegas namun mulus
+            const s = frac * frac * (3 - 2 * frac);
+            const pA = poses[idx % n];
+            const pB = poses[(idx + 1) % n];
+
+            const keys = ['head', 'shoulder', 'hip', 'elbowL', 'handL', 'elbowR', 'handR', 'kneeL', 'footL', 'kneeR', 'footR'];
+            const out = {};
+            keys.forEach(k => {
+                out[k] = lerpPt(pA[k], pB[k], s);
+            });
+            out.phaseName = pA.phaseName;
+            out.intensity = lerp(pA.intensity, pB.intensity, s);
+            return out;
+        }
+
+        function getPoseForExercise(id, rawTime) {
+            // cycle berjalan 0..1 berulang setiap ~1.2 detik (atau 1.8 detik untuk Burpees)
+            switch (id) {
+                case 67: { // Burpees (4 Fase: Squat Thrust -> Push-up Plank -> Squat Frog -> Vertical Jump)
+                    const cycle = (rawTime * 0.65) % 1;
+                    const keyframes = [
+                        { // 0: Squat Hands Down
+                            phaseName: "1. Squat Thrust",
+                            intensity: 0.7,
+                            head: [94, 72], shoulder: [90, 86], hip: [72, 108],
+                            elbowL: [94, 106], handL: [98, 128],
+                            elbowR: [92, 106], handR: [96, 128],
+                            kneeL: [94, 108], footL: [84, 128],
+                            kneeR: [90, 108], footR: [80, 128]
+                        },
+                        { // 1: Plank / Bottom Push-up (Chest & Core Active)
+                            phaseName: "2. Push-up / Plank",
+                            intensity: 1.0,
+                            head: [118, 96], shoulder: [104, 102], hip: [68, 108],
+                            elbowL: [96, 114], handL: [102, 128],
+                            elbowR: [94, 114], handR: [100, 128],
+                            kneeL: [46, 118], footL: [26, 128],
+                            kneeR: [44, 118], footR: [24, 128]
+                        },
+                        { // 2: Squat Tuck Ready to Jump
+                            phaseName: "3. Tuck Recovery",
+                            intensity: 0.75,
+                            head: [98, 68], shoulder: [92, 82], hip: [74, 106],
+                            elbowL: [94, 102], handL: [100, 122],
+                            elbowR: [92, 102], handR: [98, 122],
+                            kneeL: [96, 106], footL: [86, 128],
+                            kneeR: [92, 106], footR: [82, 128]
+                        },
+                        { // 3: Explosive Jump Up (Quads & Cardio Peak)
+                            phaseName: "4. Explosive Jump!",
+                            intensity: 1.0,
+                            head: [92, 22], shoulder: [92, 36], hip: [92, 70],
+                            elbowL: [88, 18], handL: [86, 6],
+                            elbowR: [96, 18], handR: [98, 6],
+                            kneeL: [90, 92], footL: [88, 112],
+                            kneeR: [94, 92], footR: [96, 112]
+                        }
+                    ];
+                    const pose = multiPoseLerp(keyframes, cycle);
+                    pose.props = [{ type: 'floor', y: 130 }];
+                    pose.frontView = false;
+                    return pose;
+                }
+
+                case 65: { // High Knees (Lari cepat di tempat, lutut naik >90 derajat bergantian)
+                    const s = Math.sin(rawTime * Math.PI * 2.6); // -1 ke 1
+                    const n = (s + 1) / 2; // 0 ke 1
+                    const bounce = Math.abs(Math.cos(rawTime * Math.PI * 2.6)) * 5;
+
+                    const head = [96, 26 - bounce];
+                    const shoulder = [94, 42 - bounce];
+                    const hip = [92, 78 - bounce];
+
+                    // Kaki Kiri & Kanan bergantian terangkat tinggi ke dada
+                    const kneeL = lerpPt([122, 66 - bounce], [90, 104 - bounce], n);
+                    const footL = lerpPt([116, 96 - bounce], [88, 128 - bounce * 0.4], n);
+
+                    const kneeR = lerpPt([90, 104 - bounce], [122, 66 - bounce], n);
+                    const footR = lerpPt([88, 128 - bounce * 0.4], [116, 96 - bounce], n);
+
+                    // Ayunan lengan sprint berlawanan dengan kaki
+                    const elbowL = lerpPt([78, 58 - bounce], [108, 56 - bounce], n);
+                    const handL = lerpPt([68, 48 - bounce], [118, 40 - bounce], n);
+
+                    const elbowR = lerpPt([108, 56 - bounce], [78, 58 - bounce], n);
+                    const handR = lerpPt([118, 40 - bounce], [68, 48 - bounce], n);
+
+                    return {
+                        props: [{ type: 'floor', y: 130 }],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        phaseName: Math.abs(s) > 0.5 ? "🔥 Lutut Tinggi (Drive)" : "Transisi Langkah",
+                        intensity: 0.65 + 0.35 * Math.abs(s),
+                        frontView: false
+                    };
+                }
+
+                case 23: { // Jump Rope (Tampilan Depan/Sedikit Serong + Tali Melengkung Berputar 360 Derajat)
+                    const angle = (rawTime * Math.PI * 2.8) % (Math.PI * 2);
+                    // Saat tali di bawah (sekitar angle = PI), stickman melompat di puncak
+                    const jumpFactor = Math.max(0, -Math.cos(angle)); // 1 saat angle=PI
+                    const lift = jumpFactor * 14;
+
+                    const head = [100, 32 - lift];
+                    const shoulder = [100, 48 - lift];
+                    const hip = [100, 82 - lift];
+
+                    // Tangan di samping pinggul memutar pergelangan
+                    const wristCircle = Math.sin(angle) * 3;
+                    const elbowL = [82, 66 - lift];
+                    const handL = [74, 74 - lift + wristCircle];
+                    const elbowR = [118, 66 - lift];
+                    const handR = [126, 74 - lift + wristCircle];
+
+                    // Lutut sedikit mengeper, engkel/betis memantul
+                    const kneeL = [94, 104 - lift];
+                    const footL = [94, 128 - lift * 1.1];
+                    const kneeR = [106, 104 - lift];
+                    const footR = [106, 128 - lift * 1.1];
+
+                    // Puncak lengkungan tali dari atas kepala (y=6) ke bawah kaki (y=134)
+                    const ropePeakY = 70 + Math.cos(angle) * 66 - lift * 0.4;
+                    const ropeBehind = Math.sin(angle) < 0; // Apakah tali sedang lewat di belakang badan atau di depan
+
+                    return {
+                        props: [
+                            { type: 'floor', y: 132 },
+                            { type: 'jump_rope', handL, handR, peakY: ropePeakY, behind: ropeBehind }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        phaseName: jumpFactor > 0.5 ? "🔥 Lompatan Engkel & Betis" : "Ayunan Tali Atas",
+                        intensity: 0.55 + 0.45 * jumpFactor,
+                        frontView: true
+                    };
+                }
+
+                case 66: { // Jumping Jacks (Tampilan Frontal: Kaki Membuka Lebar & Tangan Tepuk di Atas Kepala)
+                    const t = (1 - Math.cos(rawTime * Math.PI * 2.4)) / 2; // 0 (rapat) -> 1 (terbuka penuh)
+                    const bounce = Math.sin(t * Math.PI) * 7;
+
+                    const head = [100, 32 - bounce];
+                    const shoulder = [100, 48 - bounce];
+                    const hip = [100, 82 - bounce];
+
+                    // Bahu kiri & kanan untuk tampak depan
+                    const elbowL = lerpPt([84, 68 - bounce], [76, 30 - bounce], t);
+                    const handL = lerpPt([80, 86 - bounce], [94, 12 - bounce], t);
+
+                    const elbowR = lerpPt([116, 68 - bounce], [124, 30 - bounce], t);
+                    const handR = lerpPt([120, 86 - bounce], [106, 12 - bounce], t);
+
+                    const kneeL = lerpPt([95, 106 - bounce], [80, 104 - bounce], t);
+                    const footL = lerpPt([95, 128 - bounce * 0.5], [66, 128 - bounce * 0.3], t);
+
+                    const kneeR = lerpPt([105, 106 - bounce], [120, 104 - bounce], t);
+                    const footR = lerpPt([105, 128 - bounce * 0.5], [134, 128 - bounce * 0.3], t);
+
+                    return {
+                        props: [{ type: 'floor', y: 130 }],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        phaseName: t > 0.6 ? "🔥 Abduksi Bahu & Betis" : "Posisi Rapat Awal",
+                        intensity: 0.45 + 0.55 * t,
+                        frontView: true
+                    };
+                }
+
+                case 22: { // Rowing Machine (Catch -> Drive -> Finish -> Recovery di atas Mesin Dayung)
+                    const t = (1 - Math.cos(rawTime * Math.PI * 1.6)) / 2; // 0 = Catch (maju), 1 = Finish (tarik belakang)
+
+                    // Kaki terikat tetap di foot stretcher [64, 118]
+                    const foot = [64, 118];
+                    // Kursi meluncur di atas rel dari x=88 (Catch) ke x=138 (Finish)
+                    const hip = lerpPt([88, 104], [138, 104], t);
+                    // Lutut menekuk tinggi saat Catch, lurus saat Finish
+                    const knee = lerpPt([76, 80], [102, 106], t);
+                    // Bahu condong ke depan saat Catch, condong sedikit ke belakang saat Finish
+                    const shoulder = lerpPt([76, 66], [150, 68], t);
+                    const head = lerpPt([74, 50], [154, 52], t);
+
+                    // Tangan memegang handle rantai: lurus ke roda depan saat Catch, ditarik ke rusuk saat Finish
+                    const hand = lerpPt([56, 76], [134, 82], t);
+                    const elbow = lerpPt([66, 72], [156, 80], t);
+
+                    return {
+                        props: [
+                            { type: 'floor', y: 132 },
+                            { type: 'rowing_machine', seatX: hip[0], handleX: hand[0], handleY: hand[1], spin: rawTime * 10 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: knee, footL: foot,
+                        kneeR: [knee[0] - 2, knee[1] - 2], footR: foot,
+                        phaseName: t > 0.6 ? "🔥 Drive & Tarikan Punggung" : "Fase Catch (Kompresi)",
+                        intensity: 0.4 + 0.6 * t,
+                        frontView: false
+                    };
+                }
+
+                case 21: { // Treadmill Run (Lari ritmis di atas sabuk mesin treadmill)
+                    const s = Math.sin(rawTime * Math.PI * 2.6); // -1 ke 1
+                    const c = Math.cos(rawTime * Math.PI * 2.6);
+                    const n = (s + 1) / 2;
+                    const bounce = Math.abs(c) * 4.5;
+
+                    // Stickman condong sedikit ke depan (postur lari atletis)
+                    const hip = [94, 78 - bounce];
+                    const shoulder = [100, 44 - bounce];
+                    const head = [104, 28 - bounce];
+
+                    // Siklus lari (stride depan & dorongan belakang + tekukan lutut saat melayang)
+                    const kneeL = lerpPt([116, 94 - bounce], [78, 96 - bounce], n);
+                    const footL = lerpPt([126, 116 - Math.max(0, c) * 8], [62, 114 - Math.max(0, -c) * 12], n);
+
+                    const kneeR = lerpPt([78, 96 - bounce], [116, 94 - bounce], n);
+                    const footR = lerpPt([62, 114 - Math.max(0, -c) * 12], [126, 116 - Math.max(0, c) * 8], n);
+
+                    // Ayunan lengan pelari
+                    const elbowL = lerpPt([84, 62 - bounce], [112, 60 - bounce], n);
+                    const handL = lerpPt([96, 52 - bounce], [124, 48 - bounce], n);
+
+                    const elbowR = lerpPt([112, 60 - bounce], [84, 62 - bounce], n);
+                    const handR = lerpPt([124, 48 - bounce], [96, 52 - bounce], n);
+
+                    return {
+                        props: [
+                            { type: 'floor', y: 132 },
+                            { type: 'treadmill', beltOffset: (rawTime * 60) % 18 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        phaseName: "🏃 Langkah Lari Kardio Konstan",
+                        intensity: 0.75 + 0.25 * Math.abs(s),
+                        frontView: false
+                    };
+                }
+            }
+        }
+
+        // ============================================================================
+        // 3. RENDERER CANVAS STICKMAN DENGAN DETAK JANTUNG CARDIO & OTOT SEKUNDER
+        // ============================================================================
+        function drawStickman(ctx, width, height, ex, rawTime) {
+            ctx.clearRect(0, 0, width, height);
+
+            const scale = Math.min(width / 200, height / 150);
+            const offsetX = (width - 200 * scale) / 2;
+            const offsetY = (height - 150 * scale) / 2;
+
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+
+            const pose = getPoseForExercise(ex.id, rawTime);
+            const sec = ex.secondary_muscles;
+            const c = pose.intensity; // 0..1 intensitas kardio & otot
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Helper menggambar segmen tubuh
+            function drawLimb(pt1, pt2, color, width, glowColor = null, glowBlur = 0) {
+                ctx.save();
+                if (glowColor && glowBlur > 0) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = glowBlur;
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                ctx.beginPath();
+                ctx.moveTo(pt1[0], pt1[1]);
+                ctx.lineTo(pt2[0], pt2[1]);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // 1. Gambar Props Latar Belakang (Lantai, Mesin, atau Tali Bagian Belakang)
+            pose.props.forEach(p => {
+                if (p.type === 'floor') {
+                    ctx.strokeStyle = '#1e293b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(15, p.y);
+                    ctx.lineTo(185, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'jump_rope' && p.behind) {
+                    ctx.save();
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([3, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(p.handL[0], p.handL[1]);
+                    ctx.quadraticCurveTo(100, p.peakY, p.handR[0], p.handR[1]);
+                    ctx.stroke();
+                    ctx.restore();
+                } else if (p.type === 'rowing_machine') {
+                    // Rel meluncur mesin rowing
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(45, 114);
+                    ctx.lineTo(168, 114);
+                    ctx.stroke();
+                    // Kaki penyangga rel
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(52, 114); ctx.lineTo(48, 132);
+                    ctx.moveTo(160, 114); ctx.lineTo(164, 132);
+                    ctx.stroke();
+                    // Roda Flywheel di kiri depan [40, 82]
+                    ctx.fillStyle = '#0f172a';
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.arc(40, 82, 14, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    // Jari-jari kipas flywheel berputar
+                    for (let i = 0; i < 3; i++) {
+                        const a = p.spin + (i * Math.PI / 1.5);
+                        ctx.strokeStyle = '#0284c7';
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(40 + Math.cos(a) * 11, 82 + Math.sin(a) * 11);
+                        ctx.lineTo(40 - Math.cos(a) * 11, 82 - Math.sin(a) * 11);
+                        ctx.stroke();
+                    }
+                    // Bantalan kursi geser (Sliding Seat)
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(p.seatX - 7, 107, 14, 5);
+                    // Rantai tarik dari flywheel ke handle tangan
+                    ctx.strokeStyle = '#94a3b8';
+                    ctx.lineWidth = 1.6;
+                    ctx.setLineDash([2, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(52, 76);
+                    ctx.lineTo(p.handleX, p.handleY);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                } else if (p.type === 'treadmill') {
+                    // Dek bawah sabuk lari treadmill
+                    ctx.fillStyle = '#0f172a';
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 3.5;
+                    ctx.beginPath();
+                    ctx.roundRect(42, 118, 110, 11, 5);
+                    ctx.fill();
+                    ctx.stroke();
+                    // Indikator garis sabuk bergerak ke kiri (efek lari)
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2;
+                    for (let x = 50; x < 145; x += 18) {
+                        const bx = 145 - ((x + p.beltOffset) % 95);
+                        ctx.beginPath();
+                        ctx.moveTo(bx, 119);
+                        ctx.lineTo(bx - 4, 127);
+                        ctx.stroke();
+                    }
+                    // Tiang depan & layar konsol treadmill di kanan
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(142, 118);
+                    ctx.lineTo(154, 48);
+                    ctx.lineTo(136, 48);
+                    ctx.stroke();
+                    // Layar konsol menyala
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.beginPath();
+                    ctx.moveTo(148, 46);
+                    ctx.lineTo(162, 34);
+                    ctx.lineTo(156, 30);
+                    ctx.lineTo(142, 42);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            });
+
+            // Penentuan Warna Segmen Berdasarkan Secondary Muscles di JSON
+            const neutralColor = '#94a3b8';
+            const backLimbColor = '#64748b';
+            const secondaryColor = '#f59e0b'; // Kuning/Oranye untuk Otot Sekunder
+            const cardioRed = '#ef4444';      // Merah Menyala untuk Jantung/Cardio Core
+
+            const hasQuadsOrLegs = sec.includes('quadriceps') || sec.includes('legs');
+            const hasCalvesOrLegs = sec.includes('calves') || sec.includes('legs');
+            const hasChest = sec.includes('chest');
+            const hasCore = sec.includes('core');
+            const hasBack = sec.includes('back');
+            const hasShoulders = sec.includes('shoulders');
+
+            const thighCol = hasQuadsOrLegs ? secondaryColor : neutralColor;
+            const calfCol = hasCalvesOrLegs ? secondaryColor : neutralColor;
+            const armCol = (hasChest || hasShoulders) ? secondaryColor : neutralColor;
+
+            // 2. Gambar Kaki & Lengan Belakang (Jika Tampilan Samping)
+            if (!pose.frontView) {
+                drawLimb(pose.hip, pose.kneeR, hasQuadsOrLegs ? '#b45309' : backLimbColor, 4.2);
+                drawLimb(pose.kneeR, pose.footR, hasCalvesOrLegs ? '#b45309' : backLimbColor, 3.8);
+                drawLimb(pose.shoulder, pose.elbowR, backLimbColor, 3.8);
+                drawLimb(pose.elbowR, pose.handR, backLimbColor, 3.5);
+            } else {
+                // Jika tampak depan (Jumping Jacks & Jump Rope), kedua sisi kiri & kanan digambar simetris menyala
+                drawLimb(pose.hip, pose.kneeR, thighCol, 4.5, secondaryColor, hasQuadsOrLegs ? 7 * c : 0);
+                drawLimb(pose.kneeR, pose.footR, calfCol, 4.2, secondaryColor, hasCalvesOrLegs ? 8 * c : 0);
+            }
+
+            // 3. Gambar Kaki Depan / Kiri
+            drawLimb(pose.hip, pose.kneeL, thighCol, 4.8, secondaryColor, hasQuadsOrLegs ? 8 * c : 0);
+            drawLimb(pose.kneeL, pose.footL, calfCol, 4.4, secondaryColor, hasCalvesOrLegs ? 8 * c : 0);
+
+            // 4. Gambar Torso (Sorot Punggung/Back atau Core/Chest jika ada di Secondary Muscles)
+            const torsoGlow = (hasBack || hasCore || hasChest);
+            const torsoCol = torsoGlow ? secondaryColor : '#cbd5e1';
+            drawLimb(pose.shoulder, pose.hip, torsoCol, 6.2, secondaryColor, torsoGlow ? 8 * c : 0);
+
+            // 5. INDIKATOR UTAMA KATEGORI CARDIO: DETAK JANTUNG & AURA KARDIOVASKULAR (MERAH MENYALA)
+            const heartPos = lerpPt(pose.shoulder, pose.hip, 0.32);
+            const beat = (Math.sin(rawTime * Math.PI * 5.2) + 1) / 2; // Denyut jantung cepat
+
+            // Gelombang Cincin Kardio (Cardio Pulse Ring)
+            ctx.save();
+            ctx.strokeStyle = `rgba(239, 68, 68, ${0.65 - beat * 0.45})`;
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            ctx.arc(heartPos[0], heartPos[1], 6 + beat * 9, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            // Inti Jantung Menyala Merah di Dada Stickman
+            ctx.save();
+            ctx.fillStyle = cardioRed;
+            ctx.shadowColor = cardioRed;
+            ctx.shadowBlur = 12 + beat * 10;
+            ctx.beginPath();
+            ctx.arc(heartPos[0], heartPos[1], 4.5 + beat * 2.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // 6. Gambar Lengan & Bahu
+            if (hasShoulders) {
+                ctx.save();
+                ctx.fillStyle = secondaryColor;
+                ctx.shadowColor = secondaryColor;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(pose.shoulder[0], pose.shoulder[1], 4.8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            drawLimb(pose.shoulder, pose.elbowL, armCol, 4.2, secondaryColor, (hasChest || hasShoulders) ? 7 * c : 0);
+            drawLimb(pose.elbowL, pose.handL, neutralColor, 3.8);
+
+            if (pose.frontView) {
+                drawLimb(pose.shoulder, pose.elbowR, armCol, 4.2, secondaryColor, (hasChest || hasShoulders) ? 7 * c : 0);
+                drawLimb(pose.elbowR, pose.handR, neutralColor, 3.8);
+            }
+
+            // 7. Kepala Stickman
+            ctx.save();
+            ctx.fillStyle = '#0f172a';
+            ctx.strokeStyle = '#f8fafc';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(pose.head[0], pose.head[1], 8.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+
+            // 8. Gambar Tali Jump Rope Saat Berada di Depan Tubuh
+            pose.props.forEach(p => {
+                if (p.type === 'jump_rope' && !p.behind) {
+                    ctx.save();
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2.6;
+                    ctx.shadowColor = '#38bdf8';
+                    ctx.shadowBlur = 8;
+                    ctx.beginPath();
+                    ctx.moveTo(p.handL[0], p.handL[1]);
+                    ctx.quadraticCurveTo(100, p.peakY, p.handR[0], p.handR[1]);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            });
+
+            // 9. Indikator EKG / Detak Jantung Mini di Sudut Kanan Atas Kanvas
+            ctx.save();
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.75)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            const ekgX = 148;
+            const ekgY = 20;
+            ctx.moveTo(ekgX, ekgY);
+            ctx.lineTo(ekgX + 8, ekgY);
+            ctx.lineTo(ekgX + 11, ekgY - 4);
+            ctx.lineTo(ekgX + 14, ekgY + 7);
+            ctx.lineTo(ekgX + 18, ekgY - (8 + beat * 5));
+            ctx.lineTo(ekgX + 22, ekgY + 5);
+            ctx.lineTo(ekgX + 25, ekgY);
+            ctx.lineTo(ekgX + 34, ekgY);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.restore();
+        }
+
+        // ============================================================================
+        // 4. LOGIKA UI GRID, FILTER, DAN LOOP ANIMASI
+        // ============================================================================
+        let isPlaying = true;
+        let speedMultiplier = 1.0;
+        let activeFilter = 'all';
+        let animTime = 0;
+        let lastTimestamp = performance.now();
+        let currentModalExerciseId = null;
+
+        const diffBadgeColors = {
+            beginner: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+            intermediate: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+            advanced: 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+        };
+
+        const diffLabels = {
+            beginner: 'Pemula',
+            intermediate: 'Menengah',
+            advanced: 'Mahir'
+        };
+
+        function setFilter(flt) {
+            activeFilter = flt;
+            document.querySelectorAll('.flt-btn').forEach(btn => {
+                if (btn.dataset.flt === flt) {
+                    btn.className = 'flt-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition';
+                } else {
+                    btn.className = 'flt-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition';
+                }
+            });
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('exerciseGrid');
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            const filtered = CARDIO_EXERCISES.filter(ex => {
+                const matchFlt = activeFilter === 'all' || ex.equipment === activeFilter || ex.tracking_mode === activeFilter;
+                const matchQuery = ex.name.toLowerCase().includes(query) || String(ex.id).includes(query);
+                return matchFlt && matchQuery;
+            });
+
+            grid.innerHTML = filtered.map(ex => {
+                const secBadges = ex.secondary_muscles.length > 0
+                    ? ex.secondary_muscles.map(m => `<span class="px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-medium capitalize">${m}</span>`).join('')
+                    : `<span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-medium">Kardio Murni (Tanpa Otot Sekunder)</span>`;
+
+                return `
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden flex flex-col transition duration-200 card-glow">
+                    <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-mono font-bold">#${ex.id}</span>
+                            <h3 class="font-bold text-sm text-white truncate" title="${ex.name}">${ex.name}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0 ${diffBadgeColors[ex.difficulty]}">
+                            ${diffLabels[ex.difficulty]}
+                        </span>
+                    </div>
+
+                    <div class="relative bg-slate-950/90 h-52 w-full cursor-pointer group" onclick="openFocusModal(${ex.id})">
+                        <canvas id="canvas-${ex.id}" data-id="${ex.id}"></canvas>
+                        <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-800 text-[10px] font-medium text-slate-300 capitalize">
+                            🏋️ ${ex.equipment}
+                        </span>
+                        <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition bg-slate-900/90 border border-slate-700 px-2 py-1 rounded-md text-[10px] text-slate-300">
+                            🔍 Perbesar / Unduh SVG
+                        </div>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col justify-between gap-3 bg-slate-900/50">
+                        <div>
+                            <p class="text-[11px] text-slate-400 line-clamp-2 mb-2.5">${ex.desc}</p>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-[11px] font-bold uppercase flex items-center gap-1">
+                                    ❤️ ${ex.primary_muscle}
+                                </span>
+                                ${secBadges}
+                            </div>
+                        </div>
+
+                        <div class="pt-2.5 border-t border-slate-800/70 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-500 font-mono">${ex.tracking_mode.replace('_', ' ')}</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openFocusModal(${ex.id})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition">
+                                    Detail
+                                </button>
+                                <button onclick="exportAnimatedSVG(${ex.id})" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 text-[11px] font-semibold transition flex items-center gap-1">
+                                    <span>⬇</span> SVG
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            resizeAllCanvases();
+        }
+
+        function resizeAllCanvases() {
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+            });
+            const modalCanvas = document.getElementById('modalCanvas');
+            if (modalCanvas && !document.getElementById('focusModal').classList.contains('hidden')) {
+                const rect = modalCanvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                modalCanvas.width = rect.width * dpr;
+                modalCanvas.height = rect.height * dpr;
+            }
+        }
+
+        window.addEventListener('resize', resizeAllCanvases);
+
+        function animateLoop(timestamp) {
+            const dt = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (isPlaying) {
+                animTime += dt * speedMultiplier;
+            }
+
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const id = Number(canvas.dataset.id);
+                const ex = CARDIO_EXERCISES.find(item => item.id === id);
+                if (ex) {
+                    const ctx = canvas.getContext('2d');
+                    drawStickman(ctx, canvas.width, canvas.height, ex, animTime);
+                }
+            });
+
+            if (currentModalExerciseId !== null) {
+                const ex = CARDIO_EXERCISES.find(item => item.id === currentModalExerciseId);
+                const modalCanvas = document.getElementById('modalCanvas');
+                if (ex && modalCanvas) {
+                    const ctx = modalCanvas.getContext('2d');
+                    drawStickman(ctx, modalCanvas.width, modalCanvas.height, ex, animTime);
+                    const pose = getPoseForExercise(ex.id, animTime);
+                    document.getElementById('modalPhaseBadge').textContent = pose.phaseName;
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('playIcon').textContent = isPlaying ? '⏸' : '▶';
+            document.getElementById('playText').textContent = isPlaying ? 'Jeda' : 'Putar';
+        }
+
+        function setSpeed(spd) {
+            speedMultiplier = spd;
+            document.querySelectorAll('.spd-btn').forEach(btn => {
+                btn.className = 'spd-btn px-2 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition';
+            });
+            document.getElementById(`spd-${spd}`).className = 'spd-btn px-2 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition';
+        }
+
+        function openFocusModal(id) {
+            const ex = CARDIO_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+            currentModalExerciseId = id;
+            document.getElementById('modalId').textContent = `ID #${ex.id} • ${ex.equipment.toUpperCase()} • ${ex.tracking_mode.toUpperCase()}`;
+            document.getElementById('modalTitle').textContent = ex.name;
+            document.getElementById('modalPrimary').textContent = `${ex.primary_muscle.toUpperCase()} (Detak Jantung & Paru)`;
+            document.getElementById('modalSecondary').textContent = ex.secondary_muscles.length > 0
+                ? ex.secondary_muscles.join(', ')
+                : 'Tidak ada (Fokus Kardio Murni)';
+            document.getElementById('modalBpm').textContent = ex.bpm_label;
+
+            document.getElementById('focusModal').classList.remove('hidden');
+            resizeAllCanvases();
+        }
+
+        function closeModal() {
+            currentModalExerciseId = null;
+            document.getElementById('focusModal').classList.add('hidden');
+        }
+
+        // ============================================================================
+        // 5. EKSPOR FILE ANIMASI SVG STANDALONE (RINGAN < 4KB)
+        // ============================================================================
+        function generateSVGString(ex) {
+            // Sampling 4 titik waktu siklus untuk menghasilkan animasi SVG yang luwes
+            const stepTimes = ex.id === 67 ? [0, 0.38, 0.76, 1.15] : [0, 0.2, 0.4, 0.6];
+            const poses = stepTimes.map(t => getPoseForExercise(ex.id, t));
+
+            const sec = ex.secondary_muscles;
+            const thighCol = (sec.includes('quadriceps') || sec.includes('legs')) ? '#f59e0b' : '#94a3b8';
+            const calfCol = (sec.includes('calves') || sec.includes('legs')) ? '#f59e0b' : '#94a3b8';
+            const torsoCol = (sec.includes('back') || sec.includes('core') || sec.includes('chest')) ? '#f59e0b' : '#cbd5e1';
+            const armCol = (sec.includes('shoulders') || sec.includes('chest')) ? '#f59e0b' : '#94a3b8';
+
+            function animLineMulti(keyA, keyB, stroke, width) {
+                const x1Vals = [...poses.map(p => p[keyA][0].toFixed(1)), poses[0][keyA][0].toFixed(1)].join(';');
+                const y1Vals = [...poses.map(p => p[keyA][1].toFixed(1)), poses[0][keyA][1].toFixed(1)].join(';');
+                const x2Vals = [...poses.map(p => p[keyB][0].toFixed(1)), poses[0][keyB][0].toFixed(1)].join(';');
+                const y2Vals = [...poses.map(p => p[keyB][1].toFixed(1)), poses[0][keyB][1].toFixed(1)].join(';');
+                return `<line x1="${poses[0][keyA][0].toFixed(1)}" y1="${poses[0][keyA][1].toFixed(1)}" x2="${poses[0][keyB][0].toFixed(1)}" y2="${poses[0][keyB][1].toFixed(1)}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round">
+                    <animate attributeName="x1" values="${x1Vals}" dur="1.4s" repeatCount="indefinite"/>
+                    <animate attributeName="y1" values="${y1Vals}" dur="1.4s" repeatCount="indefinite"/>
+                    <animate attributeName="x2" values="${x2Vals}" dur="1.4s" repeatCount="indefinite"/>
+                    <animate attributeName="y2" values="${y2Vals}" dur="1.4s" repeatCount="indefinite"/>
+                </line>`;
+            }
+
+            const headCx = [...poses.map(p => p.head[0].toFixed(1)), poses[0].head[0].toFixed(1)].join(';');
+            const headCy = [...poses.map(p => p.head[1].toFixed(1)), poses[0].head[1].toFixed(1)].join(';');
+
+            const hearts = poses.map(p => lerpPt(p.shoulder, p.hip, 0.32));
+            const heartCx = [...hearts.map(h => h[0].toFixed(1)), hearts[0][0].toFixed(1)].join(';');
+            const heartCy = [...hearts.map(h => h[1].toFixed(1)), hearts[0][1].toFixed(1)].join(';');
+
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="400" height="300" style="background:#090d16; font-family:sans-serif;">
+    <defs>
+        <filter id="cardioGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    <text x="12" y="18" fill="#f8fafc" font-size="8" font-weight="bold">#${ex.id} ${ex.name}</text>
+    <text x="12" y="28" fill="#ef4444" font-size="6.5" font-weight="bold">Primary: CARDIO${sec.length ? ' | Sec: ' + sec.join(', ') : ''}</text>
+    <line x1="15" y1="130" x2="185" y2="130" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    ${animLineMulti('hip', 'kneeR', thighCol, 4.2)}
+    ${animLineMulti('kneeR', 'footR', calfCol, 3.8)}
+    ${animLineMulti('hip', 'kneeL', thighCol, 4.8)}
+    ${animLineMulti('kneeL', 'footL', calfCol, 4.4)}
+    ${animLineMulti('shoulder', 'hip', torsoCol, 6.2)}
+    ${animLineMulti('shoulder', 'elbowL', armCol, 4.2)}
+    ${animLineMulti('elbowL', 'handL', '#94a3b8', 3.8)}
+    ${animLineMulti('shoulder', 'elbowR', armCol, 4.2)}
+    ${animLineMulti('elbowR', 'handR', '#94a3b8', 3.8)}
+    <circle cx="${poses[0].head[0].toFixed(1)}" cy="${poses[0].head[1].toFixed(1)}" r="8.2" fill="#0f172a" stroke="#f8fafc" stroke-width="3">
+        <animate attributeName="cx" values="${headCx}" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="${headCy}" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <g filter="url(#cardioGlow)">
+        <circle cx="${hearts[0][0].toFixed(1)}" cy="${hearts[0][1].toFixed(1)}" r="5" fill="#ef4444">
+            <animate attributeName="cx" values="${heartCx}" dur="1.4s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="${heartCy}" dur="1.4s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="4.2;7.2;4.2;7.2;4.2" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+</svg>`;
+        }
+
+        function exportAnimatedSVG(id) {
+            const ex = CARDIO_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+
+            const svgContent = generateSVGString(ex);
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stickman_${ex.id}_${ex.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Animasi "${ex.name}.svg" berhasil diunduh!`);
+        }
+
+        function downloadAllSVGs() {
+            CARDIO_EXERCISES.forEach((ex, idx) => {
+                setTimeout(() => {
+                    exportAnimatedSVG(ex.id);
+                }, idx * 300);
+            });
+            showToast('Mengunduh ke-6 file SVG kategori Cardio...');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        window.onload = function () {
+            renderGrid();
+            requestAnimationFrame(animateLoop);
+        };
+    </script>
+</body>
+</html>
