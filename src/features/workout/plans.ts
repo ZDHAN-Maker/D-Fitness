@@ -26,7 +26,7 @@ export async function getPlanForEdit(id: string): Promise<PlanEdit | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("workout_plans")
-    .select("*, workout_plan_exercises(*, exercises(id, name, primary_muscle, equipment, tracking_mode))")
+    .select("*, workout_plan_exercises(*, exercises(id, name, primary_muscle, equipment, tracking_mode, video_url))")
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
@@ -45,6 +45,7 @@ export async function getPlanForEdit(id: string): Promise<PlanEdit | null> {
         primary_muscle: (r.exercises!.primary_muscle as string) ?? null,
         equipment: (r.exercises!.equipment as string) ?? null,
         tracking_mode: r.exercises!.tracking_mode as PlanEdit["exercises"][number]["exercise"]["tracking_mode"],
+        video_url: (r.exercises!.video_url as string) ?? null,
       },
       targetSets: Number(r.target_sets),
       targetRepsMin: n(r.target_reps_min),

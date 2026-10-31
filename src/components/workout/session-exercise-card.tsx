@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Lightbulb, Plus, SlidersHorizontal } from "lucide-react";
+import { Lightbulb, Plus, SlidersHorizontal, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/ui/delete-button";
+import { ExerciseVideoModal } from "@/components/workout/exercise-video-modal";
 import { ExerciseVisual } from "@/components/workout/exercise-visual";
 import { SetRow, type SetValues } from "@/components/workout/set-row";
 import { formatSetShort, suggestProgression } from "@/lib/calculations/workout";
@@ -52,6 +53,21 @@ export function SessionExerciseCard({ ex, previous, errors, onSave, onToggle, on
           <h2 className="truncate font-display text-lg font-semibold">{ex.exercise.name}</h2>
           <p className="text-xs text-muted-foreground">{[ex.exercise.primary_muscle, ex.exercise.equipment, targetText].filter(Boolean).join(" · ")}</p>
         </div>
+        <ExerciseVideoModal
+          exercise={ex.exercise}
+          trigger={
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={`Animasi & teknik untuk ${ex.exercise.name}`}
+              className="size-8 text-primary hover:bg-primary/10"
+              title="Lihat animasi gerakan & panduan teknik"
+            >
+              <Video className="size-4" />
+            </Button>
+          }
+        />
         <Button type="button" variant={details ? "secondary" : "ghost"} size="icon" aria-pressed={details} aria-label="Show RPE, warm-up and remove-set options" onClick={() => setDetails((d) => !d)}>
           <SlidersHorizontal />
         </Button>

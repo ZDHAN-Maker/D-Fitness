@@ -41,7 +41,7 @@ export async function getSessionView(id: string): Promise<SessionView | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("workout_sessions")
-    .select("*, workout_session_exercises(id, position, exercises(id, name, primary_muscle, equipment, tracking_mode), workout_sets(*))")
+    .select("*, workout_session_exercises(id, position, exercises(id, name, primary_muscle, equipment, tracking_mode, video_url), workout_sets(*))")
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
@@ -64,7 +64,14 @@ export async function getSessionView(id: string): Promise<SessionView | null> {
       return {
         id: String(e.id),
         position: Number(e.position),
-        exercise: { id: Number(ex.id), name: String(ex.name), primary_muscle: (ex.primary_muscle as string) ?? null, equipment: (ex.equipment as string) ?? null, tracking_mode: ex.tracking_mode as SessionExerciseView["exercise"]["tracking_mode"] },
+        exercise: {
+          id: Number(ex.id),
+          name: String(ex.name),
+          primary_muscle: (ex.primary_muscle as string) ?? null,
+          equipment: (ex.equipment as string) ?? null,
+          tracking_mode: ex.tracking_mode as SessionExerciseView["exercise"]["tracking_mode"],
+          video_url: (ex.video_url as string) ?? null,
+        },
         sets: ((e.workout_sets ?? []) as Row[]).map(toSet).sort((a, b) => a.set_number - b.set_number),
         target: targets.get(Number(e.position)) ?? null,
       };
@@ -106,7 +113,11 @@ export async function addExerciseToSession(sessionId: string, exerciseId: number
   if (lastErr) throw lastErr;
   const position = last?.length ? Number(last[0]!.position) + 1 : 0;
 
-  const { data: se, error } = await supabase.from("workout_session_exercises").insert({ session_id: sessionId, exercise_id: exerciseId, position }).select("id, position, exercises(id, name, primary_muscle, equipment, tracking_mode)").single();
+  const { data: se, error } = await supabase
+    .from("workout_session_exercises")
+    .insert({ session_id: sessionId, exercise_id: exerciseId, position })
+    .select("id, position, exercises(id, name, primary_muscle, equipment, tracking_mode, video_url)")
+    .single();
   if (error) throw error;
   const { data: set, error: setErr } = await supabase.from("workout_sets").insert({ session_exercise_id: se.id, set_number: 1 }).select("*").single();
   if (setErr) throw setErr;
@@ -115,7 +126,14 @@ export async function addExerciseToSession(sessionId: string, exerciseId: number
   return {
     id: String(se.id),
     position,
-    exercise: { id: Number(ex.id), name: String(ex.name), primary_muscle: (ex.primary_muscle as string) ?? null, equipment: (ex.equipment as string) ?? null, tracking_mode: ex.tracking_mode as SessionExerciseView["exercise"]["tracking_mode"] },
+    exercise: {
+      id: Number(ex.id),
+      name: String(ex.name),
+      primary_muscle: (ex.primary_muscle as string) ?? null,
+      equipment: (ex.equipment as string) ?? null,
+      tracking_mode: ex.tracking_mode as SessionExerciseView["exercise"]["tracking_mode"],
+      video_url: (ex.video_url as string) ?? null,
+    },
     sets: [toSet(set)],
     target: null,
   };
