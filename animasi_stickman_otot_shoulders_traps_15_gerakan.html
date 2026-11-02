@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Animasi Stickman - Shoulders & Traps (15 Gerakan)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 28px -5px rgba(239, 68, 68, 0.35), 0 0 14px -5px rgba(245, 158, 11, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
+
+    <!-- Header & Controls -->
+    <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3.5 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex items-start sm:items-center justify-between gap-3">
+                <div>
+                    <div class="flex items-center flex-wrap gap-2.5">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-sm">
+                            11
+                        </span>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                            Kategori: <span class="text-red-500">Shoulders (Bahu)</span> & <span class="text-rose-400">Traps (Bahu Atas)</span>
+                        </h1>
+                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            15 Gerakan
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Visualisasi anatomi Deltoids (11 gerakan) & Trapezius (4 gerakan) lengkap dengan fitur ekspor SVG beranimasi.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Legend & Interactive Toolbar -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3">
+                <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] animate-pulse"></span>
+                        <span class="font-medium text-slate-200">Otot Utama (Merah)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></span>
+                        <span class="font-medium text-slate-300">Otot Sekunder (Kuning)</span>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <span class="w-3 h-1.5 rounded bg-sky-400"></span>
+                        <span class="text-slate-400">Alat & Beban</span>
+                    </div>
+                </div>
+
+                <!-- Speed & Play Controls -->
+                <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+                    <button id="btnPlayPause" onclick="togglePlay()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition flex items-center gap-1.5">
+                        <span id="playIcon">⏸</span> <span id="playText">Jeda</span>
+                    </button>
+                    <button onclick="setSpeed(0.5)" id="spd-0.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">0.5x</button>
+                    <button onclick="setSpeed(1)" id="spd-1" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition">1x</button>
+                    <button onclick="setSpeed(1.5)" id="spd-1.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">1.5x</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Tabs & Filter Bar -->
+    <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-5 pb-2 space-y-3">
+        <!-- Main Muscle Category Tabs -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-800 p-2 rounded-2xl">
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="setMuscleTab('all')" id="tab-all" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-red-600 text-white shadow-lg shadow-red-600/25 transition">
+                    🔥 Semua Bahu & Traps (15)
+                </button>
+                <button onclick="setMuscleTab('shoulders')" id="tab-shoulders" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:text-white transition">
+                    🏋️ Shoulders / Bahu (11)
+                </button>
+                <button onclick="setMuscleTab('traps')" id="tab-traps" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:text-white transition">
+                    ⛰️ Traps / Bahu Atas (4)
+                </button>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="downloadStandaloneHTML()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
+                    <span>💻</span> Unduh File .HTML
+                </button>
+                <button onclick="downloadFilteredSVGs()" class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-red-600/20">
+                    <span>⬇</span> <span id="downloadBatchText">Unduh Semua SVG (15)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Equipment & Search Filter -->
+        <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between bg-slate-900/50 border border-slate-800/80 p-3 rounded-2xl">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs text-slate-400 mr-1 font-medium">Filter Alat:</span>
+                <button onclick="filterEquip('all')" data-eq="all" class="eq-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition">Semua (15)</button>
+                <button onclick="filterEquip('dumbbell')" data-eq="dumbbell" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Dumbbell (6)</button>
+                <button onclick="filterEquip('barbell')" data-eq="barbell" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Barbell (5)</button>
+                <button onclick="filterEquip('band')" data-eq="band" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Band (1)</button>
+                <button onclick="filterEquip('cable')" data-eq="cable" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Cable (1)</button>
+                <button onclick="filterEquip('machine')" data-eq="machine" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Machine (1)</button>
+                <button onclick="filterEquip('bodyweight')" data-eq="bodyweight" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Bodyweight (1)</button>
+            </div>
+            <div class="relative flex-1 md:max-w-xs">
+                <input type="text" id="searchInput" oninput="renderGrid()" placeholder="Cari gerakan atau ID (#103, Arnold, Shrug...)" 
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Exercises Grid -->
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 flex-1">
+        <div id="exerciseGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Cards injected via JS -->
+        </div>
+    </main>
+
+    <!-- Modal Detail / Fokus View & Export SVG -->
+    <div id="focusModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+                <div>
+                    <span id="modalId" class="text-xs font-bold text-red-400 uppercase tracking-wider">ID #103</span>
+                    <h2 id="modalTitle" class="text-lg font-bold text-white">Arnold Press</h2>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <div class="p-5">
+                <div class="relative bg-slate-950 rounded-xl border border-slate-800 h-72 w-full overflow-hidden">
+                    <canvas id="modalCanvas"></canvas>
+                    <div id="modalPhaseBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300">
+                        Kontraksi
+                    </div>
+                </div>
+                <p id="modalDesc" class="mt-3 text-xs text-slate-300 leading-relaxed"></p>
+                <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Otot Utama:</span>
+                        <span id="modalPrimary" class="font-bold text-red-400 uppercase">SHOULDERS</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Otot Sekunder:</span>
+                        <span id="modalSecondary" class="font-semibold text-amber-400 capitalize">triceps</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Alat & Pola:</span>
+                        <span id="modalEquip" class="font-semibold text-sky-400 capitalize">dumbbell • push</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Tracking Mode:</span>
+                        <span id="modalTracking" class="font-mono text-slate-200">weight_reps</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 justify-end">
+                    <button onclick="exportAnimatedSVG(currentModalExerciseId)" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+                        <span>⬇</span> Unduh File Animasi Ringan (.SVG)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2">
+        <span>✓</span> <span id="toastMsg">File berhasil diunduh!</span>
+    </div>
+
+    <script>
+        // ============================================================================
+        // 1. DATA KATALOG 15 GERAKAN SHOULDERS & TRAPS (Sesuai exercises_catalog.json)
+        // ============================================================================
+        const SHOULDERS_TRAPS_EXERCISES = [
+            // --- SHOULDERS / BAHU (11 GERAKAN) ---
+            {
+                id: 103,
+                name: "Arnold Press",
+                primary_muscle: "shoulders",
+                secondary_muscles: ["triceps"],
+                equipment: "dumbbell",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Rotasi 180° • Anterior & Lateral Delts",
+                desc: "Mulai dengan dumbbell di depan bahu/dagu (telapak menghadap wajah), putar pergelangan dan buka siku ke samping sembari mendorong dumbbell lurus ke atas kepala."
+            },
+            {
+                id: 36,
+                name: "Banded Lateral Raise",
+                primary_muscle: "shoulders",
+                secondary_muscles: [],
+                equipment: "band",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "reps_only",
+                sub_focus: "Isolasi Lateral Deltoid • Resistance Band",
+                desc: "Injak bagian tengah resistance band, angkat kedua lengan ke samping hingga setinggi bahu melawan tegangan karet untuk mengisolasi bahu samping."
+            },
+            {
+                id: 41,
+                name: "Barbell Overhead Press",
+                primary_muscle: "shoulders",
+                secondary_muscles: ["triceps", "core"],
+                equipment: "barbell",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Military Press Berdiri • Kekuatan Bahu & Inti",
+                desc: "Berdiri tegak dengan inti perut terkunci, dorong barbel dari dada atas/tulang selangka lurus melewati wajah hingga terkunci di atas kepala."
+            },
+            {
+                id: 40,
+                name: "Cable Lateral Raise",
+                primary_muscle: "shoulders",
+                secondary_muscles: [],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Unilateral Low Pulley • Ketegangan Konstan",
+                desc: "Berdiri menyamping di dekat mesin katrol bawah, tarik handle kabel menyilang tubuh dan angkat lengan ke samping setinggi bahu."
+            },
+            {
+                id: 38,
+                name: "Dumbbell Front Raise",
+                primary_muscle: "shoulders",
+                secondary_muscles: [],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Isolasi Anterior Deltoid (Bahu Depan)",
+                desc: "Berdiri tegak memegang dumbbell di depan paha, angkat lengan lurus ke depan hingga setinggi mata/bahu lalu turunkan terkontrol."
+            },
+            {
+                id: 5,
+                name: "Lateral Raise",
+                primary_muscle: "shoulders",
+                secondary_muscles: [],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Isolasi Murni Lateral Deltoid (Lebar Bahu)",
+                desc: "Angkat sepasang dumbbell dari samping paha membuka lebar ke samping hingga lengan sejajar lantai membentuk huruf T."
+            },
+            {
+                id: 105,
+                name: "Machine Shoulder Press",
+                primary_muscle: "shoulders",
+                secondary_muscles: ["triceps"],
+                equipment: "machine",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Seated Guided Press • Stabilitas Maksimal",
+                desc: "Duduk bersandar di kursi mesin shoulder press, dorong kedua tuas pegangan ke atas kepala mengikuti jalur terpandu."
+            },
+            {
+                id: 37,
+                name: "Pike Push-up",
+                primary_muscle: "shoulders",
+                secondary_muscles: ["triceps", "upper chest"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "reps_only",
+                sub_focus: "Inverted-V Bodyweight Overhead Press",
+                desc: "Angkat pinggul tinggi membentuk posisi huruf V terbalik, tekuk siku menurunkan puncak kepala mendekati lantai lalu dorong kembali ke atas."
+            },
+            {
+                id: 104,
+                name: "Seated Dumbbell Shoulder Press",
+                primary_muscle: "shoulders",
+                secondary_muscles: ["triceps"],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Bangku Sandaran 90° • Fokus Deltoid & Triceps",
+                desc: "Duduk di bangku dengan sandaran tegak untuk mengeliminasi ayunan kaki, dorong sepasang dumbbell dari samping telinga hingga lurus di atas kepala."
+            },
+            {
+                id: 4,
+                name: "Shoulder Press",
+                primary_muscle: "shoulders",
+                secondary_muscles: ["triceps"],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Standing Dumbbell Overhead Press",
+                desc: "Berdiri tegak memegang sepasang dumbbell di samping bahu, dorong keduanya secara vertikal ke atas kepala hingga siku hampir lurus."
+            },
+            {
+                id: 106,
+                name: "Upright Row",
+                primary_muscle: "shoulders",
+                secondary_muscles: ["traps", "biceps"],
+                equipment: "barbell",
+                difficulty: "intermediate",
+                movement_type: "pull",
+                tracking_mode: "weight_reps",
+                sub_focus: "Vertical Pull • Siku Lebih Tinggi dari Tangan",
+                desc: "Pegang barbel di depan paha, tarik barbel vertikal menyusuri tubuh hingga dada atas dengan mengarahkan kedua siku naik tinggi ke samping."
+            },
+
+            // --- TRAPS / BAHU ATAS (4 GERAKAN) ---
+            {
+                id: 108,
+                name: "Barbell Shrugs",
+                primary_muscle: "traps",
+                secondary_muscles: ["forearms"],
+                equipment: "barbell",
+                difficulty: "beginner",
+                movement_type: "pull",
+                tracking_mode: "weight_reps",
+                sub_focus: "Scapular Elevation • Upper Trapezius",
+                desc: "Berdiri tegak memegang barbel di depan paha dengan lengan lurus, angkat kedua bahu setinggi mungkin ke arah telinga lalu tahan sejenak."
+            },
+            {
+                id: 109,
+                name: "Dumbbell Shrugs",
+                primary_muscle: "traps",
+                secondary_muscles: ["forearms"],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "pull",
+                tracking_mode: "weight_reps",
+                sub_focus: "Neutral Grip Shrug • Isolasi Traps Atas",
+                desc: "Pegang sepasang dumbbell berat di sisi samping paha, angkat bahu lurus ke atas menuju telinga tanpa menekuk siku."
+            },
+            {
+                id: 101,
+                name: "Rack Pulls",
+                primary_muscle: "traps",
+                secondary_muscles: ["lower back", "lats", "glutes"],
+                equipment: "barbell",
+                difficulty: "intermediate",
+                movement_type: "hinge",
+                tracking_mode: "weight_reps",
+                sub_focus: "Partial Deadlift dari Pin Rak Setinggi Lutut",
+                desc: "Tarik barbel berat yang diletakkan di atas pin pengaman power rack (setinggi lutut) hingga berdiri tegak dan mengunci otot traps serta punggung."
+            },
+            {
+                id: 100,
+                name: "Snatch-Grip Deadlift",
+                primary_muscle: "traps",
+                secondary_muscles: ["hamstrings", "lats", "mid back"],
+                equipment: "barbell",
+                difficulty: "advanced",
+                movement_type: "hinge",
+                tracking_mode: "weight_reps",
+                sub_focus: "Ultra-Wide Grip Deadlift • Beban Traps & Upper Back",
+                desc: "Lakukan deadlift dari lantai menggunakan genggaman tangan ekstra lebar (snatch grip) yang memaksa punggung atas dan otot traps bekerja sangat keras."
+            }
+        ];
+
+        // ============================================================================
+        // 2. KINEMATIKA SENDI STICKMAN UNTUK 15 GERAKAN (220x155 Viewport)
+        // t = 0 (Fase Awal / Bawah), t = 1 (Puncak Kontraksi)
+        // ============================================================================
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+
+        function getPoseForExercise(id, t) {
+            switch (id) {
+                case 103: { // Arnold Press (Rotasi dari depan wajah -> buka ke samping -> dorong ke atas)
+                    const head = [110, 40];
+                    const shoulder = [110, 56];
+                    const shL = [94, 58];
+                    const shR = [126, 58];
+                    const hip = [110, 96];
+                    const kneeL = [98, 116]; const footL = [96, 136];
+                    const kneeR = [122, 116]; const footR = [124, 136];
+
+                    // Fase 1 (t < 0.45): siku membuka dari depan dada [102, 74] ke samping [74, 62]
+                    // Fase 2 (t >= 0.45): dorong dari samping bahu ke atas kepala [88, 14]
+                    let elbowL, handL, elbowR, handR;
+                    if (t < 0.45) {
+                        const s = t / 0.45;
+                        elbowL = lerpPt([100, 76], [72, 62], s);
+                        handL = lerpPt([102, 54], [74, 42], s);
+                        elbowR = lerpPt([120, 76], [148, 62], s);
+                        handR = lerpPt([118, 54], [146, 42], s);
+                    } else {
+                        const s = (t - 0.45) / 0.55;
+                        elbowL = lerpPt([72, 62], [86, 36], s);
+                        handL = lerpPt([74, 42], [92, 14], s);
+                        elbowR = lerpPt([148, 62], [134, 36], s);
+                        handR = lerpPt([146, 42], [128, 14], s);
+                    }
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'dumbbells_pair', handL, handR }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t < 0.45 ? "🔄 Rotasi Buka Siku (Arnold Twist)" : "🔥 Overhead Press (Deltoids & Triceps)"
+                    };
+                }
+
+                case 36: { // Banded Lateral Raise (Injak Band di Bawah Kaki, Angkat Lengan ke Samping Setinggi Bahu)
+                    const head = [110, 34];
+                    const shoulder = [110, 50];
+                    const shL = [95, 52];
+                    const shR = [125, 52];
+                    const hip = [110, 92];
+                    const kneeL = [102, 114]; const footL = [102, 136];
+                    const kneeR = [118, 114]; const footR = [118, 136];
+
+                    const elbowL = lerpPt([88, 74], [70, 52], t);
+                    const handL = lerpPt([86, 94], [46, 50], t);
+                    const elbowR = lerpPt([132, 74], [150, 52], t);
+                    const handR = lerpPt([134, 94], [174, 50], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'band_under_feet', footL, footR, handL, handR, tension: t }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Abduksi Samping (Isolasi Lateral Delts)" : "Fase Turun Terkontrol"
+                    };
+                }
+
+                case 41: { // Barbell Overhead Press (Berdiri, Dorong Barbel ke Atas Kepala, Core & Triceps Aktif)
+                    const head = [110, 42];
+                    const shoulder = [110, 58];
+                    const shL = [94, 60];
+                    const shR = [126, 60];
+                    const hip = [110, 96];
+                    const kneeL = [98, 116]; const footL = [96, 136];
+                    const kneeR = [122, 116]; const footR = [124, 136];
+
+                    const barY = lerp(54, 14, t);
+                    const handL = [78, barY];
+                    const handR = [142, barY];
+                    const elbowL = lerpPt([80, 76], [84, 36], t);
+                    const elbowR = lerpPt([140, 76], [136, 36], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'barbell_front', y: barY, w: 68 }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Barbel di Atas Kepala (Shoulders, Triceps, Core)" : "Posisi Rak Dada Atas"
+                    };
+                }
+
+                case 40: { // Cable Lateral Raise (Unilateral Katrol Bawah Menyilang ke Samping Atas)
+                    const head = [106, 34];
+                    const shoulder = [106, 50];
+                    const shL = [92, 52];
+                    const shR = [120, 52];
+                    const hip = [106, 92];
+                    const kneeL = [96, 114]; const footL = [94, 136];
+                    const kneeR = [116, 114]; const footR = [118, 136];
+
+                    // Lengan kiri mengangkat kabel dari depan paha kanan [114, 94] ke samping bahu kiri [42, 48]
+                    const elbowL = lerpPt([100, 76], [68, 52], t);
+                    const handL = lerpPt([112, 92], [44, 48], t);
+                    // Tangan kanan berpegangan pada tiang mesin di kanan [164, 72]
+                    const elbowR = [138, 66];
+                    const handR = [162, 68];
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'low_cable_side', pulleyX: 164, pulleyY: 130, hand: handL, lift: t }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Cable Lateral Raise (Ketegangan Konstan)" : "Tarikan Silang Bawah"
+                    };
+                }
+
+                case 38: { // Dumbbell Front Raise (Tampilan Samping: Angkat Dumbbell Lurus ke Depan Setinggi Bahu)
+                    const head = [88, 34];
+                    const shoulder = [88, 50];
+                    const hip = [86, 90];
+                    const kneeL = [90, 112]; const footL = [94, 136];
+                    const kneeR = [82, 112]; const footR = [84, 136];
+
+                    // Lengan berayun dari depan paha (sudut 1.35 rad) ke lurus horizontal di depan bahu (0.0 rad)
+                    const angle = lerp(1.35, -0.05, t);
+                    const elbowL = [shoulder[0] + Math.cos(angle) * 20, shoulder[1] + Math.sin(angle) * 20];
+                    const handL = [shoulder[0] + Math.cos(angle) * 40, shoulder[1] + Math.sin(angle) * 40];
+
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'dumbbell_side', x: handL[0], y: handL[1] }
+                        ],
+                        head, shoulder, shL: shoulder, shR: shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Front Raise Setinggi Bahu (Anterior Deltoid)" : "Fase Turun ke Depan Paha"
+                    };
+                }
+
+                case 5: { // Lateral Raise (Tampilan Depan: Angkat Sepasang Dumbbell ke Samping Setinggi Bahu)
+                    const head = [110, 34];
+                    const shoulder = [110, 50];
+                    const shL = [95, 52];
+                    const shR = [125, 52];
+                    const hip = [110, 92];
+                    const kneeL = [98, 114]; const footL = [96, 136];
+                    const kneeR = [122, 114]; const footR = [124, 136];
+
+                    const elbowL = lerpPt([88, 74], [70, 52], t);
+                    const handL = lerpPt([86, 94], [44, 50], t);
+                    const elbowR = lerpPt([132, 74], [150, 52], t);
+                    const handR = lerpPt([134, 94], [176, 50], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'dumbbells_pair', handL, handR }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Lateral Raise (Isolasi Deltoid Samping)" : "Dumbbell di Samping Paha"
+                    };
+                }
+
+                case 105: { // Machine Shoulder Press (Duduk di Mesin Overhead Press, Dorong Tuas ke Atas)
+                    const head = [110, 44];
+                    const shoulder = [110, 60];
+                    const shL = [94, 62];
+                    const shR = [126, 62];
+                    const hip = [110, 98];
+                    const kneeL = [94, 112]; const footL = [94, 136];
+                    const kneeR = [126, 112]; const footR = [126, 136];
+
+                    const handleY = lerp(56, 16, t);
+                    const handL = [74, handleY];
+                    const handR = [146, handleY];
+                    const elbowL = lerpPt([76, 80], [82, 38], t);
+                    const elbowR = lerpPt([144, 80], [138, 38], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'shoulder_press_machine', handleY, lift: t }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Dorongan Penuh Mesin Press (Shoulders & Triceps)" : "Fase Turun Setinggi Telinga"
+                    };
+                }
+
+                case 37: { // Pike Push-up (Tampilan Samping Posisi Huruf V Terbalik, Kepala Turun ke Lantai lalu Dorong)
+                    const hip = [96, 60]; // Pinggul tetap tinggi membentuk huruf V terbalik
+                    const kneeL = [72, 98]; const footL = [48, 134];
+                    const kneeR = [70, 98]; const footR = [46, 134];
+                    const handL = [146, 134]; const handR = [144, 134];
+
+                    // Saat t=0 posisi bawah (kepala hampir menyentuh lantai), saat t=1 lengan lurus mendorong naik
+                    const shoulder = lerpPt([134, 106], [122, 88], t);
+                    const head = lerpPt([146, 120], [132, 76], t);
+                    const elbowL = lerpPt([126, 124], [134, 112], t);
+
+                    return {
+                        view: 'side',
+                        props: [{ type: 'floor', y: 136 }],
+                        head, shoulder, shL: shoulder, shR: shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Dorongan Pike V-Press (Shoulders, Triceps, Upper Chest)" : "Fase Turun Kepala Mendekati Lantai"
+                    };
+                }
+
+                case 104: { // Seated Dumbbell Shoulder Press (Duduk di Bangku Tegak, Dorong Dumbbell ke Atas)
+                    const head = [110, 44];
+                    const shoulder = [110, 60];
+                    const shL = [94, 62];
+                    const shR = [126, 62];
+                    const hip = [110, 98];
+                    const kneeL = [92, 112]; const footL = [92, 136];
+                    const kneeR = [128, 112]; const footR = [128, 136];
+
+                    const handL = lerpPt([74, 56], [88, 16], t);
+                    const handR = lerpPt([146, 56], [132, 16], t);
+                    const elbowL = lerpPt([76, 78], [84, 38], t);
+                    const elbowR = lerpPt([144, 78], [136, 38], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'seated_bench_front' },
+                            { type: 'dumbbells_pair', handL, handR }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Seated Dumbbell Press (Shoulders & Triceps)" : "Posisi Awal 90° di Samping Telinga"
+                    };
+                }
+
+                case 4: { // Shoulder Press (Berdiri Dumbbell Overhead Press)
+                    const head = [110, 40];
+                    const shoulder = [110, 56];
+                    const shL = [94, 58];
+                    const shR = [126, 58];
+                    const hip = [110, 94];
+                    const kneeL = [98, 116]; const footL = [96, 136];
+                    const kneeR = [122, 116]; const footR = [124, 136];
+
+                    const handL = lerpPt([74, 52], [88, 14], t);
+                    const handR = lerpPt([146, 52], [132, 14], t);
+                    const elbowL = lerpPt([76, 74], [84, 36], t);
+                    const elbowR = lerpPt([144, 74], [136, 36], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'dumbbells_pair', handL, handR }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Standing Shoulder Press" : "Turun Setinggi Bahu"
+                    };
+                }
+
+                case 106: { // Upright Row (Tarik Barbel ke Dada Atas, Siku Naik Tinggi Melebihi Tangan)
+                    const head = [110, 34];
+                    const shoulder = [110, 50];
+                    const shL = [95, 52];
+                    const shR = [125, 52];
+                    const hip = [110, 92];
+                    const kneeL = [98, 114]; const footL = [96, 136];
+                    const kneeR = [122, 114]; const footR = [124, 136];
+
+                    const barY = lerp(92, 58, t);
+                    const handL = [98, barY];
+                    const handR = [122, barY];
+                    // Siku naik dari lurus di bawah [92, 72] ke tinggi di samping atas bahu [68, 42]
+                    const elbowL = lerpPt([90, 72], [68, 42], t);
+                    const elbowR = lerpPt([130, 72], [152, 42], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'barbell_front', y: barY, w: 58 }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Tarikan Upright Row (Shoulders, Traps, Biceps)" : "Barbel di Depan Paha"
+                    };
+                }
+
+                // ==================== 4 GERAKAN TRAPS / BAHU ATAS ====================
+                case 108: { // Barbell Shrugs (Elevasi Bahu Naik ke Telinga Memegang Barbel di Depan Paha)
+                    const head = [110, 32];
+                    const elevate = lerp(0, -10, t); // Bahu terangkat tinggi mendekati telinga
+                    const shoulder = [110, 52 + elevate * 0.6];
+                    const shL = [93, 54 + elevate];
+                    const shR = [127, 54 + elevate];
+                    const hip = [110, 94];
+                    const kneeL = [98, 116]; const footL = [96, 136];
+                    const kneeR = [122, 116]; const footR = [124, 136];
+
+                    const barY = 94 + elevate;
+                    const elbowL = [91, 74 + elevate];
+                    const handL = [90, barY];
+                    const elbowR = [129, 74 + elevate];
+                    const handR = [130, barY];
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'barbell_front', y: barY, w: 66 }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Elevasi Bahu ke Telinga (Traps & Forearms)" : "Regangan Bahu Bawah"
+                    };
+                }
+
+                case 109: { // Dumbbell Shrugs (Elevasi Bahu Memegang Dumbbell di Samping Paha)
+                    const head = [110, 32];
+                    const elevate = lerp(0, -10, t);
+                    const shoulder = [110, 52 + elevate * 0.6];
+                    const shL = [93, 54 + elevate];
+                    const shR = [127, 54 + elevate];
+                    const hip = [110, 94];
+                    const kneeL = [98, 116]; const footL = [96, 136];
+                    const kneeR = [122, 116]; const footR = [124, 136];
+
+                    const elbowL = [86, 74 + elevate];
+                    const handL = [84, 94 + elevate];
+                    const elbowR = [134, 74 + elevate];
+                    const handR = [136, 94 + elevate];
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 138 },
+                            { type: 'dumbbells_pair', handL, handR }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Kontraksi Dumbbell Shrugs (Traps Atas)" : "Fase Turun Bahu Rileks"
+                    };
+                }
+
+                case 101: { // Rack Pulls (Tampilan Samping: Tarik Barbel dari Pin Rak Setinggi Lutut ke Lockout)
+                    const hip = lerpPt([74, 80], [98, 76], t);
+                    const shoulder = lerpPt([112, 54], [96, 38], t);
+                    const head = lerpPt([122, 42], [96, 24], t);
+                    const kneeL = lerpPt([104, 104], [99, 104], t);
+                    const footL = [102, 134];
+                    const kneeR = [kneeL[0] - 4, kneeL[1]];
+                    const footR = [footL[0] - 4, footL[1]];
+
+                    // Barbel mulai dari atas pin rak setinggi lutut (y=98) ke lockout paha (y=78)
+                    const handL = lerpPt([110, 98], [98, 78], t);
+                    const elbowL = lerpPt([111, 76], [97, 58], t);
+
+                    return {
+                        view: 'side_rackpull',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'power_rack_pins', pinY: 100 },
+                            { type: 'barbell_side', x: handL[0], y: handL[1], r: 12 }
+                        ],
+                        head, shoulder, shL: shoulder, shR: shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Rack Pull (Traps, Lower Back, Lats, Glutes)" : "Barbel di Atas Pin Rak Setinggi Lutut"
+                    };
+                }
+
+                case 100: { // Snatch-Grip Deadlift (Tampilan Depan: Genggaman Ekstra Lebar dari Lantai ke Lockout)
+                    const head = lerpPt([110, 56], [110, 28], t);
+                    const shoulder = lerpPt([110, 72], [110, 44], t);
+                    const shL = [94, shoulder[1] + 2];
+                    const shR = [126, shoulder[1] + 2];
+                    const hip = lerpPt([110, 98], [110, 82], t);
+                    const kneeL = lerpPt([92, 112], [98, 110], t);
+                    const kneeR = lerpPt([128, 112], [122, 110], t);
+                    const footL = [96, 134];
+                    const footR = [124, 134];
+
+                    // Genggaman Snatch Ekstra Lebar (x=68 dan x=152)
+                    const barY = lerp(118, 84, t);
+                    const handL = [68, barY];
+                    const handR = [152, barY];
+                    const elbowL = lerpPt([80, 94], [80, 64], t);
+                    const elbowR = lerpPt([140, 94], [140, 64], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'barbell_front', y: barY, w: 96 }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Snatch-Grip (Traps, Hamstrings, Lats, Mid Back)" : "Tarikan Genggaman Lebar dari Lantai"
+                    };
+                }
+            }
+        }
+
+        // ============================================================================
+        // 3. RENDERER STICKMAN DENGAN PEMISAHAN ANATOMI DELTOIDS VS TRAPEZIUS
+        // ============================================================================
+        function drawStickman(ctx, width, height, ex, t) {
+            ctx.clearRect(0, 0, width, height);
+
+            const scale = Math.min(width / 220, height / 155);
+            const offsetX = (width - 220 * scale) / 2;
+            const offsetY = (height - 155 * scale) / 2;
+
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+
+            const pose = getPoseForExercise(ex.id, t);
+            const sec = ex.secondary_muscles;
+            const c = pose.contraction;
+            const isShoulderPrimary = ex.primary_muscle === 'shoulders';
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            function drawLimb(pt1, pt2, color, lineWidth, glowColor = null, glowBlur = 0) {
+                ctx.save();
+                if (glowColor && glowBlur > 0) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = glowBlur;
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth;
+                ctx.beginPath();
+                ctx.moveTo(pt1[0], pt1[1]);
+                ctx.lineTo(pt2[0], pt2[1]);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            const neutralColor = '#94a3b8';
+            const secondaryColor = '#f59e0b'; // Kuning / Oranye
+            const primaryColor = '#ef4444';   // Merah Menyala
+
+            const hasTriceps = sec.includes('triceps');
+            const hasCore = sec.includes('core');
+            const hasUpperChest = sec.includes('upper chest');
+            const hasSecTraps = sec.includes('traps');
+            const hasBiceps = sec.includes('biceps');
+            const hasForearms = sec.includes('forearms');
+            const hasLowerBack = sec.includes('lower back');
+            const hasLats = sec.includes('lats');
+            const hasGlutes = sec.includes('glutes');
+            const hasHamstrings = sec.includes('hamstrings');
+            const hasMidBack = sec.includes('mid back');
+
+            // 1. Gambar Props / Mesin Latar Belakang
+            pose.props.forEach(p => {
+                if (p.type === 'floor') {
+                    ctx.strokeStyle = '#1e293b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(15, p.y);
+                    ctx.lineTo(205, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'seated_bench_front') {
+                    // Sandaran & kursi bangku tampak depan
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 2.5;
+                    ctx.fillRect(98, 46, 24, 52);
+                    ctx.strokeRect(98, 46, 24, 52);
+                    ctx.fillRect(90, 98, 40, 6);
+                    ctx.beginPath();
+                    ctx.moveTo(110, 104); ctx.lineTo(110, 138);
+                    ctx.stroke();
+                } else if (p.type === 'shoulder_press_machine') {
+                    // Rangka mesin shoulder press
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4;
+                    ctx.strokeRect(62, 12, 96, 126);
+                    // Kursi duduk
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(96, 48, 28, 52);
+                    ctx.fillRect(90, 100, 40, 6);
+                    // Palang tuas mesin
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(62, p.handleY); ctx.lineTo(82, p.handleY);
+                    ctx.moveTo(138, p.handleY); ctx.lineTo(158, p.handleY);
+                    ctx.stroke();
+                } else if (p.type === 'low_cable_side') {
+                    // Tiang katrol kanan
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, 18); ctx.lineTo(p.pulleyX, 138);
+                    ctx.stroke();
+                    const stackY = 98 - p.lift * 30;
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(p.pulleyX - 7, stackY, 14, 16);
+                    // Kawat kabel dari katrol bawah menyilang ke tangan kiri
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 1.8;
+                    ctx.setLineDash([3, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, p.pulleyY);
+                    ctx.lineTo(p.hand[0], p.hand[1]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                } else if (p.type === 'power_rack_pins') {
+                    // Tiang Power Rack & Pin Pengaman Setinggi Lutut
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(86, 16); ctx.lineTo(86, 136);
+                    ctx.moveTo(134, 16); ctx.lineTo(134, 136);
+                    ctx.stroke();
+                    // Safety Pins horizontal
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 3.5;
+                    ctx.beginPath();
+                    ctx.moveTo(82, p.pinY); ctx.lineTo(138, p.pinY);
+                    ctx.stroke();
+                }
+            });
+
+            // ====================================================================
+            // CABANG A: TAMPILAN DEPAN SIMETRIS (12 Gerakan)
+            // ====================================================================
+            if (pose.view === 'front') {
+                // 1. Kaki Kiri & Kanan (Sorot Hamstrings Kuning jika Snatch-Grip Deadlift #100)
+                const thighCol = hasHamstrings ? secondaryColor : neutralColor;
+                drawLimb(pose.hip, pose.kneeL, thighCol, 4.8, secondaryColor, hasHamstrings ? 8 * c : 0);
+                drawLimb(pose.kneeL, pose.footL, neutralColor, 4.2);
+                drawLimb(pose.hip, pose.kneeR, thighCol, 4.8, secondaryColor, hasHamstrings ? 8 * c : 0);
+                drawLimb(pose.kneeR, pose.footR, neutralColor, 4.2);
+
+                // 2. Torso, Core, Lats, & Mid Back
+                if (hasLats || hasMidBack) {
+                    // Sayap V-Taper Kuning untuk Snatch-Grip Deadlift
+                    ctx.save();
+                    ctx.fillStyle = `rgba(245, 158, 11, ${0.25 + 0.35 * c})`;
+                    ctx.strokeStyle = secondaryColor;
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.moveTo(pose.shL[0], pose.shL[1]);
+                    ctx.lineTo(pose.hip[0], pose.hip[1] - 6);
+                    ctx.lineTo(pose.shR[0], pose.shR[1]);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                const torsoCol = hasCore ? secondaryColor : '#cbd5e1';
+                drawLimb(pose.shoulder, pose.hip, torsoCol, 6.5, secondaryColor, hasCore ? 8 * c : 0);
+                drawLimb(pose.shL, pose.shR, '#cbd5e1', 5.5);
+
+                // 3. Lengan Atas (Sorot Kuning jika Triceps atau Biceps adalah sekunder)
+                const upperArmSec = hasTriceps || hasBiceps;
+                const upperArmCol = upperArmSec ? secondaryColor : neutralColor;
+                drawLimb(pose.shL, pose.elbowL, upperArmCol, 4.8, secondaryColor, upperArmSec ? 8 * c : 0);
+                drawLimb(pose.shR, pose.elbowR, upperArmCol, 4.8, secondaryColor, upperArmSec ? 8 * c : 0);
+
+                // 4. Lengan Bawah (Sorot Kuning jika Forearms adalah sekunder pada Shrugs)
+                const forearmCol = hasForearms ? secondaryColor : neutralColor;
+                drawLimb(pose.elbowL, pose.handL, forearmCol, 4.2, secondaryColor, hasForearms ? 8 * c : 0);
+                drawLimb(pose.elbowR, pose.handR, forearmCol, 4.2, secondaryColor, hasForearms ? 8 * c : 0);
+
+                // 5. OTOT TRAPS (Bahu Atas / Pangkal Leher)
+                const neckBase = [pose.head[0], pose.head[1] + 9];
+                if (!isShoulderPrimary) {
+                    // TRAPS SEBAGAI OTOT UTAMA (MERAH MENYALA & MENEBAL TINGGI)
+                    ctx.save();
+                    ctx.fillStyle = `rgba(239, 68, 68, ${0.45 + 0.45 * c})`;
+                    ctx.strokeStyle = primaryColor;
+                    ctx.lineWidth = 4.5 + 2 * c;
+                    ctx.shadowColor = primaryColor;
+                    ctx.shadowBlur = 14 + 14 * c;
+                    ctx.beginPath();
+                    ctx.moveTo(pose.shL[0], pose.shL[1]);
+                    ctx.lineTo(neckBase[0], neckBase[1] - 2);
+                    ctx.lineTo(pose.shR[0], pose.shR[1]);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.restore();
+                } else if (hasSecTraps) {
+                    // Traps sebagai Otot Sekunder (Kuning Menyala pada Upright Row #106)
+                    drawLimb(pose.shL, neckBase, secondaryColor, 5.5 + 1.5 * c, secondaryColor, 8 * c);
+                    drawLimb(pose.shR, neckBase, secondaryColor, 5.5 + 1.5 * c, secondaryColor, 8 * c);
+                }
+
+                // 6. OTOT SHOULDERS / DELTOIDS (Kapsul Bahu Kiri & Kanan)
+                if (isShoulderPrimary) {
+                    // Untuk Cable Lateral Raise (#40) yang unilateral, fokus utama di bahu kiri yang bekerja
+                    const activeShoulders = ex.id === 40 ? [pose.shL] : [pose.shL, pose.shR];
+                    activeShoulders.forEach(shPt => {
+                        ctx.save();
+                        ctx.strokeStyle = `rgba(239, 68, 68, ${0.35 + 0.55 * c})`;
+                        ctx.lineWidth = 1.6;
+                        ctx.beginPath();
+                        ctx.arc(shPt[0], shPt[1], 7.5 + 4.5 * c, 0, Math.PI * 2);
+                        ctx.stroke();
+
+                        ctx.fillStyle = primaryColor;
+                        ctx.shadowColor = primaryColor;
+                        ctx.shadowBlur = 14 + 14 * c;
+                        ctx.beginPath();
+                        ctx.arc(shPt[0], shPt[1], 5.2 + 3 * c, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    });
+                }
+
+                // 7. Kepala
+                ctx.save();
+                ctx.fillStyle = '#0f172a';
+                ctx.strokeStyle = '#f8fafc';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(pose.head[0], pose.head[1], 8.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // ====================================================================
+            // CABANG B: TAMPILAN SAMPING (Front Raise #38, Pike Push-up #37, Rack Pulls #101)
+            // ====================================================================
+            else {
+                // Kaki belakang & depan
+                drawLimb(pose.hip, pose.kneeR, '#64748b', 4.2);
+                drawLimb(pose.kneeR, pose.footR, '#64748b', 3.8);
+                drawLimb(pose.hip, pose.kneeL, neutralColor, 4.8);
+                drawLimb(pose.kneeL, pose.footL, neutralColor, 4.2);
+
+                // Glutes sekunder (Rack Pulls #101)
+                if (hasGlutes) {
+                    ctx.save();
+                    ctx.fillStyle = secondaryColor;
+                    ctx.shadowColor = secondaryColor;
+                    ctx.shadowBlur = 8 * c;
+                    ctx.beginPath();
+                    ctx.arc(pose.hip[0] - 3, pose.hip[1] + 2, 5 + 1.5 * c, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // Torso (Sorot Kuning jika Lower Back, Lats, atau Upper Chest aktif)
+                const torsoSec = hasLowerBack || hasLats || hasUpperChest;
+                drawLimb(pose.shoulder, pose.hip, torsoSec ? secondaryColor : '#cbd5e1', 6.2, secondaryColor, torsoSec ? 9 * c : 0);
+
+                // Lengan Atas (Sorot Kuning jika Triceps aktif pada Pike Push-up) & Lengan Bawah
+                const armCol = hasTriceps ? secondaryColor : neutralColor;
+                drawLimb(pose.shoulder, pose.elbowL, armCol, 4.8, secondaryColor, hasTriceps ? 8 * c : 0);
+                drawLimb(pose.elbowL, pose.handL, neutralColor, 4.2);
+
+                // Sorotan Utama: Traps (Rack Pulls #101) vs Shoulders (Front Raise #38 & Pike Push-up #37)
+                if (!isShoulderPrimary) {
+                    // Rack Pulls (#101): Traps di Pangkal Leher-Bahu Atas Menyala Merah
+                    const neckPt = lerpPt(pose.shoulder, pose.head, 0.45);
+                    drawLimb([pose.shoulder[0] - 4, pose.shoulder[1] + 2], neckPt, primaryColor, 7.5 + 2.5 * c, primaryColor, 14 + 14 * c);
+                    ctx.save();
+                    ctx.fillStyle = primaryColor;
+                    ctx.shadowColor = primaryColor;
+                    ctx.shadowBlur = 14 + 12 * c;
+                    ctx.beginPath();
+                    ctx.arc(pose.shoulder[0] - 2, pose.shoulder[1] - 1, 5.5 + 3 * c, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                } else {
+                    // Front Raise (#38) & Pike Push-up (#37): Kapsul Deltoid Bahu Menyala Merah
+                    ctx.save();
+                    ctx.strokeStyle = `rgba(239, 68, 68, ${0.35 + 0.55 * c})`;
+                    ctx.lineWidth = 1.6;
+                    ctx.beginPath();
+                    ctx.arc(pose.shoulder[0], pose.shoulder[1], 7.5 + 4.5 * c, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    ctx.fillStyle = primaryColor;
+                    ctx.shadowColor = primaryColor;
+                    ctx.shadowBlur = 14 + 14 * c;
+                    ctx.beginPath();
+                    ctx.arc(pose.shoulder[0], pose.shoulder[1], 5.2 + 3 * c, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // Kepala
+                ctx.save();
+                ctx.fillStyle = '#0f172a';
+                ctx.strokeStyle = '#f8fafc';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(pose.head[0], pose.head[1], 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // 2. Gambar Props Depan (Barbell, Dumbbell, Resistance Band)
+            pose.props.forEach(p => {
+                if (p.type === 'dumbbells_pair') {
+                    [p.handL, p.handR].forEach(hPt => {
+                        ctx.save();
+                        ctx.fillStyle = '#38bdf8';
+                        ctx.strokeStyle = '#e0f2fe';
+                        ctx.lineWidth = 1.6;
+                        ctx.beginPath();
+                        ctx.roundRect(hPt[0] - 6, hPt[1] - 3, 12, 6, 2);
+                        ctx.fill();
+                        ctx.stroke();
+                        ctx.restore();
+                    });
+                } else if (p.type === 'dumbbell_side') {
+                    ctx.save();
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.strokeStyle = '#e0f2fe';
+                    ctx.lineWidth = 1.8;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 5.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.restore();
+                } else if (p.type === 'barbell_front') {
+                    ctx.save();
+                    const halfW = p.w / 2;
+                    ctx.strokeStyle = '#cbd5e1';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(110 - halfW - 10, p.y);
+                    ctx.lineTo(110 + halfW + 10, p.y);
+                    ctx.stroke();
+                    // Pelat beban kiri & kanan
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(110 - halfW - 6, p.y - 10, 5, 20);
+                    ctx.fillRect(110 + halfW + 1, p.y - 10, 5, 20);
+                    ctx.restore();
+                } else if (p.type === 'barbell_side') {
+                    ctx.save();
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.strokeStyle = '#0284c7';
+                    ctx.lineWidth = 2.2;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r || 11, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2.8, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                } else if (p.type === 'band_under_feet') {
+                    ctx.save();
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2 + p.tension * 1.4;
+                    ctx.shadowColor = '#38bdf8';
+                    ctx.shadowBlur = 5 * p.tension;
+                    ctx.beginPath();
+                    ctx.moveTo(p.handL[0], p.handL[1]);
+                    ctx.lineTo(p.footL[0], p.footL[1]);
+                    ctx.lineTo(p.footR[0], p.footR[1]);
+                    ctx.lineTo(p.handR[0], p.handR[1]);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            });
+
+            ctx.restore();
+        }
+
+        // ============================================================================
+        // 4. LOGIKA UI GRID, FILTER TAB, DAN LOOP ANIMASI
+        // ============================================================================
+        let isPlaying = true;
+        let speedMultiplier = 1.0;
+        let activeMuscleTab = 'all'; // 'all' | 'shoulders' | 'traps'
+        let activeEquipmentFilter = 'all';
+        let animTime = 0;
+        let lastTimestamp = performance.now();
+        let currentModalExerciseId = null;
+
+        const diffBadgeColors = {
+            beginner: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+            intermediate: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+            advanced: 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+        };
+
+        const diffLabels = {
+            beginner: 'Pemula',
+            intermediate: 'Menengah',
+            advanced: 'Mahir'
+        };
+
+        function setMuscleTab(tab) {
+            activeMuscleTab = tab;
+            ['all', 'shoulders', 'traps'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    btn.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-red-600 text-white shadow-lg shadow-red-600/25 transition';
+                } else {
+                    btn.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:text-white transition';
+                }
+            });
+            renderGrid();
+        }
+
+        function filterEquip(eq) {
+            activeEquipmentFilter = eq;
+            document.querySelectorAll('.eq-btn').forEach(btn => {
+                if (btn.dataset.eq === eq) {
+                    btn.className = 'eq-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition';
+                } else {
+                    btn.className = 'eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition';
+                }
+            });
+            renderGrid();
+        }
+
+        function getFilteredExercises() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            return SHOULDERS_TRAPS_EXERCISES.filter(ex => {
+                const matchTab = activeMuscleTab === 'all' || ex.primary_muscle === activeMuscleTab;
+                const matchEq = activeEquipmentFilter === 'all' || ex.equipment === activeEquipmentFilter;
+                const matchQuery = ex.name.toLowerCase().includes(query) || String(ex.id).includes(query);
+                return matchTab && matchEq && matchQuery;
+            });
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('exerciseGrid');
+            const filtered = getFilteredExercises();
+
+            document.getElementById('downloadBatchText').textContent = `Unduh Semua SVG (${filtered.length})`;
+
+            grid.innerHTML = filtered.map(ex => {
+                const secBadges = ex.secondary_muscles.length > 0
+                    ? ex.secondary_muscles.map(m => `<span class="px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-medium capitalize">${m}</span>`).join('')
+                    : `<span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-medium">Isolasi Murni</span>`;
+
+                const primaryIcon = ex.primary_muscle === 'shoulders' ? '🏋️ Shoulders' : '⛰️ Traps';
+
+                return `
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden flex flex-col transition duration-200 card-glow">
+                    <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-mono font-bold">#${ex.id}</span>
+                            <h3 class="font-bold text-sm text-white truncate" title="${ex.name}">${ex.name}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0 ${diffBadgeColors[ex.difficulty]}">
+                            ${diffLabels[ex.difficulty]}
+                        </span>
+                    </div>
+
+                    <div class="relative bg-slate-950/90 h-52 w-full cursor-pointer group" onclick="openFocusModal(${ex.id})">
+                        <canvas id="canvas-${ex.id}" data-id="${ex.id}"></canvas>
+                        <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-800 text-[10px] font-medium text-slate-300 capitalize">
+                            🏋️ ${ex.equipment}
+                        </span>
+                        <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-red-500/10 border border-red-500/30 text-[10px] font-semibold text-red-300">
+                            ${ex.sub_focus}
+                        </span>
+                        <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition bg-slate-900/90 border border-slate-700 px-2 py-1 rounded-md text-[10px] text-slate-300">
+                            🔍 Perbesar / Unduh SVG
+                        </div>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col justify-between gap-3 bg-slate-900/50">
+                        <div>
+                            <p class="text-[11px] text-slate-400 line-clamp-2 mb-2.5">${ex.desc}</p>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-[11px] font-bold uppercase">
+                                    ${primaryIcon}
+                                </span>
+                                ${secBadges}
+                            </div>
+                        </div>
+
+                        <div class="pt-2.5 border-t border-slate-800/70 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-500 font-mono">${ex.movement_type} • ${ex.tracking_mode.replace('_', ' ')}</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openFocusModal(${ex.id})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition">
+                                    Detail
+                                </button>
+                                <button onclick="exportAnimatedSVG(${ex.id})" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 text-[11px] font-semibold transition flex items-center gap-1">
+                                    <span>⬇</span> SVG
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            resizeAllCanvases();
+        }
+
+        function resizeAllCanvases() {
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+            });
+            const modalCanvas = document.getElementById('modalCanvas');
+            if (modalCanvas && !document.getElementById('focusModal').classList.contains('hidden')) {
+                const rect = modalCanvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                modalCanvas.width = rect.width * dpr;
+                modalCanvas.height = rect.height * dpr;
+            }
+        }
+
+        window.addEventListener('resize', resizeAllCanvases);
+
+        function animateLoop(timestamp) {
+            const dt = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (isPlaying) {
+                animTime += dt * speedMultiplier;
+            }
+
+            // Siklus ~1.6 detik dengan sedikit tahanan (squeeze) di puncak
+            const rawSin = (1 - Math.cos(animTime * Math.PI * 1.25)) / 2;
+            const phase = Math.pow(rawSin, 0.82);
+
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const id = Number(canvas.dataset.id);
+                const ex = SHOULDERS_TRAPS_EXERCISES.find(item => item.id === id);
+                if (ex) {
+                    const ctx = canvas.getContext('2d');
+                    drawStickman(ctx, canvas.width, canvas.height, ex, phase);
+                }
+            });
+
+            if (currentModalExerciseId !== null) {
+                const ex = SHOULDERS_TRAPS_EXERCISES.find(item => item.id === currentModalExerciseId);
+                const modalCanvas = document.getElementById('modalCanvas');
+                if (ex && modalCanvas) {
+                    const ctx = modalCanvas.getContext('2d');
+                    drawStickman(ctx, modalCanvas.width, modalCanvas.height, ex, phase);
+                    const pose = getPoseForExercise(ex.id, phase);
+                    document.getElementById('modalPhaseBadge').textContent = pose.phaseText;
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('playIcon').textContent = isPlaying ? '⏸' : '▶';
+            document.getElementById('playText').textContent = isPlaying ? 'Jeda' : 'Putar';
+        }
+
+        function setSpeed(spd) {
+            speedMultiplier = spd;
+            document.querySelectorAll('.spd-btn').forEach(btn => {
+                btn.className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition';
+            });
+            document.getElementById(`spd-${spd}`).className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition';
+        }
+
+        function openFocusModal(id) {
+            const ex = SHOULDERS_TRAPS_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+            currentModalExerciseId = id;
+            document.getElementById('modalId').textContent = `ID #${ex.id} • ${ex.difficulty.toUpperCase()}`;
+            document.getElementById('modalTitle').textContent = ex.name;
+            document.getElementById('modalDesc').textContent = ex.desc;
+            document.getElementById('modalPrimary').textContent = ex.primary_muscle.toUpperCase();
+            document.getElementById('modalSecondary').textContent = ex.secondary_muscles.length > 0
+                ? ex.secondary_muscles.join(', ')
+                : 'Isolasi Murni';
+            document.getElementById('modalEquip').textContent = `${ex.equipment} • ${ex.movement_type}`;
+            document.getElementById('modalTracking').textContent = ex.tracking_mode;
+
+            document.getElementById('focusModal').classList.remove('hidden');
+            resizeAllCanvases();
+        }
+
+        function closeModal() {
+            currentModalExerciseId = null;
+            document.getElementById('focusModal').classList.add('hidden');
+        }
+
+        // ============================================================================
+        // 5. EKSPOR FILE ANIMASI .SVG MANDIRI & FILE .HTML LENGKAP
+        // ============================================================================
+        function generateSVGString(ex) {
+            const p0 = getPoseForExercise(ex.id, 0);
+            const pM = getPoseForExercise(ex.id, 0.5);
+            const p1 = getPoseForExercise(ex.id, 1);
+
+            const sec = ex.secondary_muscles;
+            const upperArmCol = (sec.includes('triceps') || sec.includes('biceps')) ? '#f59e0b' : '#94a3b8';
+            const forearmCol = sec.includes('forearms') ? '#f59e0b' : '#94a3b8';
+            const torsoCol = (sec.includes('core') || sec.includes('lower back') || sec.includes('lats')) ? '#f59e0b' : '#cbd5e1';
+
+            function animLine3(a0, b0, aM, bM, a1, b1, stroke, width) {
+                return `<line x1="${a0[0].toFixed(1)}" y1="${a0[1].toFixed(1)}" x2="${b0[0].toFixed(1)}" y2="${b0[1].toFixed(1)}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round">
+                    <animate attributeName="x1" values="${a0[0].toFixed(1)};${aM[0].toFixed(1)};${a1[0].toFixed(1)};${aM[0].toFixed(1)};${a0[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="y1" values="${a0[1].toFixed(1)};${aM[1].toFixed(1)};${a1[1].toFixed(1)};${aM[1].toFixed(1)};${a0[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="x2" values="${b0[0].toFixed(1)};${bM[0].toFixed(1)};${b1[0].toFixed(1)};${bM[0].toFixed(1)};${b0[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="y2" values="${b0[1].toFixed(1)};${bM[1].toFixed(1)};${b1[1].toFixed(1)};${bM[1].toFixed(1)};${b0[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                </line>`;
+            }
+
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 155" width="440" height="310" style="background:#090d16; font-family:sans-serif;">
+    <defs>
+        <filter id="stGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+    </defs>
+    <text x="12" y="18" fill="#f8fafc" font-size="8" font-weight="bold">#${ex.id} ${ex.name}</text>
+    <text x="12" y="28" fill="#ef4444" font-size="6.5" font-weight="bold">Primary: ${ex.primary_muscle.toUpperCase()}${sec.length ? ' | Sec: ' + sec.join(', ') : ''}</text>
+    <line x1="15" y1="136" x2="205" y2="136" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    ${animLine3(p0.hip, p0.kneeL, pM.hip, pM.kneeL, p1.hip, p1.kneeL, '#94a3b8', 4.6)}
+    ${animLine3(p0.kneeL, p0.footL, pM.kneeL, pM.footL, p1.kneeL, p1.footL, '#94a3b8', 4.2)}
+    ${animLine3(p0.hip, p0.kneeR, pM.hip, pM.kneeR, p1.hip, p1.kneeR, '#64748b', 4.4)}
+    ${animLine3(p0.kneeR, p0.footR, pM.kneeR, pM.footR, p1.kneeR, p1.footR, '#64748b', 4)}
+    ${animLine3(p0.shoulder, p0.hip, pM.shoulder, pM.hip, p1.shoulder, p1.hip, torsoCol, 6.2)}
+    ${animLine3(p0.shL, p0.elbowL, pM.shL, pM.elbowL, p1.shL, p1.elbowL, upperArmCol, 4.8)}
+    ${animLine3(p0.elbowL, p0.handL, pM.elbowL, pM.handL, p1.elbowL, p1.handL, forearmCol, 4.2)}
+    ${animLine3(p0.shR, p0.elbowR, pM.shR, pM.elbowR, p1.shR, p1.elbowR, upperArmCol, 4.8)}
+    ${animLine3(p0.elbowR, p0.handR, pM.elbowR, pM.handR, p1.elbowR, p1.handR, forearmCol, 4.2)}
+    <g filter="url(#stGlow)">
+        ${animLine3(p0.shL, p0.shR, pM.shL, pM.shR, p1.shL, p1.shR, '#ef4444', 7)}
+        <circle cx="${p0.shL[0].toFixed(1)}" cy="${p0.shL[1].toFixed(1)}" r="5.5" fill="#ef4444">
+            <animate attributeName="cy" values="${p0.shL[1].toFixed(1)};${pM.shL[1].toFixed(1)};${p1.shL[1].toFixed(1)};${pM.shL[1].toFixed(1)};${p0.shL[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="5;8;5" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="${p0.shR[0].toFixed(1)}" cy="${p0.shR[1].toFixed(1)}" r="5.5" fill="#ef4444">
+            <animate attributeName="cy" values="${p0.shR[1].toFixed(1)};${pM.shR[1].toFixed(1)};${p1.shR[1].toFixed(1)};${pM.shR[1].toFixed(1)};${p0.shR[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="5;8;5" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+    <circle cx="${p0.head[0].toFixed(1)}" cy="${p0.head[1].toFixed(1)}" r="8" fill="#0f172a" stroke="#f8fafc" stroke-width="3">
+        <animate attributeName="cx" values="${p0.head[0].toFixed(1)};${pM.head[0].toFixed(1)};${p1.head[0].toFixed(1)};${pM.head[0].toFixed(1)};${p0.head[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="${p0.head[1].toFixed(1)};${pM.head[1].toFixed(1)};${p1.head[1].toFixed(1)};${pM.head[1].toFixed(1)};${p0.head[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+</svg>`;
+        }
+
+        function exportAnimatedSVG(id) {
+            const ex = SHOULDERS_TRAPS_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+
+            const svgContent = generateSVGString(ex);
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stickman_${ex.id}_${ex.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Animasi "${ex.name}.svg" berhasil diunduh!`);
+        }
+
+        function downloadFilteredSVGs() {
+            const list = getFilteredExercises();
+            list.forEach((ex, idx) => {
+                setTimeout(() => {
+                    exportAnimatedSVG(ex.id);
+                }, idx * 280);
+            });
+            showToast(`Mengunduh ${list.length} file SVG kategori Shoulders & Traps...`);
+        }
+
+        function downloadStandaloneHTML() {
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'shoulders_traps_stickman_animations.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('File "shoulders_traps_stickman_animations.html" berhasil diunduh!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        window.onload = function () {
+            renderGrid();
+            requestAnimationFrame(animateLoop);
+        };
+    </script>
+</body>
+</html>

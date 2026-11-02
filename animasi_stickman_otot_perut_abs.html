@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Animasi Stickman - Kategori Abs (15 Gerakan)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.25), 0 0 10px -5px rgba(245, 158, 11, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
+
+    <!-- Header & Controls -->
+    <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3.5 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <!-- Title & Badge -->
+            <div class="flex items-start sm:items-center justify-between gap-3">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-sm">
+                            01
+                        </span>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                            Kategori: <span class="text-red-500">Abs / Perut</span>
+                        </h1>
+                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            15 Gerakan
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Animasi vektor stickman singkat (1.6 detik/loop) dengan indikator aktivasi otot langsung.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Legend & Interactive Toolbar -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3">
+                <!-- Legend Otot -->
+                <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] animate-pulse"></span>
+                        <span class="font-medium text-slate-200">Otot Utama (Abs)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></span>
+                        <span class="font-medium text-slate-300">Otot Sekunder</span>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <span class="w-3 h-1 rounded-full bg-slate-500"></span>
+                        <span class="text-slate-400">Alat / Penumpu</span>
+                    </div>
+                </div>
+
+                <!-- Speed & Play Controls -->
+                <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+                    <button id="btnPlayPause" onclick="togglePlay()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition flex items-center gap-1.5">
+                        <span id="playIcon">⏸</span> <span id="playText">Jeda</span>
+                    </button>
+                    <button onclick="setSpeed(0.5)" id="spd-0.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">0.5x</button>
+                    <button onclick="setSpeed(1)" id="spd-1" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition">1x</button>
+                    <button onclick="setSpeed(1.5)" id="spd-1.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">1.5x</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter & Search Bar -->
+    <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-5 pb-2">
+        <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-slate-900/60 border border-slate-800/80 p-3 rounded-2xl">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs text-slate-400 mr-1 font-medium">Filter Alat:</span>
+                <button onclick="filterEquip('all')" data-eq="all" class="eq-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition">Semua (15)</button>
+                <button onclick="filterEquip('bodyweight')" data-eq="bodyweight" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Bodyweight (13)</button>
+                <button onclick="filterEquip('cable')" data-eq="cable" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Cable (1)</button>
+                <button onclick="filterEquip('dumbbell')" data-eq="dumbbell" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Dumbbell (1)</button>
+            </div>
+            <div class="relative flex-1 sm:max-w-xs">
+                <input type="text" id="searchInput" oninput="renderGrid()" placeholder="Cari nama gerakan atau ID..." 
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Exercises Grid -->
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 flex-1">
+        <div id="exerciseGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            <!-- Cards will be injected dynamically -->
+        </div>
+    </main>
+
+    <!-- Modal Detail / Fokus View & Export SVG -->
+    <div id="focusModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+                <div>
+                    <span id="modalId" class="text-xs font-bold text-red-400 uppercase tracking-wider">ID #83</span>
+                    <h2 id="modalTitle" class="text-lg font-bold text-white">Ab Wheel Rollout</h2>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <div class="p-5">
+                <div class="relative bg-slate-950 rounded-xl border border-slate-800 h-72 w-full overflow-hidden">
+                    <canvas id="modalCanvas"></canvas>
+                    <div id="modalPhaseBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300">
+                        Kontraksi
+                    </div>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-3 text-xs">
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
+                        <span class="text-slate-400 block mb-1">Otot Utama (Merah):</span>
+                        <span id="modalPrimary" class="font-bold text-red-400 uppercase">ABS (PERUT)</span>
+                    </div>
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
+                        <span class="text-slate-400 block mb-1">Otot Sekunder (Kuning):</span>
+                        <span id="modalSecondary" class="font-semibold text-amber-400">Shoulders, Lower Back</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 justify-end">
+                    <button onclick="exportAnimatedSVG(currentModalExerciseId)" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+                        <span>⬇</span> Unduh File Animasi Ringan (.SVG)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2">
+        <span>✓</span> <span id="toastMsg">File SVG berhasil diunduh!</span>
+    </div>
+
+    <script>
+        // ============================================================================
+        // 1. DATA KATALOG 15 GERAKAN ABS (Sesuai File exercises_catalog.json)
+        // ============================================================================
+        const ABS_EXERCISES = [
+            {
+                id: 83,
+                name: "Ab Wheel Rollout",
+                primary_muscle: "abs",
+                secondary_muscles: ["shoulders", "lower back"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Dorong roda ke depan dari posisi berlutut sambil menjaga perut tetap terkunci."
+            },
+            {
+                id: 64,
+                name: "Bicycle Crunches",
+                primary_muscle: "abs",
+                secondary_muscles: ["obliques"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Pertemukan siku dan lutut berlawanan secara bergantian seperti mengayuh sepeda."
+            },
+            {
+                id: 82,
+                name: "Cable Rope Crunch",
+                primary_muscle: "abs",
+                secondary_muscles: [],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "weight_reps",
+                desc: "Berlutut di depan mesin katrol, tarik tali ke bawah dengan menekuk tulang belakang/perut."
+            },
+            {
+                id: 60,
+                name: "Deadbug",
+                primary_muscle: "abs",
+                secondary_muscles: ["lower back"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Berbaring telentang, rentangkan tangan dan kaki berlawanan sambil menekan punggung bawah ke lantai."
+            },
+            {
+                id: 85,
+                name: "Decline Weighted Sit-up",
+                primary_muscle: "abs",
+                secondary_muscles: ["hip flexors"],
+                equipment: "dumbbell",
+                difficulty: "intermediate",
+                movement_type: "core",
+                tracking_mode: "weight_reps",
+                desc: "Sit-up di bangku miring (decline) sambil memegang beban dumbbell di dada."
+            },
+            {
+                id: 86,
+                name: "Dragon Flag",
+                primary_muscle: "abs",
+                secondary_muscles: ["lats", "lower back"],
+                equipment: "bodyweight",
+                difficulty: "advanced",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Pegang tiang/bangku di belakang kepala, angkat seluruh tubuh lurus bertumpu pada bahu atas."
+            },
+            {
+                id: 20,
+                name: "Hanging Knee Raise",
+                primary_muscle: "abs",
+                secondary_muscles: ["hip flexors"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Bergantung di bar pull-up, angkat kedua lutut ke arah dada dengan mengontraksikan perut bawah."
+            },
+            {
+                id: 84,
+                name: "Hanging Straight Leg Raise",
+                primary_muscle: "abs",
+                secondary_muscles: ["hip flexors"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Bergantung di bar, angkat kedua kaki dalam posisi lurus hingga sejajar lantai (90 derajat)."
+            },
+            {
+                id: 91,
+                name: "Hollow Body Hold",
+                primary_muscle: "abs",
+                secondary_muscles: ["hip flexors"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "duration",
+                desc: "Tahan posisi tubuh melengkung seperti pisang dengan bahu dan kaki terangkat dari lantai."
+            },
+            {
+                id: 61,
+                name: "Leg Raises",
+                primary_muscle: "abs",
+                secondary_muscles: ["hip flexors"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Berbaring telentang di lantai, angkat kedua kaki lurus ke atas hingga vertikal lalu turunkan perlahan."
+            },
+            {
+                id: 63,
+                name: "Mountain Climbers",
+                primary_muscle: "abs",
+                secondary_muscles: ["shoulders", "quadriceps"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "duration",
+                desc: "Dari posisi tinggi push-up, tarik lutut bergantian dengan cepat ke arah dada."
+            },
+            {
+                id: 19,
+                name: "Plank",
+                primary_muscle: "abs",
+                secondary_muscles: ["shoulders"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "duration",
+                desc: "Tahan tubuh lurus sejajar lantai bertumpu pada siku/lengan bawah dan ujung kaki."
+            },
+            {
+                id: 93,
+                name: "Plank to Push-up",
+                primary_muscle: "abs",
+                secondary_muscles: ["chest", "triceps", "shoulders"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Transisi naik turun dari posisi forearm plank (siku) ke posisi high plank (telapak tangan)."
+            },
+            {
+                id: 92,
+                name: "Reverse Crunch",
+                primary_muscle: "abs",
+                secondary_muscles: [],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Tarik lutut dan angkat panggul/pinggul menggulung ke arah dada dari posisi berbaring."
+            },
+            {
+                id: 87,
+                name: "Toes to Bar",
+                primary_muscle: "abs",
+                secondary_muscles: ["lats", "forearms"],
+                equipment: "bodyweight",
+                difficulty: "advanced",
+                movement_type: "core",
+                tracking_mode: "reps_only",
+                desc: "Bergantung di bar, ayunkan dan angkat ujung kaki hingga menyentuh palang di atas."
+            }
+        ];
+
+        // ============================================================================
+        // 2. DEFINISI KEYFRAMES SENDI STICKMAN (KOORDINAT NORMALISASI 0..100)
+        // Setiap gerakan punya Pose A (Awal/Rileks) & Pose B (Kontraksi Puncak)
+        // ============================================================================
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+
+        // Mengembalikan posisi sendi pada fase t (0.0 = awal, 1.0 = puncak kontraksi)
+        // Format koordinat: [x, y] pada kanvas 200x150
+        function getPoseForExercise(id, t, rawTime) {
+            // t adalah nilai halus 0 -> 1 -> 0 (siklus 1.6 detik)
+            // rawTime untuk gerakan bergantian (seperti Bicycle Crunch & Mountain Climbers)
+            const alt = Math.sin(rawTime * Math.PI * 2); // -1 ke 1
+
+            switch (id) {
+                case 83: { // Ab Wheel Rollout
+                    // Lutut tetap di [45, 122], dorong roda dari [78, 122] ke [155, 122]
+                    const wheelX = lerp(78, 152, t);
+                    const hip = lerpPt([62, 85], [100, 102], t);
+                    const shoulder = lerpPt([80, 68], [138, 92], t);
+                    const head = lerpPt([90, 58], [150, 86], t);
+                    const elbow = lerpPt([79, 95], [145, 107], t);
+                    return {
+                        props: [
+                            { type: 'floor', y: 126 },
+                            { type: 'wheel', x: wheelX, y: 118, r: 7 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: [wheelX, 118],
+                        elbowR: elbow, handR: [wheelX, 118],
+                        kneeL: [48, 123], footL: [30, 124],
+                        kneeR: [48, 123], footR: [30, 124],
+                        contraction: t
+                    };
+                }
+
+                case 64: { // Bicycle Crunches (Bergantian Kiri & Kanan)
+                    const s = (alt + 1) / 2; // 0 ke 1
+                    const hip = [95, 118];
+                    const shoulder = [62, 100 - Math.abs(alt) * 8];
+                    const head = [50, 88 - Math.abs(alt) * 8];
+                    // Kaki 1 menekuk, kaki 2 lurus
+                    const kneeL = lerpPt([115, 78], [135, 105], s);
+                    const footL = lerpPt([135, 85], [170, 110], s);
+                    const kneeR = lerpPt([135, 105], [115, 78], s);
+                    const footR = lerpPt([170, 110], [135, 85], s);
+                    const elbowL = lerpPt([78, 82], [45, 92], s);
+                    const elbowR = lerpPt([45, 92], [78, 82], s);
+                    return {
+                        props: [{ type: 'floor', y: 126 }],
+                        head, shoulder, hip,
+                        elbowL, handL: head,
+                        elbowR, handR: head,
+                        kneeL, footL, kneeR, footR,
+                        contraction: 0.4 + 0.6 * Math.abs(alt)
+                    };
+                }
+
+                case 82: { // Cable Rope Crunch
+                    const hip = lerpPt([110, 92], [116, 98], t);
+                    const shoulder = lerpPt([105, 52], [82, 82], t);
+                    const head = lerpPt([102, 36], [72, 92], t);
+                    const hand = lerpPt([95, 42], [68, 92], t);
+                    const elbow = lerpPt([92, 60], [72, 98], t);
+                    return {
+                        props: [
+                            { type: 'floor', y: 126 },
+                            { type: 'cable', x1: 45, y1: 18, x2: hand[0], y2: hand[1] }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: [108, 123], footL: [132, 124],
+                        kneeR: [108, 123], footR: [132, 124],
+                        contraction: t
+                    };
+                }
+
+                case 60: { // Deadbug
+                    const hip = [105, 118];
+                    const shoulder = [65, 118];
+                    const head = [50, 114];
+                    // Rentangkan lengan kanan & kaki kiri saat t naik
+                    const handL = lerpPt([65, 75], [32, 108], t);
+                    const elbowL = lerpPt([65, 95], [48, 112], t);
+                    const handR = [68, 76];
+                    const elbowR = [67, 96];
+                    const kneeL = [105, 82];
+                    const footL = [132, 82];
+                    const kneeR = lerpPt([105, 82], [138, 106], t);
+                    const footR = lerpPt([132, 82], [172, 112], t);
+                    return {
+                        props: [{ type: 'floor', y: 125 }],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t
+                    };
+                }
+
+                case 85: { // Decline Weighted Sit-up
+                    const hip = [112, 102];
+                    const knee = [142, 78];
+                    const foot = [158, 98];
+                    const shoulder = lerpPt([68, 114], [106, 64], t);
+                    const head = lerpPt([54, 118], [105, 48], t);
+                    const hand = lerpPt([75, 104], [114, 68], t);
+                    const elbow = lerpPt([72, 118], [102, 78], t);
+                    return {
+                        props: [
+                            { type: 'bench_decline', x1: 48, y1: 122, x2: 142, y2: 82, x3: 162, y3: 100 },
+                            { type: 'dumbbell', x: hand[0], y: hand[1] }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: t
+                    };
+                }
+
+                case 86: { // Dragon Flag
+                    const shoulder = [68, 116];
+                    const head = [54, 114];
+                    const angle = lerp(-0.18, -1.08, t); // Dari hampir horizontal ke 62 derajat ke atas
+                    const hip = [shoulder[0] + Math.cos(angle) * 42, shoulder[1] + Math.sin(angle) * 42];
+                    const knee = [shoulder[0] + Math.cos(angle) * 76, shoulder[1] + Math.sin(angle) * 76];
+                    const foot = [shoulder[0] + Math.cos(angle) * 108, shoulder[1] + Math.sin(angle) * 108];
+                    return {
+                        props: [
+                            { type: 'bench_flat', x1: 35, x2: 115, y: 122 },
+                            { type: 'post', x: 38, y1: 95, y2: 122 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: [46, 110], handL: [38, 102],
+                        elbowR: [46, 110], handR: [38, 102],
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: 0.4 + 0.6 * t
+                    };
+                }
+
+                case 20: { // Hanging Knee Raise
+                    const hand = [100, 20];
+                    const elbow = [100, 36];
+                    const shoulder = [100, 50];
+                    const head = [100, 38];
+                    const hip = lerpPt([100, 86], [104, 82], t);
+                    const knee = lerpPt([100, 114], [128, 74], t);
+                    const foot = lerpPt([100, 140], [116, 102], t);
+                    return {
+                        props: [{ type: 'pullup_bar', x: 100, y: 18 }],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: t
+                    };
+                }
+
+                case 84: { // Hanging Straight Leg Raise
+                    const hand = [95, 20];
+                    const elbow = [95, 36];
+                    const shoulder = [95, 50];
+                    const head = [95, 38];
+                    const hip = lerpPt([95, 86], [98, 84], t);
+                    const knee = lerpPt([95, 114], [126, 84], t);
+                    const foot = lerpPt([95, 140], [156, 82], t);
+                    return {
+                        props: [{ type: 'pullup_bar', x: 95, y: 18 }],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: t
+                    };
+                }
+
+                case 91: { // Hollow Body Hold (Isometrik + goyangan mikro kontraksi)
+                    const pulse = Math.sin(rawTime * Math.PI * 4) * 2.5;
+                    const hip = [100, 119];
+                    const shoulder = [66, 105 + pulse * 0.5];
+                    const head = [54, 96 + pulse * 0.5];
+                    const hand = [28, 82 + pulse];
+                    const elbow = [46, 94 + pulse * 0.7];
+                    const knee = [134, 106 - pulse * 0.5];
+                    const foot = [166, 92 - pulse];
+                    return {
+                        props: [{ type: 'floor', y: 125 }],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: 0.75 + 0.25 * t
+                    };
+                }
+
+                case 61: { // Leg Raises
+                    const shoulder = [62, 118];
+                    const head = [48, 115];
+                    const hip = [102, 118];
+                    const angle = lerp(-0.1, -1.52, t);
+                    const knee = [hip[0] + Math.cos(angle) * 32, hip[1] + Math.sin(angle) * 32];
+                    const foot = [hip[0] + Math.cos(angle) * 64, hip[1] + Math.sin(angle) * 64];
+                    return {
+                        props: [{ type: 'floor', y: 125 }],
+                        head, shoulder, hip,
+                        elbowL: [80, 120], handL: [98, 121],
+                        elbowR: [80, 120], handR: [98, 121],
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: t
+                    };
+                }
+
+                case 63: { // Mountain Climbers
+                    const s = (alt + 1) / 2;
+                    const shoulder = [65, 82];
+                    const head = [50, 76];
+                    const hip = [110, 90];
+                    const hand = [62, 122];
+                    const elbow = [63, 102];
+                    const kneeL = lerpPt([84, 104], [136, 108], s);
+                    const footL = lerpPt([102, 118], [164, 122], s);
+                    const kneeR = lerpPt([136, 108], [84, 104], s);
+                    const footR = lerpPt([164, 122], [102, 118], s);
+                    return {
+                        props: [{ type: 'floor', y: 125 }],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL, footL, kneeR, footR,
+                        contraction: 0.5 + 0.5 * Math.abs(alt)
+                    };
+                }
+
+                case 19: { // Plank (Isometrik dengan napas kontraksi inti)
+                    const br = Math.sin(rawTime * Math.PI * 4) * 1.5;
+                    const shoulder = [68, 96 + br * 0.4];
+                    const head = [52, 92 + br * 0.4];
+                    const hip = [112, 102 + br];
+                    const knee = [138, 112];
+                    const foot = [162, 122];
+                    return {
+                        props: [{ type: 'floor', y: 125 }],
+                        head, shoulder, hip,
+                        elbowL: [68, 122], handL: [50, 122],
+                        elbowR: [68, 122], handR: [50, 122],
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: 0.75 + 0.25 * t
+                    };
+                }
+
+                case 93: { // Plank to Push-up
+                    const shoulder = lerpPt([68, 98], [68, 78], t);
+                    const head = lerpPt([52, 94], [52, 72], t);
+                    const hip = lerpPt([112, 104], [112, 92], t);
+                    const knee = lerpPt([138, 113], [138, 107], t);
+                    const foot = [162, 122];
+                    const elbow = lerpPt([68, 122], [66, 100], t);
+                    const hand = lerpPt([50, 122], [66, 122], t);
+                    return {
+                        props: [{ type: 'floor', y: 125 }],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: 0.35 + 0.65 * t
+                    };
+                }
+
+                case 92: { // Reverse Crunch
+                    const shoulder = [62, 118];
+                    const head = [48, 114];
+                    const hip = lerpPt([104, 118], [86, 102], t);
+                    const knee = lerpPt([122, 86], [74, 72], t);
+                    const foot = lerpPt([146, 96], [88, 56], t);
+                    return {
+                        props: [{ type: 'floor', y: 125 }],
+                        head, shoulder, hip,
+                        elbowL: [80, 120], handL: [100, 121],
+                        elbowR: [80, 120], handR: [100, 121],
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: t
+                    };
+                }
+
+                case 87: { // Toes to Bar
+                    const hand = [96, 20];
+                    const elbow = [96, 35];
+                    const shoulder = lerpPt([96, 50], [86, 48], t);
+                    const head = lerpPt([96, 38], [76, 42], t);
+                    const hip = lerpPt([96, 86], [92, 78], t);
+                    const knee = lerpPt([96, 114], [104, 52], t);
+                    const foot = lerpPt([96, 140], [100, 22], t);
+                    return {
+                        props: [{ type: 'pullup_bar', x: 96, y: 18 }],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        elbowR: elbow, handR: hand,
+                        kneeL: knee, footL: foot,
+                        kneeR: knee, footR: foot,
+                        contraction: t
+                    };
+                }
+            }
+        }
+
+        // ============================================================================
+        // 3. RENDERER CANVAS STICKMAN DENGAN HIGHLIGHT OTOT UTAMA & SEKUNDER
+        // ============================================================================
+        function drawStickman(ctx, width, height, ex, t, rawTime) {
+            ctx.clearRect(0, 0, width, height);
+
+            // Skala sistem koordinat 200x150 ke ukuran canvas
+            const scale = Math.min(width / 200, height / 150);
+            const offsetX = (width - 200 * scale) / 2;
+            const offsetY = (height - 150 * scale) / 2;
+
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+
+            const pose = getPoseForExercise(ex.id, t, rawTime);
+            const sec = ex.secondary_muscles;
+            const c = pose.contraction; // 0..1 intensitas kontraksi
+
+            // 1. Gambar Props / Peralatan
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            pose.props.forEach(p => {
+                if (p.type === 'floor') {
+                    ctx.strokeStyle = '#1e293b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(15, p.y);
+                    ctx.lineTo(185, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'wheel') {
+                    ctx.strokeStyle = '#64748b';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (p.type === 'pullup_bar') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x - 35, p.y);
+                    ctx.lineTo(p.x + 35, p.y);
+                    ctx.stroke();
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (p.type === 'cable') {
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 1.8;
+                    ctx.setLineDash([3, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(p.x1, p.y1);
+                    ctx.lineTo(p.x2, p.y2);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    // Pulley wheel
+                    ctx.fillStyle = '#475569';
+                    ctx.beginPath();
+                    ctx.arc(p.x1, p.y1, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (p.type === 'bench_decline') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x1, p.y1);
+                    ctx.lineTo(p.x2, p.y2);
+                    ctx.lineTo(p.x3, p.y3);
+                    ctx.stroke();
+                } else if (p.type === 'bench_flat') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x1, p.y);
+                    ctx.lineTo(p.x2, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'post') {
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 3.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y1);
+                    ctx.lineTo(p.x, p.y2);
+                    ctx.stroke();
+                }
+            });
+
+            // Helper menggambar segmen tubuh
+            function drawLimb(pt1, pt2, color, width, glowColor = null, glowBlur = 0) {
+                ctx.save();
+                if (glowColor && glowBlur > 0) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = glowBlur;
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                ctx.beginPath();
+                ctx.moveTo(pt1[0], pt1[1]);
+                ctx.lineTo(pt2[0], pt2[1]);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // Warna segmen berdasarkan keterlibatan otot sekunder
+            const neutralColor = '#94a3b8';
+            const secondaryColor = '#f59e0b'; // Amber/Kuning untuk otot sekunder
+            const primaryColor = '#ef4444';   // Merah menyala untuk Abs (otot utama)
+
+            const hasQuads = sec.includes('quadriceps');
+            const hasHipFlexors = sec.includes('hip flexors');
+            const hasShoulders = sec.includes('shoulders');
+            const hasTriceps = sec.includes('triceps');
+            const hasForearms = sec.includes('forearms');
+            const hasLatsOrChest = sec.includes('lats') || sec.includes('chest');
+            const hasLowerBackOrObliques = sec.includes('lower back') || sec.includes('obliques');
+
+            // 2. Kaki & Paha
+            const thighColor = (hasQuads || hasHipFlexors) ? secondaryColor : neutralColor;
+            const thighGlow = (hasQuads || hasHipFlexors) ? 6 * c : 0;
+            drawLimb(pose.hip, pose.kneeL, thighColor, 4.5, secondaryColor, thighGlow);
+            drawLimb(pose.kneeL, pose.footL, neutralColor, 4);
+            drawLimb(pose.hip, pose.kneeR, thighColor, 4.5, secondaryColor, thighGlow);
+            drawLimb(pose.kneeR, pose.footR, neutralColor, 4);
+
+            // 3. Torso Atas (Dada/Punggung Atas) & Torso Bawah/Tengah (INTI ABS - MERAH MENYALA)
+            const midTorso = lerpPt(pose.shoulder, pose.hip, 0.35);
+            const upperTorsoColor = hasLatsOrChest ? secondaryColor : '#cbd5e1';
+            drawLimb(pose.shoulder, midTorso, upperTorsoColor, 6, secondaryColor, hasLatsOrChest ? 6 * c : 0);
+
+            // Segmen Otot Utama: ABS / CORE (Selalu Merah Menyala dan Berdenyut sesuai Kontraksi)
+            if (hasLowerBackOrObliques) {
+                // Outline sekunder kuning tipis di belakang inti merah
+                drawLimb(midTorso, pose.hip, secondaryColor, 9.5, secondaryColor, 8 * c);
+            }
+            drawLimb(midTorso, pose.hip, primaryColor, 6.8, '#ef4444', 10 + 12 * c);
+
+            // Indikator cincin aktivasi di tengah perut (Core Pulse)
+            const coreCenter = lerpPt(midTorso, pose.hip, 0.5);
+            ctx.save();
+            ctx.fillStyle = `rgba(239, 68, 68, ${0.25 + 0.45 * c})`;
+            ctx.beginPath();
+            ctx.arc(coreCenter[0], coreCenter[1], 6 + 4 * c, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // 4. Lengan Atas & Lengan Bawah
+            const upperArmColor = (hasShoulders || hasTriceps) ? secondaryColor : neutralColor;
+            const forearmColor = hasForearms ? secondaryColor : neutralColor;
+            drawLimb(pose.shoulder, pose.elbowL, upperArmColor, 4.2, secondaryColor, (hasShoulders || hasTriceps) ? 6 * c : 0);
+            drawLimb(pose.elbowL, pose.handL, forearmColor, 3.8, secondaryColor, hasForearms ? 6 * c : 0);
+            drawLimb(pose.shoulder, pose.elbowR, upperArmColor, 4.2, secondaryColor, (hasShoulders || hasTriceps) ? 6 * c : 0);
+            drawLimb(pose.elbowR, pose.handR, forearmColor, 3.8, secondaryColor, hasForearms ? 6 * c : 0);
+
+            // 5. Titik Sendi Sekunder Spesifik (Bahu & Hip Flexor)
+            if (hasShoulders) {
+                ctx.save();
+                ctx.fillStyle = secondaryColor;
+                ctx.shadowColor = secondaryColor;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(pose.shoulder[0], pose.shoulder[1], 4.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+            if (hasHipFlexors) {
+                ctx.save();
+                ctx.fillStyle = secondaryColor;
+                ctx.shadowColor = secondaryColor;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(pose.hip[0], pose.hip[1], 4.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 6. Kepala Stickman
+            ctx.save();
+            ctx.fillStyle = '#0f172a';
+            ctx.strokeStyle = '#f8fafc';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(pose.head[0], pose.head[1], 8.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+
+            // Dumbbell jika ada
+            pose.props.forEach(p => {
+                if (p.type === 'dumbbell') {
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            ctx.restore();
+        }
+
+        // ============================================================================
+        // 4. UI GRID & LOOP ANIMASI UTAMA
+        // ============================================================================
+        let isPlaying = true;
+        let speedMultiplier = 1.0;
+        let activeEquipmentFilter = 'all';
+        let animTime = 0;
+        let lastTimestamp = performance.now();
+        let currentModalExerciseId = null;
+
+        const diffBadgeColors = {
+            beginner: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+            intermediate: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+            advanced: 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+        };
+
+        const diffLabels = {
+            beginner: 'Pemula',
+            intermediate: 'Menengah',
+            advanced: 'Mahir'
+        };
+
+        function filterEquip(eq) {
+            activeEquipmentFilter = eq;
+            document.querySelectorAll('.eq-btn').forEach(btn => {
+                if (btn.dataset.eq === eq) {
+                    btn.className = 'eq-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition';
+                } else {
+                    btn.className = 'eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition';
+                }
+            });
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('exerciseGrid');
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            const filtered = ABS_EXERCISES.filter(ex => {
+                const matchEq = activeEquipmentFilter === 'all' || ex.equipment === activeEquipmentFilter;
+                const matchQuery = ex.name.toLowerCase().includes(query) || String(ex.id).includes(query);
+                return matchEq && matchQuery;
+            });
+
+            grid.innerHTML = filtered.map(ex => {
+                const secBadges = ex.secondary_muscles.length > 0
+                    ? ex.secondary_muscles.map(m => `<span class="px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-medium capitalize">${m}</span>`).join('')
+                    : `<span class="text-[11px] text-slate-500 italic">Isolasi Murni (Tanpa Otot Sekunder)</span>`;
+
+                return `
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden flex flex-col transition duration-200 card-glow">
+                    <!-- Top Card Header -->
+                    <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-mono font-bold">#${ex.id}</span>
+                            <h3 class="font-bold text-sm text-white truncate" title="${ex.name}">${ex.name}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0 ${diffBadgeColors[ex.difficulty]}">
+                            ${diffLabels[ex.difficulty]}
+                        </span>
+                    </div>
+
+                    <!-- Stickman Canvas Viewport -->
+                    <div class="relative bg-slate-950/90 h-44 w-full cursor-pointer group" onclick="openFocusModal(${ex.id})">
+                        <canvas id="canvas-${ex.id}" data-id="${ex.id}"></canvas>
+                        
+                        <!-- Equipment Tag -->
+                        <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-800 text-[10px] font-medium text-slate-300 capitalize">
+                            🏋️ ${ex.equipment}
+                        </span>
+
+                        <!-- Hover Zoom Hint -->
+                        <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition bg-slate-900/90 border border-slate-700 px-2 py-1 rounded-md text-[10px] text-slate-300">
+                            🔍 Perbesar / Unduh SVG
+                        </div>
+                    </div>
+
+                    <!-- Muscle Target & Action Footer -->
+                    <div class="p-3.5 flex-1 flex flex-col justify-between gap-3 bg-slate-900/50">
+                        <div>
+                            <p class="text-[11px] text-slate-400 line-clamp-2 mb-2.5">${ex.desc}</p>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-[11px] font-bold uppercase">
+                                    🎯 ${ex.primary_muscle}
+                                </span>
+                                ${secBadges}
+                            </div>
+                        </div>
+
+                        <div class="pt-2.5 border-t border-slate-800/70 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-500 font-mono">${ex.tracking_mode.replace('_', ' ')}</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openFocusModal(${ex.id})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition">
+                                    Detail
+                                </button>
+                                <button onclick="exportAnimatedSVG(${ex.id})" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 text-[11px] font-semibold transition flex items-center gap-1">
+                                    <span>⬇</span> SVG
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            resizeAllCanvases();
+        }
+
+        function resizeAllCanvases() {
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+            });
+            const modalCanvas = document.getElementById('modalCanvas');
+            if (modalCanvas && !document.getElementById('focusModal').classList.contains('hidden')) {
+                const rect = modalCanvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                modalCanvas.width = rect.width * dpr;
+                modalCanvas.height = rect.height * dpr;
+            }
+        }
+
+        window.addEventListener('resize', resizeAllCanvases);
+
+        function animateLoop(timestamp) {
+            const dt = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (isPlaying) {
+                animTime += dt * speedMultiplier;
+            }
+
+            // Siklus singkat & halus: ~1.6 detik per repetisi menggunakan kurva cosinus
+            const phase = (1 - Math.cos(animTime * Math.PI * 1.25)) / 2;
+
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const id = Number(canvas.dataset.id);
+                const ex = ABS_EXERCISES.find(item => item.id === id);
+                if (ex) {
+                    const ctx = canvas.getContext('2d');
+                    drawStickman(ctx, canvas.width, canvas.height, ex, phase, animTime * 0.625);
+                }
+            });
+
+            // Jika modal terbuka, render juga canvas modal
+            if (currentModalExerciseId !== null) {
+                const ex = ABS_EXERCISES.find(item => item.id === currentModalExerciseId);
+                const modalCanvas = document.getElementById('modalCanvas');
+                if (ex && modalCanvas) {
+                    const ctx = modalCanvas.getContext('2d');
+                    drawStickman(ctx, modalCanvas.width, modalCanvas.height, ex, phase, animTime * 0.625);
+                    const badge = document.getElementById('modalPhaseBadge');
+                    if (phase > 0.6) {
+                        badge.textContent = '🔥 Puncak Kontraksi Abs';
+                        badge.className = 'absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-red-500/20 border border-red-500/40 text-red-300';
+                    } else {
+                        badge.textContent = 'Fase Eksentrik / Awal';
+                        badge.className = 'absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300';
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+
+        // Kontrol Kecepatan & Play/Pause
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('playIcon').textContent = isPlaying ? '⏸' : '▶';
+            document.getElementById('playText').textContent = isPlaying ? 'Jeda' : 'Putar';
+        }
+
+        function setSpeed(spd) {
+            speedMultiplier = spd;
+            document.querySelectorAll('.spd-btn').forEach(btn => {
+                btn.className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition';
+            });
+            document.getElementById(`spd-${spd}`).className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition';
+        }
+
+        // Modal Fokus
+        function openFocusModal(id) {
+            const ex = ABS_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+            currentModalExerciseId = id;
+            document.getElementById('modalId').textContent = `ID #${ex.id} • ${ex.equipment.toUpperCase()}`;
+            document.getElementById('modalTitle').textContent = ex.name;
+            document.getElementById('modalPrimary').textContent = `${ex.primary_muscle.toUpperCase()} (Perut)`;
+            document.getElementById('modalSecondary').textContent = ex.secondary_muscles.length
+                ? ex.secondary_muscles.join(', ')
+                : 'Tidak ada (Isolasi Abs)';
+
+            document.getElementById('focusModal').classList.remove('hidden');
+            resizeAllCanvases();
+        }
+
+        function closeModal() {
+            currentModalExerciseId = null;
+            document.getElementById('focusModal').classList.add('hidden');
+        }
+
+        // ============================================================================
+        // 5. GENERATOR & PENGUNDUH FILE ANIMASI SVG STANDALONE (RINGAN ~2KB)
+        // ============================================================================
+        function exportAnimatedSVG(id) {
+            const ex = ABS_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+
+            const p0 = getPoseForExercise(id, 0, 0);
+            const p1 = getPoseForExercise(id, 1, 0.25);
+
+            const sec = ex.secondary_muscles;
+            const thighColor = (sec.includes('quadriceps') || sec.includes('hip flexors')) ? '#f59e0b' : '#94a3b8';
+            const armColor = (sec.includes('shoulders') || sec.includes('triceps')) ? '#f59e0b' : '#94a3b8';
+
+            const mid0 = lerpPt(p0.shoulder, p0.hip, 0.35);
+            const mid1 = lerpPt(p1.shoulder, p1.hip, 0.35);
+
+            function animLine(a0, b0, a1, b1, stroke, width) {
+                return `<line x1="${a0[0].toFixed(1)}" y1="${a0[1].toFixed(1)}" x2="${b0[0].toFixed(1)}" y2="${b0[1].toFixed(1)}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round">
+                    <animate attributeName="x1" values="${a0[0].toFixed(1)};${a1[0].toFixed(1)};${a0[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="y1" values="${a0[1].toFixed(1)};${a1[1].toFixed(1)};${a0[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="x2" values="${b0[0].toFixed(1)};${b1[0].toFixed(1)};${b0[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="y2" values="${b0[1].toFixed(1)};${b1[1].toFixed(1)};${b0[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                </line>`;
+            }
+
+            const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="400" height="300" style="background:#090d16; font-family:sans-serif;">
+    <defs>
+        <filter id="absGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    <text x="12" y="18" fill="#f8fafc" font-size="8" font-weight="bold">#${ex.id} ${ex.name}</text>
+    <text x="12" y="28" fill="#ef4444" font-size="6.5" font-weight="bold">Primary: ${ex.primary_muscle.toUpperCase()}${sec.length ? ' | Sec: ' + sec.join(', ') : ''}</text>
+    <line x1="15" y1="126" x2="185" y2="126" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    ${animLine(p0.hip, p0.kneeL, p1.hip, p1.kneeL, thighColor, 4.5)}
+    ${animLine(p0.kneeL, p0.footL, p1.kneeL, p1.footL, '#94a3b8', 4)}
+    ${animLine(p0.hip, p0.kneeR, p1.hip, p1.kneeR, thighColor, 4.5)}
+    ${animLine(p0.kneeR, p0.footR, p1.kneeR, p1.footR, '#94a3b8', 4)}
+    ${animLine(p0.shoulder, mid0, p1.shoulder, mid1, '#cbd5e1', 6)}
+    <g filter="url(#absGlow)">
+        ${animLine(mid0, p0.hip, mid1, p1.hip, '#ef4444', 7)}
+    </g>
+    ${animLine(p0.shoulder, p0.elbowL, p1.shoulder, p1.elbowL, armColor, 4.2)}
+    ${animLine(p0.elbowL, p0.handL, p1.elbowL, p1.handL, '#94a3b8', 3.8)}
+    <circle cx="${p0.head[0].toFixed(1)}" cy="${p0.head[1].toFixed(1)}" r="8.5" fill="#0f172a" stroke="#f8fafc" stroke-width="3">
+        <animate attributeName="cx" values="${p0.head[0].toFixed(1)};${p1.head[0].toFixed(1)};${p0.head[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="${p0.head[1].toFixed(1)};${p1.head[1].toFixed(1)};${p0.head[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+</svg>`;
+
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stickman_${ex.id}_${ex.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = `Animasi "${ex.name}.svg" berhasil diunduh!`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        // Jalankan saat halaman siap
+        window.onload = function () {
+            renderGrid();
+            requestAnimationFrame(animateLoop);
+        };
+    </script>
+</body>
+</html>

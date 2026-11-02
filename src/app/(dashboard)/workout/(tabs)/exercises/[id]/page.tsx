@@ -5,6 +5,7 @@ import { ArrowLeft, Trophy } from "lucide-react";
 import { z } from "zod";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ExerciseVideoModal } from "@/components/workout/exercise-video-modal";
 import { ExerciseVisual } from "@/components/workout/exercise-visual";
 import { getExercise } from "@/features/workout/exercises";
 import { RECORD_LABEL, getExerciseHistory, listRecords } from "@/features/workout/records";
@@ -25,15 +26,20 @@ export default async function ExerciseDetailPage({ params }: { params: Promise<{
       <Link href="/workout/exercises" className="flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline">
         <ArrowLeft className="size-4" aria-hidden="true" /> Library
       </Link>
-      <header>
-        <h2 className="text-3xl font-bold">{exercise.name}</h2>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {exercise.primary_muscle ? <Badge>{cap(exercise.primary_muscle)}</Badge> : null}
-          {exercise.equipment ? <Badge variant="muted">{cap(exercise.equipment)}</Badge> : null}
-          {exercise.difficulty ? <Badge variant="muted">{cap(exercise.difficulty)}</Badge> : null}
-          {exercise.movement_type ? <Badge variant="outline">{cap(exercise.movement_type)}</Badge> : null}
+      <header className="flex flex-col gap-2">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-3xl font-bold">{exercise.name}</h2>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {exercise.primary_muscle ? <Badge>{cap(exercise.primary_muscle)}</Badge> : null}
+              {exercise.equipment ? <Badge variant="muted">{cap(exercise.equipment)}</Badge> : null}
+              {exercise.difficulty ? <Badge variant="muted">{cap(exercise.difficulty)}</Badge> : null}
+              {exercise.movement_type ? <Badge variant="outline">{cap(exercise.movement_type)}</Badge> : null}
+            </div>
+          </div>
+          <ExerciseVideoModal exercise={exercise} />
         </div>
-        {exercise.secondary_muscles.length ? <p className="mt-2 text-sm text-muted-foreground">Also works: {exercise.secondary_muscles.map(cap).join(", ")}</p> : null}
+        {exercise.secondary_muscles.length ? <p className="mt-1 text-sm text-muted-foreground">Also works: {exercise.secondary_muscles.map(cap).join(", ")}</p> : null}
       </header>
 
       <ExerciseVisual
@@ -46,10 +52,18 @@ export default async function ExerciseDetailPage({ params }: { params: Promise<{
       />
 
       <Card>
-        <CardHeader><CardTitle>How to</CardTitle></CardHeader>
-        <CardContent>
-          {exercise.instructions ? <p className="whitespace-pre-line text-sm leading-relaxed">{exercise.instructions}</p> : <p className="text-sm text-muted-foreground">No instructions in the dataset for this exercise yet.</p>}
-          {exercise.video_url ? <a href={exercise.video_url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-medium text-primary underline-offset-4 hover:underline">Watch video</a> : null}
+        <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <CardTitle>Panduan & Animasi Gerakan</CardTitle>
+          <ExerciseVideoModal exercise={exercise} />
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {exercise.instructions ? (
+            <p className="whitespace-pre-line text-sm leading-relaxed">{exercise.instructions}</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Pelajari teknik postur yang benar, pola pernapasan, dan cara eksekusi gerakan ini secara aman dan optimal melalui animasi biomekanik interaktif.
+            </p>
+          )}
         </CardContent>
       </Card>
 

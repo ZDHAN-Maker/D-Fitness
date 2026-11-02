@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Animasi Stickman - Kategori Calves / Betis (3 Gerakan)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.3), 0 0 12px -5px rgba(56, 189, 248, 0.2);
+            border-color: rgba(239, 68, 68, 0.45);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
+
+    <!-- Header & Controls -->
+    <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3.5 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex items-start sm:items-center justify-between gap-3">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-sm">
+                            03
+                        </span>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                            Kategori: <span class="text-red-500">Calves / Betis</span>
+                        </h1>
+                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            3 Gerakan
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Animasi stickman singkat (1.6 detik/loop) dengan fokus artikulasi engkel (jinjit penuh & regangan tumit) serta isolasi murni otot betis.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Legend & Interactive Toolbar -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3">
+                <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] animate-pulse"></span>
+                        <span class="font-medium text-slate-200">Otot Utama (Calves)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]"></span>
+                        <span class="font-medium text-slate-300">Bantalan Mesin & Beban</span>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <span class="w-3 h-1.5 rounded bg-slate-500"></span>
+                        <span class="text-slate-400">Balok Pijakan (Step Block)</span>
+                    </div>
+                </div>
+
+                <!-- Speed & Play Controls -->
+                <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+                    <button id="btnPlayPause" onclick="togglePlay()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition flex items-center gap-1.5">
+                        <span id="playIcon">⏸</span> <span id="playText">Jeda</span>
+                    </button>
+                    <button onclick="setSpeed(0.5)" id="spd-0.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">0.5x</button>
+                    <button onclick="setSpeed(1)" id="spd-1" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition">1x</button>
+                    <button onclick="setSpeed(1.5)" id="spd-1.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">1.5x</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter, Search & Batch Download Bar -->
+    <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-5 pb-2">
+        <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-slate-900/60 border border-slate-800/80 p-3 rounded-2xl">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs text-slate-400 mr-1 font-medium">Filter Alat:</span>
+                <button onclick="filterEquip('all')" data-eq="all" class="eq-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition">Semua (3)</button>
+                <button onclick="filterEquip('machine')" data-eq="machine" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Machine (2)</button>
+                <button onclick="filterEquip('bodyweight')" data-eq="bodyweight" class="eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Bodyweight (1)</button>
+            </div>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 sm:max-w-md justify-end">
+                <div class="relative flex-1">
+                    <input type="text" id="searchInput" oninput="renderGrid()" placeholder="Cari nama gerakan atau ID..." 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                </div>
+                <button onclick="downloadAllSVGs()" class="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shrink-0 shadow-lg shadow-red-600/20">
+                    <span>⬇</span> Unduh Semua SVG (3)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Exercises Grid -->
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 flex-1">
+        <div id="exerciseGrid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Cards injected via JS -->
+        </div>
+
+        <!-- Biomechanical Note Banner -->
+        <div class="mt-6 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-400">
+            <div class="space-y-1">
+                <p class="font-bold text-slate-200 flex items-center gap-2">
+                    <span class="text-red-400">💡</span> Catatan Anatomi & Katalog Data (Kategori Calves):
+                </p>
+                <p>
+                    Ketiga gerakan di atas merupakan latihan <strong>isolasi murni</strong> untuk otot betis (<code class="text-red-300">secondary_muscles: []</code>). 
+                    <strong>Seated Calf Raise (#56)</strong> dengan lutut ditekuk 90° memfokuskan kontraksi pada otot <em>Soleus</em>, sedangkan <strong>Single-Leg (#50)</strong> dan <strong>Standing Machine (#117)</strong> dengan lutut lurus memaksimalkan kontraksi otot <em>Gastrocnemius</em>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Detail / Fokus View & Export SVG -->
+    <div id="focusModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+                <div>
+                    <span id="modalId" class="text-xs font-bold text-red-400 uppercase tracking-wider">ID #56</span>
+                    <h2 id="modalTitle" class="text-lg font-bold text-white">Seated Calf Raise</h2>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <div class="p-5">
+                <div class="relative bg-slate-950 rounded-xl border border-slate-800 h-72 w-full overflow-hidden">
+                    <canvas id="modalCanvas"></canvas>
+                    <div id="modalPhaseBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300">
+                        Kontraksi
+                    </div>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-3 text-xs">
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
+                        <span class="text-slate-400 block mb-1">Otot Utama (Merah):</span>
+                        <span id="modalPrimary" class="font-bold text-red-400 uppercase">CALVES (Betis)</span>
+                    </div>
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
+                        <span class="text-slate-400 block mb-1">Fokus Bagian Betis:</span>
+                        <span id="modalSubFocus" class="font-semibold text-sky-400">Soleus & Gastrocnemius</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 justify-end">
+                    <button onclick="exportAnimatedSVG(currentModalExerciseId)" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+                        <span>⬇</span> Unduh File Animasi Ringan (.SVG)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2">
+        <span>✓</span> <span id="toastMsg">File SVG berhasil diunduh!</span>
+    </div>
+
+    <script>
+        // ============================================================================
+        // 1. DATA KATALOG 3 GERAKAN CALVES (Sesuai File exercises_catalog.json)
+        // ============================================================================
+        const CALVES_EXERCISES = [
+            {
+                id: 56,
+                name: "Seated Calf Raise",
+                primary_muscle: "calves",
+                secondary_muscles: [],
+                equipment: "machine",
+                difficulty: "beginner",
+                movement_type: "squat",
+                tracking_mode: "weight_reps",
+                sub_focus: "Soleus (Lutut 90°)",
+                desc: "Duduk di mesin dengan bantalan beban di atas paha ujung lutut, ujung kaki di atas balok pijakan, angkat tumit setinggi mungkin."
+            },
+            {
+                id: 50,
+                name: "Single-Leg Calf Raise",
+                primary_muscle: "calves",
+                secondary_muscles: [],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "squat",
+                tracking_mode: "reps_only",
+                sub_focus: "Unilateral Gastrocnemius",
+                desc: "Berdiri dengan satu kaki di atas balok pijakan (kaki lainnya ditekuk di belakang), dorong tubuh naik lewat ujung jari kaki hingga jinjit penuh."
+            },
+            {
+                id: 117,
+                name: "Standing Machine Calf Raise",
+                primary_muscle: "calves",
+                secondary_muscles: [],
+                equipment: "machine",
+                difficulty: "beginner",
+                movement_type: "squat",
+                tracking_mode: "weight_reps",
+                sub_focus: "Gastrocnemius (Lutut Lurus)",
+                desc: "Berdiri tegak di bawah bantalan bahu mesin dengan ujung kaki di balok pijakan, angkat beban ke atas hanya dengan menggerakkan engkel/betis."
+            }
+        ];
+
+        // ============================================================================
+        // 2. KINEMATIKA SENDI STICKMAN UNTUK 3 GERAKAN CALVES (200x150 Viewport)
+        // Fokus utama: rotasi pergelangan kaki (tumit turun di bawah balok -> naik tinggi)
+        // ============================================================================
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+
+        function getPoseForExercise(id, t) {
+            // t = 0 (tumit turun di bawah pijakan / regangan penuh)
+            // t = 1 (jinjit maksimal / puncak kontraksi betis)
+            switch (id) {
+                case 56: { // Seated Calf Raise
+                    // Duduk di kursi kiri, lutut terangkat saat tumit jinjit
+                    const hip = [62, 86];
+                    const shoulder = [60, 48];
+                    const head = [60, 32];
+                    // Ujung jari kaki (toe) tetap menumpu di atas step block [126, 120]
+                    const toe = [126, 120];
+                    // Tumit (ankle/heel) bergerak dari bawah pijakan (y=127) ke atas jinjit (y=106)
+                    const heel = lerpPt([111, 127], [115, 106], t);
+                    // Lutut ikut naik mengikuti dorongan tumit
+                    const knee = lerpPt([111, 88], [114, 68], t);
+                    // Tangan memegang gagang tuas pengaman di depan bantalan lutut
+                    const elbow = [74, 70];
+                    const hand = lerpPt([98, 76], [100, 64], t);
+
+                    return {
+                        props: [
+                            { type: 'floor', y: 134 },
+                            { type: 'step_block', x: 118, y: 120, w: 22, h: 14 },
+                            { type: 'seated_calf_machine', seatX: 46, seatY: 90, kneeX: knee[0], kneeY: knee[1], t }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        kneeL: knee, heelL: heel, toeL: toe,
+                        // Kaki belakang sedikit bergeser agar tampak dimensi
+                        kneeR: [knee[0] - 3, knee[1] - 2],
+                        heelR: [heel[0] - 3, heel[1] - 1],
+                        toeR: [toe[0] - 2, toe[1] - 1],
+                        nonWorkingLeg: false,
+                        contraction: t
+                    };
+                }
+
+                case 50: { // Single-Leg Calf Raise (Satu Kaki di Balok + Tangan Berpegangan Tiang)
+                    // Seluruh tubuh naik turun secara vertikal mengikuti dorongan 1 kaki
+                    const lift = lerp(4, -15, t); // Naik 19 unit dari regangan bawah ke jinjit puncak
+                    const toe = [104, 118]; // Ujung kaki menumpu di pinggir step block
+                    const heel = lerpPt([89, 126], [93, 105], t);
+                    const knee = [95, 84 + lift];
+                    const hip = [94, 56 + lift];
+                    const shoulder = [95, 28 + lift];
+                    const head = [95, 15 + lift];
+
+                    // Lengan memegang tiang keseimbangan di sebelah kanan
+                    const elbow = [110, 42 + lift * 0.7];
+                    const hand = [132, 46 + lift * 0.3];
+
+                    // Kaki non-aktif ditekuk di belakang betis aktif
+                    const kneeIdle = [91, 86 + lift];
+                    const heelIdle = [74, 96 + lift];
+                    const toeIdle = [72, 106 + lift];
+
+                    return {
+                        props: [
+                            { type: 'floor', y: 134 },
+                            { type: 'step_block', x: 98, y: 118, w: 26, h: 16 },
+                            { type: 'balance_post', x: 136, y1: 18, y2: 134 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        kneeL: knee, heelL: heel, toeL: toe,
+                        kneeR: kneeIdle, heelR: heelIdle, toeR: toeIdle,
+                        nonWorkingLeg: true,
+                        contraction: t
+                    };
+                }
+
+                case 117: { // Standing Machine Calf Raise (Bantalan Beban di Bahu)
+                    const lift = lerp(4, -15, t);
+                    const toe = [106, 118];
+                    const heel = lerpPt([91, 126], [95, 105], t);
+                    const knee = [97, 84 + lift];
+                    const hip = [95, 56 + lift];
+                    const shoulder = [96, 30 + lift];
+                    const head = [96, 17 + lift];
+
+                    // Tangan memegang pegangan samping bantalan bahu
+                    const elbow = [84, 42 + lift];
+                    const hand = [98, 28 + lift];
+
+                    return {
+                        props: [
+                            { type: 'floor', y: 134 },
+                            { type: 'step_block', x: 100, y: 118, w: 24, h: 16 },
+                            { type: 'standing_calf_machine', shoulderX: shoulder[0], shoulderY: shoulder[1], t }
+                        ],
+                        head, shoulder, hip,
+                        elbowL: elbow, handL: hand,
+                        kneeL: knee, heelL: heel, toeL: toe,
+                        kneeR: [knee[0] - 4, knee[1] - 1],
+                        heelR: [heel[0] - 4, heel[1] - 1],
+                        toeR: [toe[0] - 3, toe[1] - 1],
+                        nonWorkingLeg: false,
+                        contraction: t
+                    };
+                }
+            }
+        }
+
+        // ============================================================================
+        // 3. RENDERER CANVAS STICKMAN DENGAN ANATOMI OTOT BETIS (GASTROCNEMIUS/SOLEUS)
+        // ============================================================================
+        function drawStickman(ctx, width, height, ex, t) {
+            ctx.clearRect(0, 0, width, height);
+
+            const scale = Math.min(width / 200, height / 150);
+            const offsetX = (width - 200 * scale) / 2;
+            const offsetY = (height - 150 * scale) / 2;
+
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+
+            const pose = getPoseForExercise(ex.id, t);
+            const c = pose.contraction; // 0..1 intensitas jinjit / kontraksi puncak betis
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // 1. Gambar Props / Mesin & Step Block Pijakan
+            pose.props.forEach(p => {
+                if (p.type === 'floor') {
+                    ctx.strokeStyle = '#1e293b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(15, p.y);
+                    ctx.lineTo(185, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'step_block') {
+                    // Balok pijakan tinggi agar tumit terlihat turun melewati batas pijakan
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#64748b';
+                    ctx.lineWidth = 2;
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+                    ctx.strokeRect(p.x, p.y, p.w, p.h);
+                    // Garis grip kuning/biru di permukaan atas balok
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x + 2, p.y);
+                    ctx.lineTo(p.x + p.w - 2, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'balance_post') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y1);
+                    ctx.lineTo(p.x, p.y2);
+                    ctx.stroke();
+                } else if (p.type === 'seated_calf_machine') {
+                    // Kursi duduk
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.seatX, p.seatY);
+                    ctx.lineTo(p.seatX + 30, p.seatY);
+                    ctx.stroke();
+                    ctx.lineWidth = 3.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.seatX + 12, p.seatY);
+                    ctx.lineTo(p.seatX + 12, 134);
+                    ctx.stroke();
+
+                    // Tiang engsel mesin di depan
+                    const pivotX = 148;
+                    const pivotY = 86;
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(pivotX, 55);
+                    ctx.lineTo(pivotX, 134);
+                    ctx.stroke();
+
+                    // Lengan pengungkit (lever arm) dari engsel ke bantalan lutut
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 3.5;
+                    ctx.beginPath();
+                    ctx.moveTo(pivotX, pivotY);
+                    ctx.lineTo(p.kneeX, p.kneeY - 7);
+                    ctx.stroke();
+
+                    // Pelat beban (weight plate) pada lengan mesin yang ikut terangkat
+                    const platePos = lerpPt([pivotX, pivotY], [p.kneeX, p.kneeY - 7], 0.45);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.strokeStyle = '#0284c7';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(platePos[0], platePos[1], 8.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Bantalan lutut (Knee Pad) di atas paha ujung
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(p.kneeX - 10, p.kneeY - 10, 18, 6);
+                } else if (p.type === 'standing_calf_machine') {
+                    // Rangka menara mesin di sebelah kanan
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 5;
+                    ctx.beginPath();
+                    ctx.moveTo(142, 12);
+                    ctx.lineTo(142, 134);
+                    ctx.stroke();
+
+                    // Tumpukan beban (weight stack) bergerak naik turun
+                    const stackY = 98 - p.t * 24;
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(134, stackY, 16, 18);
+
+                    // Lengan bantalan bahu (Shoulder Yoke Pad)
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(142, p.shoulderY - 4);
+                    ctx.lineTo(p.shoulderX - 6, p.shoulderY - 4);
+                    ctx.stroke();
+
+                    // Bantalan empuk biru di atas bahu stickman
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(p.shoulderX - 9, p.shoulderY - 8, 18, 6.5);
+                }
+            });
+
+            function drawLimb(pt1, pt2, color, width, glowColor = null, glowBlur = 0) {
+                ctx.save();
+                if (glowColor && glowBlur > 0) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = glowBlur;
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                ctx.beginPath();
+                ctx.moveTo(pt1[0], pt1[1]);
+                ctx.lineTo(pt2[0], pt2[1]);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            const neutralColor = '#94a3b8';
+            const backLimbColor = '#475569';
+            const primaryColor = '#ef4444'; // Merah Menyala untuk Calves / Betis
+
+            // 2. Gambar Kaki Belakang / Kaki Non-Aktif
+            drawLimb(pose.hip, pose.kneeR, backLimbColor, 4.2);
+            if (pose.nonWorkingLeg) {
+                // Single-leg: kaki belakang ditekuk santai (tidak menyala merah)
+                drawLimb(pose.kneeR, pose.heelR, backLimbColor, 3.8);
+                drawLimb(pose.heelR, pose.toeR, backLimbColor, 3.5);
+            } else {
+                // Kedua kaki bekerja: kaki belakang juga memiliki sedikit sorotan merah
+                drawLimb(pose.kneeR, pose.heelR, '#b91c1c', 4.2);
+                drawLimb(pose.heelR, pose.toeR, backLimbColor, 3.8);
+            }
+
+            // 3. Gambar Torso, Lengan, dan Kepala
+            drawLimb(pose.shoulder, pose.hip, '#cbd5e1', 5.8);
+            drawLimb(pose.shoulder, pose.elbowL, neutralColor, 4);
+            drawLimb(pose.elbowL, pose.handL, neutralColor, 3.6);
+
+            ctx.save();
+            ctx.fillStyle = '#0f172a';
+            ctx.strokeStyle = '#f8fafc';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(pose.head[0], pose.head[1], 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+
+            // 4. Gambar Paha Depan (Netral)
+            drawLimb(pose.hip, pose.kneeL, neutralColor, 5);
+
+            // 5. GAMBAR OTOT BETIS UTAMA (CALVES) - MENYALA MERAH + TONJOLAN GASTROCNEMIUS/SOLEUS
+            // Tulang kering / tungkai bawah utama
+            drawLimb(pose.kneeL, pose.heelL, primaryColor, 5.5 + 1.8 * c, primaryColor, 10 + 14 * c);
+
+            // Hitung posisi perut otot betis (Calf Muscle Belly) di bagian BELAKANG tungkai bawah
+            // Saat t=0 (tumit turun), otot memanjang di tengah; saat t=1 (jinjit tinggi), otot memendek naik ke dekat lutut dan menggembung tebal
+            const bellyRatio = lerp(0.45, 0.34, c);
+            const calfAnchor = lerpPt(pose.kneeL, pose.heelL, bellyRatio);
+            const dx = pose.heelL[0] - pose.kneeL[0];
+            const dy = pose.heelL[1] - pose.kneeL[1];
+            const len = Math.hypot(dx, dy) || 1;
+            // Vektor ke arah belakang betis (kiri stickman)
+            const backX = -dy / len;
+            const backY = dx / len;
+            const bulgePos = [
+                calfAnchor[0] + backX * (3.5 + 3.2 * c),
+                calfAnchor[1] + backY * (3.5 + 3.2 * c)
+            ];
+
+            // Gambar Tonjolan Perut Otot Betis (Menggembung saat jinjit)
+            ctx.save();
+            ctx.fillStyle = primaryColor;
+            ctx.shadowColor = '#ef4444';
+            ctx.shadowBlur = 12 + 12 * c;
+            ctx.beginPath();
+            ctx.ellipse(
+                bulgePos[0],
+                bulgePos[1],
+                3.2 + 2.8 * c,
+                6.5 - 1.0 * c,
+                Math.atan2(dy, dx) - Math.PI / 2,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+            ctx.restore();
+
+            // Cincin Denyut Aktivasi (Pulse Halo) di Betis
+            ctx.save();
+            ctx.strokeStyle = `rgba(239, 68, 68, ${0.25 + 0.55 * c})`;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(bulgePos[0], bulgePos[1], 6.5 + 4.5 * c, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            // 6. Gambar Telapak Kaki (Heel -> Toe) & Titik Sendi Engkel
+            drawLimb(pose.heelL, pose.toeL, '#f8fafc', 4.2);
+
+            // Titik Pivot Engkel & Jari Kaki agar rotasi jinjit sangat jelas terlihat
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(pose.heelL[0], pose.heelL[1], 2.8, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(pose.toeL[0], pose.toeL[1], 2.8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Panah Indikator Arah Angkatan Tumit (Heel Lift Indicator)
+            const arrowX = pose.heelL[0] - 14;
+            const arrowY = pose.heelL[1];
+            ctx.save();
+            ctx.strokeStyle = c > 0.5 ? '#ef4444' : '#64748b';
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.moveTo(arrowX, 126);
+            ctx.lineTo(arrowX, arrowY);
+            ctx.stroke();
+            // Ujung panah
+            ctx.beginPath();
+            ctx.moveTo(arrowX - 3, arrowY + 3);
+            ctx.lineTo(arrowX, arrowY - 1);
+            ctx.lineTo(arrowX + 3, arrowY + 3);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.restore();
+        }
+
+        // ============================================================================
+        // 4. LOGIKA UI GRID, FILTER, DAN LOOP ANIMASI
+        // ============================================================================
+        let isPlaying = true;
+        let speedMultiplier = 1.0;
+        let activeEquipmentFilter = 'all';
+        let animTime = 0;
+        let lastTimestamp = performance.now();
+        let currentModalExerciseId = null;
+
+        const diffBadgeColors = {
+            beginner: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+            intermediate: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+            advanced: 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+        };
+
+        const diffLabels = {
+            beginner: 'Pemula',
+            intermediate: 'Menengah',
+            advanced: 'Mahir'
+        };
+
+        function filterEquip(eq) {
+            activeEquipmentFilter = eq;
+            document.querySelectorAll('.eq-btn').forEach(btn => {
+                if (btn.dataset.eq === eq) {
+                    btn.className = 'eq-btn px-3 py-1 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition';
+                } else {
+                    btn.className = 'eq-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition';
+                }
+            });
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('exerciseGrid');
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            const filtered = CALVES_EXERCISES.filter(ex => {
+                const matchEq = activeEquipmentFilter === 'all' || ex.equipment === activeEquipmentFilter;
+                const matchQuery = ex.name.toLowerCase().includes(query) || String(ex.id).includes(query);
+                return matchEq && matchQuery;
+            });
+
+            grid.innerHTML = filtered.map(ex => {
+                return `
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden flex flex-col transition duration-200 card-glow">
+                    <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-mono font-bold">#${ex.id}</span>
+                            <h3 class="font-bold text-sm text-white truncate" title="${ex.name}">${ex.name}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0 ${diffBadgeColors[ex.difficulty]}">
+                            ${diffLabels[ex.difficulty]}
+                        </span>
+                    </div>
+
+                    <div class="relative bg-slate-950/90 h-56 w-full cursor-pointer group" onclick="openFocusModal(${ex.id})">
+                        <canvas id="canvas-${ex.id}" data-id="${ex.id}"></canvas>
+                        <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-800 text-[10px] font-medium text-slate-300 capitalize">
+                            🏋️ ${ex.equipment}
+                        </span>
+                        <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/30 text-[10px] font-semibold text-sky-300">
+                            ${ex.sub_focus}
+                        </span>
+                        <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition bg-slate-900/90 border border-slate-700 px-2 py-1 rounded-md text-[10px] text-slate-300">
+                            🔍 Perbesar / Unduh SVG
+                        </div>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col justify-between gap-3 bg-slate-900/50">
+                        <div>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-3">${ex.desc}</p>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-[11px] font-bold uppercase">
+                                    🎯 ${ex.primary_muscle}
+                                </span>
+                                <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-medium">
+                                    Isolasi Murni (Tanpa Otot Sekunder)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800/70 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-500 font-mono">${ex.movement_type} • ${ex.tracking_mode.replace('_', ' ')}</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openFocusModal(${ex.id})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition">
+                                    Detail
+                                </button>
+                                <button onclick="exportAnimatedSVG(${ex.id})" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 text-[11px] font-semibold transition flex items-center gap-1">
+                                    <span>⬇</span> SVG
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            resizeAllCanvases();
+        }
+
+        function resizeAllCanvases() {
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+            });
+            const modalCanvas = document.getElementById('modalCanvas');
+            if (modalCanvas && !document.getElementById('focusModal').classList.contains('hidden')) {
+                const rect = modalCanvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                modalCanvas.width = rect.width * dpr;
+                modalCanvas.height = rect.height * dpr;
+            }
+        }
+
+        window.addEventListener('resize', resizeAllCanvases);
+
+        function animateLoop(timestamp) {
+            const dt = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (isPlaying) {
+                animTime += dt * speedMultiplier;
+            }
+
+            // Siklus singkat ~1.6 detik per repetisi dengan sedikit tahanan (squeeze) di puncak jinjit
+            const rawSin = (1 - Math.cos(animTime * Math.PI * 1.25)) / 2;
+            const phase = Math.pow(rawSin, 0.85);
+
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const id = Number(canvas.dataset.id);
+                const ex = CALVES_EXERCISES.find(item => item.id === id);
+                if (ex) {
+                    const ctx = canvas.getContext('2d');
+                    drawStickman(ctx, canvas.width, canvas.height, ex, phase);
+                }
+            });
+
+            if (currentModalExerciseId !== null) {
+                const ex = CALVES_EXERCISES.find(item => item.id === currentModalExerciseId);
+                const modalCanvas = document.getElementById('modalCanvas');
+                if (ex && modalCanvas) {
+                    const ctx = modalCanvas.getContext('2d');
+                    drawStickman(ctx, modalCanvas.width, modalCanvas.height, ex, phase);
+                    const badge = document.getElementById('modalPhaseBadge');
+                    if (phase > 0.65) {
+                        badge.textContent = '🔥 Jinjit Puncak (Plantarflexion)';
+                        badge.className = 'absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-red-500/20 border border-red-500/40 text-red-300';
+                    } else if (phase < 0.3) {
+                        badge.textContent = '⬇ Regangan Tumit (Dorsiflexion)';
+                        badge.className = 'absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-sky-500/20 border border-sky-500/40 text-sky-300';
+                    } else {
+                        badge.textContent = 'Transisi Naik / Turun';
+                        badge.className = 'absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300';
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('playIcon').textContent = isPlaying ? '⏸' : '▶';
+            document.getElementById('playText').textContent = isPlaying ? 'Jeda' : 'Putar';
+        }
+
+        function setSpeed(spd) {
+            speedMultiplier = spd;
+            document.querySelectorAll('.spd-btn').forEach(btn => {
+                btn.className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition';
+            });
+            document.getElementById(`spd-${spd}`).className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition';
+        }
+
+        function openFocusModal(id) {
+            const ex = CALVES_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+            currentModalExerciseId = id;
+            document.getElementById('modalId').textContent = `ID #${ex.id} • ${ex.equipment.toUpperCase()}`;
+            document.getElementById('modalTitle').textContent = ex.name;
+            document.getElementById('modalPrimary').textContent = `${ex.primary_muscle.toUpperCase()} (Betis)`;
+            document.getElementById('modalSubFocus').textContent = ex.sub_focus;
+
+            document.getElementById('focusModal').classList.remove('hidden');
+            resizeAllCanvases();
+        }
+
+        function closeModal() {
+            currentModalExerciseId = null;
+            document.getElementById('focusModal').classList.add('hidden');
+        }
+
+        // ============================================================================
+        // 5. EKSPOR FILE ANIMASI SVG STANDALONE (RINGAN ~2KB)
+        // ============================================================================
+        function generateSVGString(ex) {
+            const p0 = getPoseForExercise(ex.id, 0);
+            const p1 = getPoseForExercise(ex.id, 1);
+
+            function animLine(a0, b0, a1, b1, stroke, width) {
+                return `<line x1="${a0[0].toFixed(1)}" y1="${a0[1].toFixed(1)}" x2="${b0[0].toFixed(1)}" y2="${b0[1].toFixed(1)}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round">
+                    <animate attributeName="x1" values="${a0[0].toFixed(1)};${a1[0].toFixed(1)};${a0[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="y1" values="${a0[1].toFixed(1)};${a1[1].toFixed(1)};${a0[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="x2" values="${b0[0].toFixed(1)};${b1[0].toFixed(1)};${b0[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="y2" values="${b0[1].toFixed(1)};${b1[1].toFixed(1)};${b0[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+                </line>`;
+            }
+
+            // Posisi tonjolan otot betis pada t=0 dan t=1
+            const c0 = lerpPt(p0.kneeL, p0.heelL, 0.45);
+            const c1 = lerpPt(p1.kneeL, p1.heelL, 0.34);
+            const stepProp = p0.props.find(p => p.type === 'step_block');
+
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="400" height="300" style="background:#090d16; font-family:sans-serif;">
+    <defs>
+        <filter id="calfGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    <text x="12" y="18" fill="#f8fafc" font-size="8" font-weight="bold">#${ex.id} ${ex.name}</text>
+    <text x="12" y="28" fill="#ef4444" font-size="6.5" font-weight="bold">Primary: CALVES (${ex.sub_focus})</text>
+    <line x1="15" y1="134" x2="185" y2="134" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    <rect x="${stepProp.x}" y="${stepProp.y}" width="${stepProp.w}" height="${stepProp.h}" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+    ${animLine(p0.shoulder, p0.hip, p1.shoulder, p1.hip, '#cbd5e1', 5.8)}
+    ${animLine(p0.shoulder, p0.elbowL, p1.shoulder, p1.elbowL, '#94a3b8', 4)}
+    ${animLine(p0.elbowL, p0.handL, p1.elbowL, p1.handL, '#94a3b8', 3.6)}
+    <circle cx="${p0.head[0].toFixed(1)}" cy="${p0.head[1].toFixed(1)}" r="8" fill="#0f172a" stroke="#f8fafc" stroke-width="3">
+        <animate attributeName="cx" values="${p0.head[0].toFixed(1)};${p1.head[0].toFixed(1)};${p0.head[0].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="${p0.head[1].toFixed(1)};${p1.head[1].toFixed(1)};${p0.head[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+    ${animLine(p0.hip, p0.kneeL, p1.hip, p1.kneeL, '#94a3b8', 5)}
+    <g filter="url(#calfGlow)">
+        ${animLine(p0.kneeL, p0.heelL, p1.kneeL, p1.heelL, '#ef4444', 6.5)}
+        <circle cx="${(c0[0] - 4).toFixed(1)}" cy="${c0[1].toFixed(1)}" r="4" fill="#ef4444">
+            <animate attributeName="cx" values="${(c0[0] - 4).toFixed(1)};${(c1[0] - 5.5).toFixed(1)};${(c0[0] - 4).toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="${c0[1].toFixed(1)};${c1[1].toFixed(1)};${c0[1].toFixed(1)}" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="3.5;6.2;3.5" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+    ${animLine(p0.heelL, p0.toeL, p1.heelL, p1.toeL, '#f8fafc', 4.2)}
+</svg>`;
+        }
+
+        function exportAnimatedSVG(id) {
+            const ex = CALVES_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+
+            const svgContent = generateSVGString(ex);
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stickman_${ex.id}_${ex.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Animasi "${ex.name}.svg" berhasil diunduh!`);
+        }
+
+        function downloadAllSVGs() {
+            CALVES_EXERCISES.forEach((ex, idx) => {
+                setTimeout(() => {
+                    exportAnimatedSVG(ex.id);
+                }, idx * 300);
+            });
+            showToast('Mengunduh ke-3 file SVG kategori Calves...');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        window.onload = function () {
+            renderGrid();
+            requestAnimationFrame(animateLoop);
+        };
+    </script>
+</body>
+</html>

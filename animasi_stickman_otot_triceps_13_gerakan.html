@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Animasi Stickman - Kategori Triceps / Lengan Belakang (13 Gerakan)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 28px -5px rgba(239, 68, 68, 0.35), 0 0 14px -5px rgba(245, 158, 11, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
+
+    <!-- Header & Controls -->
+    <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3.5 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex items-start sm:items-center justify-between gap-3">
+                <div>
+                    <div class="flex items-center flex-wrap gap-2.5">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-sm">
+                            12
+                        </span>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                            Kategori Terakhir: <span class="text-red-500">Triceps / Lengan Belakang</span>
+                        </h1>
+                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            13 Gerakan • 100% Katalog Selesai
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Visualisasi anatomi 3 kepala otot Triceps (Lateral, Long, & Medial Head) dengan fokus ekstensi siku (elbow extension).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Legend & Interactive Toolbar -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3">
+                <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] animate-pulse"></span>
+                        <span class="font-medium text-slate-200">Utama: Triceps (Merah)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></span>
+                        <span class="font-medium text-slate-300">Sekunder: Chest / Shoulders / Core</span>
+                    </div>
+                </div>
+
+                <!-- Speed & Play Controls -->
+                <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+                    <button id="btnPlayPause" onclick="togglePlay()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition flex items-center gap-1.5">
+                        <span id="playIcon">⏸</span> <span id="playText">Jeda</span>
+                    </button>
+                    <button onclick="setSpeed(0.5)" id="spd-0.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">0.5x</button>
+                    <button onclick="setSpeed(1)" id="spd-1" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition">1x</button>
+                    <button onclick="setSpeed(1.5)" id="spd-1.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">1.5x</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter & Batch Export Bar -->
+    <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-5 pb-2 space-y-3">
+        <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between bg-slate-900/70 border border-slate-800/80 p-3 rounded-2xl">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs text-slate-400 mr-1 font-medium">Filter Alat:</span>
+                <button onclick="filterEquip('all')" data-eq="all" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition">Semua (13)</button>
+                <button onclick="filterEquip('cable')" data-eq="cable" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Cable (5)</button>
+                <button onclick="filterEquip('barbell')" data-eq="barbell" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Barbell / EZ-Bar (3)</button>
+                <button onclick="filterEquip('bodyweight')" data-eq="bodyweight" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Bodyweight (3)</button>
+                <button onclick="filterEquip('dumbbell')" data-eq="dumbbell" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Dumbbell (2)</button>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 justify-end">
+                <div class="relative flex-1 sm:w-56">
+                    <input type="text" id="searchInput" oninput="renderGrid()" placeholder="Cari gerakan (#47, Pushdown, Dips...)" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                </div>
+                <button onclick="downloadStandaloneHTML()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
+                    <span>💻</span> Unduh File .HTML
+                </button>
+                <button onclick="downloadFilteredSVGs()" class="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-red-600/20">
+                    <span>⬇</span> <span id="downloadBatchText">Unduh Semua SVG (13)</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Exercises Grid -->
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 flex-1">
+        <div id="exerciseGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Cards injected via JS -->
+        </div>
+    </main>
+
+    <!-- Modal Detail / Fokus View & Export SVG -->
+    <div id="focusModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+                <div>
+                    <span id="modalId" class="text-xs font-bold text-red-400 uppercase tracking-wider">ID #47</span>
+                    <h2 id="modalTitle" class="text-lg font-bold text-white">Skull Crusher (EZ Bar)</h2>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <div class="p-5">
+                <div class="relative bg-slate-950 rounded-xl border border-slate-800 h-72 w-full overflow-hidden">
+                    <canvas id="modalCanvas"></canvas>
+                    <div id="modalPhaseBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300">
+                        Kontraksi
+                    </div>
+                </div>
+                <p id="modalDesc" class="mt-3 text-xs text-slate-300 leading-relaxed"></p>
+                <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Otot Utama:</span>
+                        <span id="modalPrimary" class="font-bold text-red-400 uppercase">TRICEPS</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Otot Sekunder:</span>
+                        <span id="modalSecondary" class="font-semibold text-amber-400 capitalize">-</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Alat & Pola:</span>
+                        <span id="modalEquip" class="font-semibold text-sky-400 capitalize">barbell • push</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Tracking Mode:</span>
+                        <span id="modalTracking" class="font-mono text-slate-200">weight_reps</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 justify-end">
+                    <button onclick="exportAnimatedSVG(currentModalExerciseId)" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+                        <span>⬇</span> Unduh File Animasi Ringan (.SVG)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2">
+        <span>✓</span> <span id="toastMsg">File berhasil diunduh!</span>
+    </div>
+
+    <script>
+        // ============================================================================
+        // 1. DATA KATALOG 13 GERAKAN TRICEPS (Sesuai File exercises_catalog.json)
+        // ============================================================================
+        const TRICEPS_EXERCISES = [
+            {
+                id: 72,
+                name: "Cable Tricep Kickback",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Horizontal Elbow Extension • Ketegangan Konstan",
+                desc: "Membungkuk menghadap katrol bawah, kunci lengan atas sejajar torso lalu luruskan siku ke belakang melawan tarikan kabel."
+            },
+            {
+                id: 44,
+                name: "Chair / Bench Dips",
+                primary_muscle: "triceps",
+                secondary_muscles: ["shoulders", "chest"],
+                equipment: "bodyweight",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "reps_only",
+                sub_focus: "Tumpuan Tangan di Bangku Belakang",
+                desc: "Letakkan kedua telapak tangan di tepi bangku di belakang punggung, tekuk siku menurunkan pinggul lalu dorong kembali hingga siku lurus."
+            },
+            {
+                id: 68,
+                name: "Close-Grip Barbell Bench Press",
+                primary_muscle: "triceps",
+                secondary_muscles: ["chest", "shoulders"],
+                equipment: "barbell",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Compound Heavy Press • Siku Rapat di Rusuk",
+                desc: "Berbaring di bangku datar memegang barbel dengan jarak tangan selebar bahu, turunkan ke dada bawah dengan siku rapat lalu dorong ke atas."
+            },
+            {
+                id: 27,
+                name: "Diamond Push-up",
+                primary_muscle: "triceps",
+                secondary_muscles: ["chest", "core"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "reps_only",
+                sub_focus: "Close-Hand Push-up • Dominasi Triceps",
+                desc: "Lakukan push-up dengan kedua telapak tangan dirapatkan di bawah dada membentuk berlian (diamond) untuk memaksimalkan ekstensi siku."
+            },
+            {
+                id: 71,
+                name: "Dumbbell Tricep Kickback",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Peak Contraction • Lengan Atas Sejajar Lantai",
+                desc: "Condongkan badan ke depan, tahan siku tinggi di samping rusuk dan ayunkan dumbbell ke belakang hingga lengan lurus penuh."
+            },
+            {
+                id: 70,
+                name: "Overhead Cable Triceps Extension",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Long Head Stretch • Membelakangi Katrol",
+                desc: "Berdiri membelakangi mesin kabel, pegang tali di belakang kepala lalu luruskan lengan ke atas depan untuk meregangkan kepala panjang triceps."
+            },
+            {
+                id: 69,
+                name: "Overhead Dumbbell Triceps Extension",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Vertical Overhead Extension • Long Head",
+                desc: "Pegang dumbbell di atas kepala dengan siku mengarah ke atas, turunkan beban ke belakang leher lalu dorong vertikal hingga lengan lurus."
+            },
+            {
+                id: 74,
+                name: "Overhead EZ-Bar French Press",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "barbell",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Seated/Standing EZ-Bar Overhead Extension",
+                desc: "Pegang EZ-Bar di atas kepala, tekuk siku menurunkan barbel ke belakang kepala lalu luruskan kembali siku tanpa menggerakkan bahu."
+            },
+            {
+                id: 73,
+                name: "Parallel Bar Dips",
+                primary_muscle: "triceps",
+                secondary_muscles: ["chest", "shoulders"],
+                equipment: "bodyweight",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "reps_only",
+                sub_focus: "Postur Tegak • Vertical Bodyweight Dip",
+                desc: "Bertumpu di atas dua palang sejajar dengan tubuh tetap tegak (tidak terlalu condong ke depan), tekuk siku 90° lalu dorong naik hingga terkunci."
+            },
+            {
+                id: 75,
+                name: "Single-Arm Cable Tricep Pushdown",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Unilateral Isolation • Fokus Sisi Kiri/Kanan",
+                desc: "Gunakan satu tangan untuk menarik handle katrol atas dari depan dada hingga lurus penuh di samping paha dengan siku terkunci di rusuk."
+            },
+            {
+                id: 47,
+                name: "Skull Crusher (EZ Bar)",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "barbell",
+                difficulty: "intermediate",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Lying Triceps Extension ke Arah Dahi",
+                desc: "Berbaring di bangku datar memegang EZ-Bar, tekuk siku menurunkan barbel mendekati dahi lalu dorong kembali ke atas hanya dengan sendi siku."
+            },
+            {
+                id: 48,
+                name: "Tricep Rope Pushdown",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Lateral Head Squeeze • Buka Tali di Bawah",
+                desc: "Tekan tali katrol atas ke bawah dan buka kedua ujung tali melebar di bagian akhir gerakan untuk mengunci kontraksi kepala samping triceps."
+            },
+            {
+                id: 6,
+                name: "Triceps Pushdown",
+                primary_muscle: "triceps",
+                secondary_muscles: [],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "push",
+                tracking_mode: "weight_reps",
+                sub_focus: "Straight Bar / V-Bar Cable Pushdown",
+                desc: "Berdiri menghadap mesin katrol atas, kunci siku di samping tubuh dan tekan stang lurus dari dada hingga terkunci di depan paha."
+            }
+        ];
+
+        // ============================================================================
+        // 2. KINEMATIKA SENDI STICKMAN UNTUK 13 GERAKAN TRICEPS (220x155 Viewport)
+        // t = 0 (Fase Siku Menekuk / Stretch), t = 1 (Fase Ekstensi Penuh / Lockout Triceps)
+        // ============================================================================
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+
+        function getPoseForExercise(id, t) {
+            switch (id) {
+                case 72: { // Cable Tricep Kickback (Membungkuk menghadap katrol kanan, luruskan lengan ke belakang kiri)
+                    const hip = [74, 80];
+                    const shoulder = [116, 62];
+                    const head = [130, 56];
+                    const kneeL = [86, 108]; const footL = [84, 134];
+                    const elbowL = [86, 66]; // Terkunci sejajar torso
+                    // Tangan berayun dari bawah siku [94, 92] ke lurus di belakang [58, 66]
+                    const handL = lerpPt([94, 92], [58, 66], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'low_cable_right', pulleyX: 168, pulleyY: 118, hand: handL, lift: t }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: [112, 82], handR: [96, 98],
+                        kneeL, footL, kneeR: [80, 108], footR: [78, 134],
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Ekstensi Penuh Cable Kickback (Lockout Triceps)" : "Fase Tekuk Siku 90°"
+                    };
+                }
+
+                case 44: { // Chair / Bench Dips (Tangan menumpu di bangku kiri, turunkan pinggul lalu dorong naik)
+                    const handL = [66, 94]; // Tetap di tepi bangku
+                    const elbowL = lerpPt([52, 78], [64, 72], t);
+                    const shoulder = lerpPt([78, 76], [78, 52], t);
+                    const head = lerpPt([80, 62], [80, 38], t);
+                    const hip = lerpPt([84, 114], [84, 90], t);
+                    const kneeL = lerpPt([118, 108], [120, 104], t);
+                    const footL = [152, 134];
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'dip_bench', x: 28, y: 94, w: 42, h: 42 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR: [kneeL[0] - 4, kneeL[1]], footR: [footL[0] - 4, footL[1]],
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Dorongan Bench Dips (Triceps, Shoulders, Chest)" : "Fase Turun Siku 90°"
+                    };
+                }
+
+                case 68: { // Close-Grip Barbell Bench Press (Berbaring di bangku, siku rapat mendorong barbel vertikal)
+                    const head = [48, 92];
+                    const shoulder = [66, 94];
+                    const hip = [110, 94];
+                    const kneeL = [138, 96]; const footL = [142, 134];
+                    // Siku bergerak dari bawah bangku [82, 108] ke atas [74, 70], tangan naik lurus di atas dada bawah
+                    const elbowL = lerpPt([84, 108], [76, 70], t);
+                    const handL = lerpPt([84, 82], [74, 46], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'flat_bench', x: 40, y: 98, w: 92 },
+                            { type: 'barbell_side', x: handL[0], y: handL[1], r: 10.5 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR: kneeL, footR: footL,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Close-Grip Press (Triceps, Chest, Shoulders)" : "Barbel di Dada Bawah (Siku Rapat)"
+                    };
+                }
+
+                case 27: { // Diamond Push-up (Tangan rapat di bawah dada, dorong tubuh lurus naik)
+                    const footL = [42, 134];
+                    const handL = [134, 134];
+                    const hip = lerpPt([88, 118], [90, 98], t);
+                    const kneeL = lerpPt([64, 126], [66, 116], t);
+                    const shoulder = lerpPt([132, 110], [134, 82], t);
+                    const head = lerpPt([148, 108], [150, 78], t);
+                    const elbowL = lerpPt([112, 122], [134, 108], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'diamond_marker', x: 134, y: 134 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR: kneeL, footR: footL,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Diamond Push-up (Triceps, Chest, Core)" : "Dada Mendekati Tangan Berlian"
+                    };
+                }
+
+                case 71: { // Dumbbell Tricep Kickback (Tumpu bangku, ayunkan dumbbell lurus ke belakang)
+                    const hip = [72, 76];
+                    const shoulder = [116, 68];
+                    const head = [130, 64];
+                    const kneeL = [62, 104]; const footL = [54, 134];
+                    const kneeR = [82, 98]; const footR = [68, 98];
+                    const elbowR = [116, 84]; const handR = [116, 98];
+                    const elbowL = [84, 68];
+                    const handL = lerpPt([90, 94], [56, 66], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'flat_bench', x: 66, y: 98, w: 62 },
+                            { type: 'dumbbell_side', x: handL[0], y: handL[1] }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Kontraksi Dumbbell Kickback" : "Fase Turun 90°"
+                    };
+                }
+
+                case 70: { // Overhead Cable Triceps Extension (Membelakangi menara kabel kiri, rentangkan tali ke atas depan)
+                    const hip = [104, 88];
+                    const shoulder = [110, 52];
+                    const head = [114, 38];
+                    const kneeL = [116, 112]; const footL = [122, 134];
+                    const kneeR = [94, 112]; const footR = [88, 134];
+                    const elbowL = [114, 34]; // Mengarah ke atas depan
+                    const handL = lerpPt([94, 48], [136, 18], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'overhead_cable_left', pulleyX: 52, pulleyY: 42, hand: handL, lift: t }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Ekstensi Overhead Kabel (Fokus Long Head Triceps)" : "Regangan Penuh di Belakang Kepala"
+                    };
+                }
+
+                case 69: { // Overhead Dumbbell Triceps Extension (Berdiri, luruskan dumbbell vertikal di atas kepala)
+                    const hip = [104, 92];
+                    const shoulder = [104, 54];
+                    const head = [106, 40];
+                    const kneeL = [108, 114]; const footL = [110, 134];
+                    const kneeR = [100, 114]; const footR = [100, 134];
+                    const elbowL = [102, 30]; // Siku terkunci di samping atas kepala
+                    const handL = lerpPt([86, 50], [102, 8], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'dumbbell_side', x: handL[0], y: handL[1] }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Vertikal Overhead Dumbbell" : "Dumbbell Turun di Belakang Leher"
+                    };
+                }
+
+                case 74: { // Overhead EZ-Bar French Press (Duduk di bangku, luruskan EZ-Bar di atas kepala)
+                    const hip = [100, 98];
+                    const shoulder = [100, 60];
+                    const head = [102, 46];
+                    const kneeL = [126, 98]; const footL = [128, 134];
+                    const elbowL = [98, 36];
+                    const handL = lerpPt([80, 54], [98, 12], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'short_seat', x: 86, y: 102 },
+                            { type: 'ez_bar_side', x: handL[0], y: handL[1] }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR: kneeL, footR: footL,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Ekstensi Penuh Overhead French Press" : "Regangan Bawah EZ-Bar"
+                    };
+                }
+
+                case 73: { // Parallel Bar Dips (Tubuh tegak di atas palang sejajar, dorong naik hingga siku lurus)
+                    const handL = [104, 68]; // Tangan menggenggam palang sejajar
+                    const lift = lerp(18, 0, t); // Saat t=0 turun 18px, saat t=1 naik penuh
+                    const elbowL = lerpPt([86, 58], [102, 50], t);
+                    const shoulder = [104, 34 + lift];
+                    const head = [106, 20 + lift];
+                    const hip = [100, 74 + lift];
+                    const kneeL = [100, 102 + lift];
+                    const footL = [92, 122 + lift];
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'parallel_dip_bars', x: 104, y: 68 }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR: kneeL, footR: footL,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Parallel Bar Dips (Triceps, Chest, Shoulders)" : "Turun 90° di Palang Sejajar"
+                    };
+                }
+
+                case 75: { // Single-Arm Cable Tricep Pushdown (Tampilan Depan Unilateral Satu Tangan)
+                    const head = [102, 32];
+                    const shoulder = [102, 48];
+                    const shL = [88, 50];
+                    const shR = [116, 50];
+                    const hip = [102, 90];
+                    const kneeL = [94, 112]; const footL = [92, 134];
+                    const kneeR = [110, 112]; const footR = [112, 134];
+                    // Lengan kanan aktif mendorong kabel dari dada [116, 58] ke samping paha [122, 92]
+                    const elbowR = [118, 70];
+                    const handR = lerpPt([112, 56], [122, 92], t);
+                    // Lengan kiri bertolak pinggang (non-aktif)
+                    const elbowL = [78, 68];
+                    const handL = [88, 84];
+                    return {
+                        view: 'front_single_pushdown',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'front_cable_tower', pulleyX: 144, pulleyY: 16, hand: handR, lift: t }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Single-Arm Pushdown (Isolasi Sisi Kanan)" : "Fase Awal Siku 90°"
+                    };
+                }
+
+                case 47: { // Skull Crusher (EZ Bar) (Berbaring di bangku, lengan atas tetap, luruskan siku dari dahi ke atas)
+                    const head = [52, 92];
+                    const shoulder = [68, 94];
+                    const hip = [112, 94];
+                    const kneeL = [140, 96]; const footL = [144, 134];
+                    // Siku tetap terkunci di atas bahu [66, 68]
+                    const elbowL = [66, 68];
+                    // Tangan berayun dari dekat dahi [46, 82] ke lurus vertikal [66, 42]
+                    const handL = lerpPt([46, 82], [66, 42], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'flat_bench', x: 42, y: 98, w: 94 },
+                            { type: 'ez_bar_side', x: handL[0], y: handL[1] }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR: kneeL, footR: footL,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Ekstensi Penuh Skull Crusher (Isolasi Triceps)" : "EZ-Bar Turun Mendekati Dahi"
+                    };
+                }
+
+                case 48: { // Tricep Rope Pushdown (Menghadap mesin kabel kanan, tekan tali & buka di bawah)
+                    const head = [84, 30];
+                    const shoulder = [82, 46];
+                    const hip = [78, 86];
+                    const kneeL = [82, 110]; const footL = [84, 134];
+                    const elbowL = [86, 68]; // Siku terkunci di rusuk
+                    const handL = lerpPt([104, 54], [84, 92], t);
+                    const handR = lerpPt([106, 56], [96, 90], t); // Ujung tali kedua melebar saat di bawah
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'high_cable_right', pulleyX: 148, pulleyY: 16, handL, handR, isRope: true, lift: t }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR,
+                        kneeL, footL, kneeR: [74, 110], footR: [76, 134],
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Buka Tali di Bawah (Squeeze Kepala Samping Triceps)" : "Fase Atas Siku Menekuk"
+                    };
+                }
+
+                case 6: { // Triceps Pushdown (Straight Bar / V-Bar Pushdown menghadap mesin kabel kanan)
+                    const head = [84, 30];
+                    const shoulder = [82, 46];
+                    const hip = [78, 86];
+                    const kneeL = [82, 110]; const footL = [84, 134];
+                    const elbowL = [86, 68];
+                    const handL = lerpPt([106, 56], [92, 92], t);
+                    return {
+                        view: 'side',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'high_cable_right', pulleyX: 148, pulleyY: 16, handL, handR: handL, isRope: false, lift: t }
+                        ],
+                        head, shoulder, hip,
+                        elbowL, handL, elbowR: elbowL, handR: handL,
+                        kneeL, footL, kneeR: [74, 110], footR: [76, 134],
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Lockout Triceps Pushdown (Siku Terkunci)" : "Stang Kabel Setinggi Dada"
+                    };
+                }
+            }
+        }
+
+        // ============================================================================
+        // 3. RENDERER STICKMAN DENGAN TONJOLAN HORSESHOE TRICEPS (MERAH MENYALA)
+        // ============================================================================
+        function drawStickman(ctx, width, height, ex, t) {
+            ctx.clearRect(0, 0, width, height);
+
+            const scale = Math.min(width / 220, height / 155);
+            const offsetX = (width - 220 * scale) / 2;
+            const offsetY = (height - 155 * scale) / 2;
+
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+
+            const pose = getPoseForExercise(ex.id, t);
+            const sec = ex.secondary_muscles;
+            const c = pose.contraction;
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            function drawLimb(pt1, pt2, color, lineWidth, glowColor = null, glowBlur = 0) {
+                ctx.save();
+                if (glowColor && glowBlur > 0) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = glowBlur;
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth;
+                ctx.beginPath();
+                ctx.moveTo(pt1[0], pt1[1]);
+                ctx.lineTo(pt2[0], pt2[1]);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            const neutralColor = '#94a3b8';
+            const secondaryColor = '#f59e0b'; // Kuning / Oranye
+            const primaryColor = '#ef4444';   // Merah Menyala
+
+            const hasChest = sec.includes('chest');
+            const hasShoulders = sec.includes('shoulders');
+            const hasCore = sec.includes('core');
+
+            // 1. Gambar Props / Mesin Latar Belakang
+            pose.props.forEach(p => {
+                if (p.type === 'floor') {
+                    ctx.strokeStyle = '#1e293b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(15, p.y);
+                    ctx.lineTo(205, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'dip_bench') {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 2.5;
+                    ctx.fillRect(p.x, p.y, p.w, 8);
+                    ctx.strokeRect(p.x, p.y, p.w, 8);
+                    ctx.beginPath();
+                    ctx.moveTo(p.x + 6, p.y + 8); ctx.lineTo(p.x + 6, 136);
+                    ctx.moveTo(p.x + p.w - 6, p.y + 8); ctx.lineTo(p.x + p.w - 6, 136);
+                    ctx.stroke();
+                } else if (p.type === 'flat_bench') {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 2.5;
+                    ctx.fillRect(p.x, p.y, p.w, 6);
+                    ctx.strokeRect(p.x, p.y, p.w, 6);
+                    ctx.beginPath();
+                    ctx.moveTo(p.x + 10, p.y + 6); ctx.lineTo(p.x + 10, 136);
+                    ctx.moveTo(p.x + p.w - 10, p.y + 6); ctx.lineTo(p.x + p.w - 10, 136);
+                    ctx.stroke();
+                } else if (p.type === 'short_seat') {
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + 28, p.y);
+                    ctx.moveTo(p.x + 14, p.y); ctx.lineTo(p.x + 14, 136);
+                    ctx.stroke();
+                } else if (p.type === 'parallel_dip_bars') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(76, p.y); ctx.lineTo(136, p.y);
+                    ctx.moveTo(82, p.y); ctx.lineTo(82, 136);
+                    ctx.moveTo(130, p.y); ctx.lineTo(130, 136);
+                    ctx.stroke();
+                } else if (p.type === 'diamond_marker') {
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y - 5);
+                    ctx.lineTo(p.x + 6, p.y);
+                    ctx.lineTo(p.x, p.y + 3);
+                    ctx.lineTo(p.x - 6, p.y);
+                    ctx.closePath();
+                    ctx.stroke();
+                } else if (p.type === 'low_cable_right') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, 18); ctx.lineTo(p.pulleyX, 136);
+                    ctx.stroke();
+                    const stackY = 92 - p.lift * 28;
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(p.pulleyX - 7, stackY, 14, 16);
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 1.8;
+                    ctx.setLineDash([3, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, p.pulleyY);
+                    ctx.lineTo(p.hand[0], p.hand[1]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                } else if (p.type === 'overhead_cable_left') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, 16); ctx.lineTo(p.pulleyX, 136);
+                    ctx.stroke();
+                    const stackY = 96 - p.lift * 30;
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(p.pulleyX - 7, stackY, 14, 16);
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 1.8;
+                    ctx.setLineDash([3, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, p.pulleyY);
+                    ctx.lineTo(p.hand[0], p.hand[1]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                } else if (p.type === 'high_cable_right' || p.type === 'front_cable_tower') {
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX + 12, 16); ctx.lineTo(p.pulleyX + 12, 136);
+                    ctx.moveTo(p.pulleyX, 16); ctx.lineTo(p.pulleyX + 16, 16);
+                    ctx.stroke();
+                    const stackY = 96 - p.lift * 30;
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(p.pulleyX + 5, stackY, 14, 16);
+                    const targetPt = p.hand || p.handL;
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 1.8;
+                    ctx.setLineDash([3, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, p.pulleyY);
+                    ctx.lineTo(targetPt[0], targetPt[1]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    if (p.isRope) {
+                        // Cabang tali rope
+                        ctx.strokeStyle = '#f8fafc';
+                        ctx.lineWidth = 2.2;
+                        ctx.beginPath();
+                        ctx.moveTo(p.handL[0], p.handL[1] - 6);
+                        ctx.lineTo(p.handL[0] - 4, p.handL[1] + 2);
+                        ctx.moveTo(p.handL[0], p.handL[1] - 6);
+                        ctx.lineTo(p.handR[0] + 4, p.handR[1] + 2);
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            // ====================================================================
+            // CABANG A: TAMPILAN DEPAN UNILATERAL (#75 Single-Arm Cable Pushdown)
+            // ====================================================================
+            if (pose.view === 'front_single_pushdown') {
+                drawLimb(pose.hip, pose.kneeL, neutralColor, 4.6);
+                drawLimb(pose.kneeL, pose.footL, neutralColor, 4.2);
+                drawLimb(pose.hip, pose.kneeR, neutralColor, 4.6);
+                drawLimb(pose.kneeR, pose.footR, neutralColor, 4.2);
+
+                drawLimb(pose.shoulder, pose.hip, '#cbd5e1', 6.5);
+                drawLimb(pose.shL, pose.shR, '#cbd5e1', 5.5);
+
+                // Lengan kiri istirahat (netral)
+                drawLimb(pose.shL, pose.elbowL, '#64748b', 4.2);
+                drawLimb(pose.elbowL, pose.handL, '#64748b', 3.8);
+
+                // Lengan kanan aktif: TRICEPS MENYALA MERAH & MENEBAL
+                drawLimb(pose.shR, pose.elbowR, primaryColor, 6.2 + 2.2 * c, primaryColor, 14 + 14 * c);
+                drawLimb(pose.elbowR, pose.handR, neutralColor, 4.2);
+
+                const triMid = lerpPt(pose.shR, pose.elbowR, 0.5);
+                ctx.save();
+                ctx.fillStyle = primaryColor;
+                ctx.shadowColor = primaryColor;
+                ctx.shadowBlur = 14 + 12 * c;
+                ctx.beginPath();
+                ctx.arc(triMid[0] + 3, triMid[1], 4.5 + 2.8 * c, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                ctx.save();
+                ctx.fillStyle = '#0f172a';
+                ctx.strokeStyle = '#f8fafc';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(pose.head[0], pose.head[1], 8.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // ====================================================================
+            // CABANG B: TAMPILAN SAMPING (12 Gerakan Lainnya)
+            // ====================================================================
+            else {
+                // 1. Kaki belakang & depan
+                drawLimb(pose.hip, pose.kneeR, '#64748b', 4.2);
+                drawLimb(pose.kneeR, pose.footR, '#64748b', 3.8);
+                drawLimb(pose.hip, pose.kneeL, neutralColor, 4.8);
+                drawLimb(pose.kneeL, pose.footL, neutralColor, 4.2);
+
+                // 2. Torso (Sorot Kuning jika Chest atau Core adalah otot sekunder)
+                const torsoSec = hasChest || hasCore;
+                drawLimb(pose.shoulder, pose.hip, torsoSec ? secondaryColor : '#cbd5e1', 6.2, secondaryColor, torsoSec ? 9 * c : 0);
+
+                // Sorot Bahu Kuning jika Shoulders adalah otot sekunder (#44, #68, #73)
+                if (hasShoulders) {
+                    ctx.save();
+                    ctx.fillStyle = secondaryColor;
+                    ctx.shadowColor = secondaryColor;
+                    ctx.shadowBlur = 9 * c;
+                    ctx.beginPath();
+                    ctx.arc(pose.shoulder[0], pose.shoulder[1], 5 + 1.5 * c, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // Lengan penumpu bangku pada Dumbbell Kickback (#71)
+                if (ex.id === 71) {
+                    drawLimb(pose.shoulder, pose.elbowR, '#64748b', 3.8);
+                    drawLimb(pose.elbowR, pose.handR, '#64748b', 3.5);
+                }
+
+                // 3. Lengan Bawah (Forearm - Netral)
+                drawLimb(pose.elbowL, pose.handL, neutralColor, 4.2);
+
+                // 4. OTOT UTAMA: TRICEPS BRACHII (Lengan Atas Belakang Menyala Merah & Menggembung)
+                drawLimb(pose.shoulder, pose.elbowL, primaryColor, 6.2 + 2.4 * c, primaryColor, 14 + 14 * c);
+
+                // Hitung tonjolan otot Triceps (Horseshoe Bulge) di sisi belakang lengan atas
+                const midArm = lerpPt(pose.shoulder, pose.elbowL, 0.5);
+                const dx = pose.elbowL[0] - pose.shoulder[0];
+                const dy = pose.elbowL[1] - pose.shoulder[1];
+                const len = Math.hypot(dx, dy) || 1;
+                const nx = -dy / len;
+                const ny = dx / len;
+                const bulgePos = [midArm[0] + nx * (2.5 + 3.2 * c), midArm[1] + ny * (2.5 + 3.2 * c)];
+
+                ctx.save();
+                ctx.strokeStyle = `rgba(239, 68, 68, ${0.3 + 0.55 * c})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(bulgePos[0], bulgePos[1], 6.5 + 4.5 * c, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = primaryColor;
+                ctx.shadowColor = primaryColor;
+                ctx.shadowBlur = 14 + 12 * c;
+                ctx.beginPath();
+                ctx.arc(bulgePos[0], bulgePos[1], 4 + 3 * c, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // 5. Kepala Stickman
+                ctx.save();
+                ctx.fillStyle = '#0f172a';
+                ctx.strokeStyle = '#f8fafc';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(pose.head[0], pose.head[1], 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // 6. Gambar Beban di Tangan (Barbell, EZ-Bar, Dumbbell)
+            pose.props.forEach(p => {
+                if (p.type === 'barbell_side') {
+                    ctx.save();
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.strokeStyle = '#0284c7';
+                    ctx.lineWidth = 2.2;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r || 10.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2.8, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                } else if (p.type === 'ez_bar_side') {
+                    ctx.save();
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.strokeStyle = '#e0f2fe';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 7.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.restore();
+                } else if (p.type === 'dumbbell_side') {
+                    ctx.save();
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.strokeStyle = '#e0f2fe';
+                    ctx.lineWidth = 1.8;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 5.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            });
+
+            ctx.restore();
+        }
+
+        // ============================================================================
+        // 4. LOGIKA UI GRID, FILTER ALAT, DAN LOOP ANIMASI
+        // ============================================================================
+        let isPlaying = true;
+        let speedMultiplier = 1.0;
+        let activeEquipmentFilter = 'all';
+        let animTime = 0;
+        let lastTimestamp = performance.now();
+        let currentModalExerciseId = null;
+
+        const diffBadgeColors = {
+            beginner: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+            intermediate: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+            advanced: 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+        };
+
+        const diffLabels = {
+            beginner: 'Pemula',
+            intermediate: 'Menengah',
+            advanced: 'Mahir'
+        };
+
+        function filterEquip(eq) {
+            activeEquipmentFilter = eq;
+            document.querySelectorAll('.eq-btn').forEach(btn => {
+                if (btn.dataset.eq === eq) {
+                    btn.className = 'eq-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition';
+                } else {
+                    btn.className = 'eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition';
+                }
+            });
+            renderGrid();
+        }
+
+        function getFilteredExercises() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            return TRICEPS_EXERCISES.filter(ex => {
+                const matchEq = activeEquipmentFilter === 'all' || ex.equipment === activeEquipmentFilter;
+                const matchQuery = ex.name.toLowerCase().includes(query) || String(ex.id).includes(query);
+                return matchEq && matchQuery;
+            });
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('exerciseGrid');
+            const filtered = getFilteredExercises();
+
+            document.getElementById('downloadBatchText').textContent = `Unduh Semua SVG (${filtered.length})`;
+
+            grid.innerHTML = filtered.map(ex => {
+                const secBadges = ex.secondary_muscles.length > 0
+                    ? ex.secondary_muscles.map(m => `<span class="px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-medium capitalize">${m}</span>`).join('')
+                    : `<span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-medium">Isolasi Murni Triceps</span>`;
+
+                return `
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden flex flex-col transition duration-200 card-glow">
+                    <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[11px] font-mono font-bold">#${ex.id}</span>
+                            <h3 class="font-bold text-sm text-white truncate" title="${ex.name}">${ex.name}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0 ${diffBadgeColors[ex.difficulty]}">
+                            ${diffLabels[ex.difficulty]}
+                        </span>
+                    </div>
+
+                    <div class="relative bg-slate-950/90 h-52 w-full cursor-pointer group" onclick="openFocusModal(${ex.id})">
+                        <canvas id="canvas-${ex.id}" data-id="${ex.id}"></canvas>
+                        <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-800 text-[10px] font-medium text-slate-300 capitalize">
+                            🏋️ ${ex.equipment}
+                        </span>
+                        <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-red-500/10 border border-red-500/30 text-[10px] font-semibold text-red-300">
+                            ${ex.sub_focus}
+                        </span>
+                        <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition bg-slate-900/90 border border-slate-700 px-2 py-1 rounded-md text-[10px] text-slate-300">
+                            🔍 Perbesar / Unduh SVG
+                        </div>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col justify-between gap-3 bg-slate-900/50">
+                        <div>
+                            <p class="text-[11px] text-slate-400 line-clamp-2 mb-2.5">${ex.desc}</p>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-[11px] font-bold uppercase">
+                                    🎯 ${ex.primary_muscle}
+                                </span>
+                                ${secBadges}
+                            </div>
+                        </div>
+
+                        <div class="pt-2.5 border-t border-slate-800/70 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-500 font-mono">${ex.movement_type} • ${ex.tracking_mode.replace('_', ' ')}</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openFocusModal(${ex.id})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition">
+                                    Detail
+                                </button>
+                                <button onclick="exportAnimatedSVG(${ex.id})" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 text-[11px] font-semibold transition flex items-center gap-1">
+                                    <span>⬇</span> SVG
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            resizeAllCanvases();
+        }
+
+        function resizeAllCanvases() {
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+            });
+            const modalCanvas = document.getElementById('modalCanvas');
+            if (modalCanvas && !document.getElementById('focusModal').classList.contains('hidden')) {
+                const rect = modalCanvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                modalCanvas.width = rect.width * dpr;
+                modalCanvas.height = rect.height * dpr;
+            }
+        }
+
+        window.addEventListener('resize', resizeAllCanvases);
+
+        function animateLoop(timestamp) {
+            const dt = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (isPlaying) {
+                animTime += dt * speedMultiplier;
+            }
+
+            // Siklus ~1.5 detik dengan tahanan puncak (lockout squeeze) pada ekstensi siku
+            const rawSin = (1 - Math.cos(animTime * Math.PI * 1.33)) / 2;
+            const phase = Math.pow(rawSin, 0.82);
+
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const id = Number(canvas.dataset.id);
+                const ex = TRICEPS_EXERCISES.find(item => item.id === id);
+                if (ex) {
+                    const ctx = canvas.getContext('2d');
+                    drawStickman(ctx, canvas.width, canvas.height, ex, phase);
+                }
+            });
+
+            if (currentModalExerciseId !== null) {
+                const ex = TRICEPS_EXERCISES.find(item => item.id === currentModalExerciseId);
+                const modalCanvas = document.getElementById('modalCanvas');
+                if (ex && modalCanvas) {
+                    const ctx = modalCanvas.getContext('2d');
+                    drawStickman(ctx, modalCanvas.width, modalCanvas.height, ex, phase);
+                    const pose = getPoseForExercise(ex.id, phase);
+                    document.getElementById('modalPhaseBadge').textContent = pose.phaseText;
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('playIcon').textContent = isPlaying ? '⏸' : '▶';
+            document.getElementById('playText').textContent = isPlaying ? 'Jeda' : 'Putar';
+        }
+
+        function setSpeed(spd) {
+            speedMultiplier = spd;
+            document.querySelectorAll('.spd-btn').forEach(btn => {
+                btn.className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition';
+            });
+            document.getElementById(`spd-${spd}`).className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition';
+        }
+
+        function openFocusModal(id) {
+            const ex = TRICEPS_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+            currentModalExerciseId = id;
+            document.getElementById('modalId').textContent = `ID #${ex.id} • ${ex.difficulty.toUpperCase()}`;
+            document.getElementById('modalTitle').textContent = ex.name;
+            document.getElementById('modalDesc').textContent = ex.desc;
+            document.getElementById('modalPrimary').textContent = ex.primary_muscle.toUpperCase();
+            document.getElementById('modalSecondary').textContent = ex.secondary_muscles.length > 0
+                ? ex.secondary_muscles.join(', ')
+                : 'Isolasi Murni';
+            document.getElementById('modalEquip').textContent = `${ex.equipment} • ${ex.movement_type}`;
+            document.getElementById('modalTracking').textContent = ex.tracking_mode;
+
+            document.getElementById('focusModal').classList.remove('hidden');
+            resizeAllCanvases();
+        }
+
+        function closeModal() {
+            currentModalExerciseId = null;
+            document.getElementById('focusModal').classList.add('hidden');
+        }
+
+        // ============================================================================
+        // 5. EKSPOR FILE ANIMASI .SVG MANDIRI & FILE .HTML LENGKAP
+        // ============================================================================
+        function generateSVGString(ex) {
+            const p0 = getPoseForExercise(ex.id, 0);
+            const pM = getPoseForExercise(ex.id, 0.5);
+            const p1 = getPoseForExercise(ex.id, 1);
+
+            const sec = ex.secondary_muscles;
+            const torsoCol = (sec.includes('chest') || sec.includes('core')) ? '#f59e0b' : '#cbd5e1';
+
+            function animLine3(a0, b0, aM, bM, a1, b1, stroke, width) {
+                return `<line x1="${a0[0].toFixed(1)}" y1="${a0[1].toFixed(1)}" x2="${b0[0].toFixed(1)}" y2="${b0[1].toFixed(1)}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round">
+                    <animate attributeName="x1" values="${a0[0].toFixed(1)};${aM[0].toFixed(1)};${a1[0].toFixed(1)};${aM[0].toFixed(1)};${a0[0].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="y1" values="${a0[1].toFixed(1)};${aM[1].toFixed(1)};${a1[1].toFixed(1)};${aM[1].toFixed(1)};${a0[1].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="x2" values="${b0[0].toFixed(1)};${bM[0].toFixed(1)};${b1[0].toFixed(1)};${bM[0].toFixed(1)};${b0[0].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="y2" values="${b0[1].toFixed(1)};${bM[1].toFixed(1)};${b1[1].toFixed(1)};${bM[1].toFixed(1)};${b0[1].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                </line>`;
+            }
+
+            const sh0 = p0.shR || p0.shoulder;
+            const shM = pM.shR || pM.shoulder;
+            const sh1 = p1.shR || p1.shoulder;
+            const el0 = ex.id === 75 ? p0.elbowR : p0.elbowL;
+            const elM = ex.id === 75 ? pM.elbowR : pM.elbowL;
+            const el1 = ex.id === 75 ? p1.elbowR : p1.elbowL;
+            const ha0 = ex.id === 75 ? p0.handR : p0.handL;
+            const haM = ex.id === 75 ? pM.handR : pM.handL;
+            const ha1 = ex.id === 75 ? p1.handR : p1.handL;
+
+            const m0 = lerpPt(sh0, el0, 0.5);
+            const mM = lerpPt(shM, elM, 0.5);
+            const m1 = lerpPt(sh1, el1, 0.5);
+
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 155" width="440" height="310" style="background:#090d16; font-family:sans-serif;">
+    <defs>
+        <filter id="triGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+    </defs>
+    <text x="12" y="18" fill="#f8fafc" font-size="8" font-weight="bold">#${ex.id} ${ex.name}</text>
+    <text x="12" y="28" fill="#ef4444" font-size="6.5" font-weight="bold">Primary: TRICEPS${sec.length ? ' | Sec: ' + sec.join(', ') : ''}</text>
+    <line x1="15" y1="136" x2="205" y2="136" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    ${animLine3(p0.hip, p0.kneeL, pM.hip, pM.kneeL, p1.hip, p1.kneeL, '#94a3b8', 4.6)}
+    ${animLine3(p0.kneeL, p0.footL, pM.kneeL, pM.footL, p1.kneeL, p1.footL, '#94a3b8', 4.2)}
+    ${animLine3(p0.shoulder, p0.hip, pM.shoulder, pM.hip, p1.shoulder, p1.hip, torsoCol, 6.2)}
+    ${animLine3(el0, ha0, elM, haM, el1, ha1, '#94a3b8', 4.2)}
+    <g filter="url(#triGlow)">
+        ${animLine3(sh0, el0, shM, elM, sh1, el1, '#ef4444', 7)}
+        <circle cx="${m0[0].toFixed(1)}" cy="${m0[1].toFixed(1)}" r="4.5" fill="#ef4444">
+            <animate attributeName="cx" values="${m0[0].toFixed(1)};${mM[0].toFixed(1)};${m1[0].toFixed(1)};${mM[0].toFixed(1)};${m0[0].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="${m0[1].toFixed(1)};${mM[1].toFixed(1)};${m1[1].toFixed(1)};${mM[1].toFixed(1)};${m0[1].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="4;7.2;4" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+    <circle cx="${p0.head[0].toFixed(1)}" cy="${p0.head[1].toFixed(1)}" r="8" fill="#0f172a" stroke="#f8fafc" stroke-width="3">
+        <animate attributeName="cx" values="${p0.head[0].toFixed(1)};${pM.head[0].toFixed(1)};${p1.head[0].toFixed(1)};${pM.head[0].toFixed(1)};${p0.head[0].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="${p0.head[1].toFixed(1)};${pM.head[1].toFixed(1)};${p1.head[1].toFixed(1)};${pM.head[1].toFixed(1)};${p0.head[1].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+</svg>`;
+        }
+
+        function exportAnimatedSVG(id) {
+            const ex = TRICEPS_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+
+            const svgContent = generateSVGString(ex);
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stickman_${ex.id}_${ex.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Animasi "${ex.name}.svg" berhasil diunduh!`);
+        }
+
+        function downloadFilteredSVGs() {
+            const list = getFilteredExercises();
+            list.forEach((ex, idx) => {
+                setTimeout(() => {
+                    exportAnimatedSVG(ex.id);
+                }, idx * 280);
+            });
+            showToast(`Mengunduh ${list.length} file SVG kategori Triceps...`);
+        }
+
+        function downloadStandaloneHTML() {
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'triceps_stickman_animations.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('File "triceps_stickman_animations.html" berhasil diunduh!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        window.onload = function () {
+            renderGrid();
+            requestAnimationFrame(animateLoop);
+        };
+    </script>
+</body>
+</html>

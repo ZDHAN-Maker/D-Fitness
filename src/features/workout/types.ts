@@ -1,6 +1,8 @@
 import type { Exercise } from "@/types/domain";
 
-export type ExerciseLite = Pick<Exercise, "id" | "name" | "primary_muscle" | "equipment" | "tracking_mode">;
+export type ExerciseLite = Pick<Exercise, "id" | "name" | "primary_muscle" | "equipment" | "tracking_mode"> & {
+  video_url?: string | null;
+};
 
 export type SetView = {
   id: string;

@@ -3,11 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth/session";
-import { runAction, type ActionResult } from "@/lib/errors";
+import { AppError, runAction, type ActionResult } from "@/lib/errors";
 import { notificationPrefsSchema } from "@/lib/validations/goals";
 import { getProfileAndSettings } from "@/features/profile/queries";
 import { syncProgress } from "@/features/goals/service";
 import { deleteNotification, generateNotifications, markAllRead, markRead, savePrefs } from "@/features/notifications/service";
+import { saveDeviceSubscription, removeDeviceSubscription, sendPushToUser } from "@/features/notifications/push-service";
 import { todayInTimeZone } from "@/utils/date";
 
 const refresh = () => {
@@ -62,5 +63,42 @@ export async function syncAppStateAction(): Promise<ActionResult<SyncOutcome>> {
     const changed = sync.goalsUpdated > 0 || sync.goalsCompleted.length > 0 || sync.achievements.length > 0 || gen.created > 0;
     if (changed) refresh();
     return { created: gen.created, goalsCompleted: sync.goalsCompleted, achievements: sync.achievements, changed };
+  });
+}
+
+export async function subscribePushAction(
+  subscription: { endpoint: string; keys: { p256dh: string; auth: string } },
+  userAgent?: string
+): Promise<ActionResult<{ ok: boolean }>> {
+  return runAction(async () => {
+    const user = await requireUser();
+    const res = await saveDeviceSubscription(user.id, subscription, userAgent);
+    if (!res.ok) {
+      throw new AppError("unknown", res.error || "Gagal menyimpan subscription push.", 500);
+    }
+    return res;
+  });
+}
+
+export async function unsubscribePushAction(
+  endpoint: string
+): Promise<ActionResult<{ ok: boolean }>> {
+  return runAction(async () => {
+    const user = await requireUser();
+    const res = await removeDeviceSubscription(user.id, endpoint);
+    return res;
+  });
+}
+
+export async function sendTestPushAction(): Promise<ActionResult<{ sent: number; failed: number }>> {
+  return runAction(async () => {
+    const user = await requireUser();
+    const res = await sendPushToUser(user.id, {
+      title: "D'GYM - Notifikasi Uji Coba 🔥",
+      body: "Push notifikasi ke HP Anda berhasil aktif! Anda akan menerima pengingat jadwal latihan, target air minum, dan nutrisi.",
+      url: "/dashboard",
+      tag: "test-push",
+    });
+    return res;
   });
 }

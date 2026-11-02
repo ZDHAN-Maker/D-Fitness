@@ -1,0 +1,1459 @@
+[
+  {
+    "id": 83,
+    "name": "Ab Wheel Rollout",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "shoulders",
+      "lower back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 64,
+    "name": "Bicycle Crunches",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "obliques"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 82,
+    "name": "Cable Rope Crunch",
+    "primary_muscle": "abs",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 60,
+    "name": "Deadbug",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "lower back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 85,
+    "name": "Decline Weighted Sit-up",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "movement_type": "core",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 86,
+    "name": "Dragon Flag",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "lats",
+      "lower back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 20,
+    "name": "Hanging Knee Raise",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 84,
+    "name": "Hanging Straight Leg Raise",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 91,
+    "name": "Hollow Body Hold",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 61,
+    "name": "Leg Raises",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 63,
+    "name": "Mountain Climbers",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "shoulders",
+      "quadriceps"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 19,
+    "name": "Plank",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 93,
+    "name": "Plank to Push-up",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "chest",
+      "triceps",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 92,
+    "name": "Reverse Crunch",
+    "primary_muscle": "abs",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 87,
+    "name": "Toes to Bar",
+    "primary_muscle": "abs",
+    "secondary_muscles": [
+      "lats",
+      "forearms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 43,
+    "name": "Banded Bicep Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "band",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 76,
+    "name": "Barbell Bicep Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 79,
+    "name": "Cable Bicep Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 110,
+    "name": "Chin-up",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "lats"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "pull",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 78,
+    "name": "Concentration Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 7,
+    "name": "Dumbbell Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 45,
+    "name": "Hammer Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 77,
+    "name": "Incline Dumbbell Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 46,
+    "name": "Preacher Curl",
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 56,
+    "name": "Seated Calf Raise",
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 50,
+    "name": "Single-Leg Calf Raise",
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 117,
+    "name": "Standing Machine Calf Raise",
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 67,
+    "name": "Burpees",
+    "primary_muscle": "cardio",
+    "secondary_muscles": [
+      "chest",
+      "quadriceps",
+      "core"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "cardio",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 65,
+    "name": "High Knees",
+    "primary_muscle": "cardio",
+    "secondary_muscles": [
+      "quadriceps",
+      "calves"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "cardio",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 23,
+    "name": "Jump Rope",
+    "primary_muscle": "cardio",
+    "secondary_muscles": [
+      "calves"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "cardio",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 66,
+    "name": "Jumping Jacks",
+    "primary_muscle": "cardio",
+    "secondary_muscles": [
+      "calves",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "cardio",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 22,
+    "name": "Rowing Machine",
+    "primary_muscle": "cardio",
+    "secondary_muscles": [
+      "back",
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "cardio",
+    "tracking_mode": "distance_duration"
+  },
+  {
+    "id": 21,
+    "name": "Treadmill Run",
+    "primary_muscle": "cardio",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "cardio",
+    "tracking_mode": "distance_duration"
+  },
+  {
+    "id": 1,
+    "name": "Bench Press",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 30,
+    "name": "Cable Chest Fly",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 119,
+    "name": "Cable Crossover",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 28,
+    "name": "Chest Dips",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 24,
+    "name": "Dumbbell Floor Press",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 31,
+    "name": "Incline Barbell Bench Press",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 118,
+    "name": "Incline Dumbbell Fly",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 2,
+    "name": "Incline Dumbbell Press",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 25,
+    "name": "Incline Push-up",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 120,
+    "name": "Machine Chest Press",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 29,
+    "name": "Pec Deck Machine",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 3,
+    "name": "Push-up",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "triceps",
+      "core"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 26,
+    "name": "Wide-Grip Push-up",
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 80,
+    "name": "Reverse-Grip Barbell Curl",
+    "primary_muscle": "forearms",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 81,
+    "name": "Wrist Curls",
+    "primary_muscle": "forearms",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 51,
+    "name": "Glute Bridge",
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings",
+      "core"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "hinge",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 115,
+    "name": "Hip Abduction Machine",
+    "primary_muscle": "glutes",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 17,
+    "name": "Hip Thrust",
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 102,
+    "name": "Kettlebell Deadlift",
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 95,
+    "name": "Sumo Deadlift",
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings",
+      "quadriceps"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 16,
+    "name": "Deadlift",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "lower back",
+      "traps"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 99,
+    "name": "Deficit Deadlift",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "lower back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 96,
+    "name": "Dumbbell Romanian Deadlift",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "lower back"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 57,
+    "name": "Lying Leg Curl",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "calves"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 15,
+    "name": "Romanian Deadlift",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "lower back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 114,
+    "name": "Seated Leg Curl",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "calves"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 97,
+    "name": "Single-Leg Dumbbell Deadlift",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "calves"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 98,
+    "name": "Stiff-Leg Deadlift",
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "lower back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 8,
+    "name": "Barbell Row",
+    "primary_muscle": "lats",
+    "secondary_muscles": [
+      "biceps",
+      "rear delts"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 111,
+    "name": "Close-Grip Lat Pulldown",
+    "primary_muscle": "lats",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 9,
+    "name": "Lat Pulldown",
+    "primary_muscle": "lats",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 11,
+    "name": "Pull-up",
+    "primary_muscle": "lats",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "pull",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 33,
+    "name": "Single-Arm Dumbbell Row",
+    "primary_muscle": "lats",
+    "secondary_muscles": [
+      "biceps",
+      "rear delts"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 34,
+    "name": "Straight-Arm Cable Pulldown",
+    "primary_muscle": "lats",
+    "secondary_muscles": [
+      "triceps",
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 35,
+    "name": "T-Bar Row",
+    "primary_muscle": "lats",
+    "secondary_muscles": [
+      "biceps",
+      "mid back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 112,
+    "name": "Back Extension (Hyperextension)",
+    "primary_muscle": "lower back",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "hinge",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 10,
+    "name": "Seated Cable Row",
+    "primary_muscle": "mid back",
+    "secondary_muscles": [
+      "biceps",
+      "lats"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 88,
+    "name": "Cable Woodchoppers (High to Low)",
+    "primary_muscle": "obliques",
+    "secondary_muscles": [
+      "abs",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 89,
+    "name": "Cable Woodchoppers (Low to High)",
+    "primary_muscle": "obliques",
+    "secondary_muscles": [
+      "abs",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 90,
+    "name": "Pallof Press",
+    "primary_muscle": "obliques",
+    "secondary_muscles": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 62,
+    "name": "Russian Twist",
+    "primary_muscle": "obliques",
+    "secondary_muscles": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 59,
+    "name": "Side Plank",
+    "primary_muscle": "obliques",
+    "secondary_muscles": [
+      "shoulders",
+      "glutes"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "core",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 53,
+    "name": "Air Squats",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "core"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 12,
+    "name": "Back Squat",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings",
+      "core"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 54,
+    "name": "Bulgarian Split Squat",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 113,
+    "name": "Front Squat",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "core"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 13,
+    "name": "Goblet Squat",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "core"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 55,
+    "name": "Hack Squat",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 116,
+    "name": "Hip Adduction Machine",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 52,
+    "name": "Jump Squats",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "calves"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "squat",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 58,
+    "name": "Leg Extension",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 14,
+    "name": "Leg Press",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 94,
+    "name": "Trap Bar / Hex Bar Deadlift",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings",
+      "traps"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 18,
+    "name": "Walking Lunge",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 49,
+    "name": "Wall Sit",
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "calves"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "squat",
+    "tracking_mode": "duration"
+  },
+  {
+    "id": 32,
+    "name": "Band Pull-Apart",
+    "primary_muscle": "rear delts",
+    "secondary_muscles": [
+      "traps",
+      "mid back"
+    ],
+    "equipment": "band",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 42,
+    "name": "Cable Face Pull",
+    "primary_muscle": "rear delts",
+    "secondary_muscles": [
+      "traps",
+      "rotator cuff"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 107,
+    "name": "Dumbbell Rear Delt Fly",
+    "primary_muscle": "rear delts",
+    "secondary_muscles": [
+      "traps"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 39,
+    "name": "Reverse Pec Deck",
+    "primary_muscle": "rear delts",
+    "secondary_muscles": [
+      "traps"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 103,
+    "name": "Arnold Press",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 36,
+    "name": "Banded Lateral Raise",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "band",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 41,
+    "name": "Barbell Overhead Press",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps",
+      "core"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 40,
+    "name": "Cable Lateral Raise",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 38,
+    "name": "Dumbbell Front Raise",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 5,
+    "name": "Lateral Raise",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 105,
+    "name": "Machine Shoulder Press",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 37,
+    "name": "Pike Push-up",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps",
+      "upper chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 104,
+    "name": "Seated Dumbbell Shoulder Press",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 4,
+    "name": "Shoulder Press",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 106,
+    "name": "Upright Row",
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "traps",
+      "biceps"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 108,
+    "name": "Barbell Shrugs",
+    "primary_muscle": "traps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 109,
+    "name": "Dumbbell Shrugs",
+    "primary_muscle": "traps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "pull",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 101,
+    "name": "Rack Pulls",
+    "primary_muscle": "traps",
+    "secondary_muscles": [
+      "lower back",
+      "lats",
+      "glutes"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 100,
+    "name": "Snatch-Grip Deadlift",
+    "primary_muscle": "traps",
+    "secondary_muscles": [
+      "hamstrings",
+      "lats",
+      "mid back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "movement_type": "hinge",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 72,
+    "name": "Cable Tricep Kickback",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 44,
+    "name": "Chair / Bench Dips",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "shoulders",
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 68,
+    "name": "Close-Grip Barbell Bench Press",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 27,
+    "name": "Diamond Push-up",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "core"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 71,
+    "name": "Dumbbell Tricep Kickback",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 70,
+    "name": "Overhead Cable Triceps Extension",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 69,
+    "name": "Overhead Dumbbell Triceps Extension",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 74,
+    "name": "Overhead EZ-Bar French Press",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 73,
+    "name": "Parallel Bar Dips",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "reps_only"
+  },
+  {
+    "id": 75,
+    "name": "Single-Arm Cable Tricep Pushdown",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 47,
+    "name": "Skull Crusher (EZ Bar)",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 48,
+    "name": "Tricep Rope Pushdown",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  },
+  {
+    "id": 6,
+    "name": "Triceps Pushdown",
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "movement_type": "push",
+    "tracking_mode": "weight_reps"
+  }
+]

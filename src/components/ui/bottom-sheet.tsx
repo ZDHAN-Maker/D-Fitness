@@ -18,7 +18,7 @@ export function BottomSheet({ open, onClose, title, children, wide = false }: Pr
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onCloseRef.current();
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-    panelRef.current?.querySelector<HTMLElement>("a, button, input, select, textarea")?.focus();
+    panelRef.current?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -33,9 +33,10 @@ export function BottomSheet({ open, onClose, title, children, wide = false }: Pr
       <div
         ref={panelRef}
         role="dialog"
+        tabIndex={-1}
         aria-modal="true"
         aria-label={title}
-        className={`relative max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl border bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-xl md:rounded-2xl ${wide ? "max-w-2xl" : "max-w-md"}`}
+        className={`relative outline-none max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl border bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-xl md:rounded-2xl ${wide ? "max-w-2xl" : "max-w-md"}`}
       >
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-lg font-semibold">{title}</h2>
