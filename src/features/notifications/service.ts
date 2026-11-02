@@ -10,6 +10,7 @@ import { average } from "@/lib/calculations/analytics";
 import { isQuietHours, planNotifications, type NotificationContext, type NotificationPrefs } from "@/lib/notifications/rules";
 import { addDays, minutesInTimeZone, todayInTimeZone, weekdayOf } from "@/utils/date";
 import type { NotificationPrefsInput } from "@/lib/validations/goals";
+import { sendPushToUser } from "@/features/notifications/push-service";
 
 type Row = Record<string, unknown>;
 
@@ -147,5 +148,17 @@ export async function generateNotifications(userId: string): Promise<GenerateRes
     .upsert(drafts.map((d) => ({ user_id: userId, type: d.type, title: d.title, body: d.body, dedupe_key: d.dedupeKey })), { onConflict: "user_id,dedupe_key", ignoreDuplicates: true })
     .select("id");
   if (error) throw new AppError("unknown", "Could not save notifications.", 500);
+
+  if (data && data.length > 0) {
+    for (const d of drafts) {
+      void sendPushToUser(userId, {
+        title: d.title,
+        body: d.body,
+        url: "/notifications",
+        tag: d.type,
+      }).catch((err) => console.error("[notifications] Push dispatch error:", err));
+    }
+  }
+
   return { created: data?.length ?? 0 };
 }
