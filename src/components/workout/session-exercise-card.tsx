@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Lightbulb, Plus, SlidersHorizontal, Video } from "lucide-react";
+import { Lightbulb, Play, Plus, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/ui/delete-button";
 import { ExerciseVideoModal } from "@/components/workout/exercise-video-modal";
@@ -43,11 +43,24 @@ export function SessionExerciseCard({ ex, previous, errors, onSave, onToggle, on
   return (
     <section aria-label={ex.exercise.name} className="rounded-lg border bg-card p-3">
       <header className="flex items-center gap-2.5">
-        <ExerciseVisual
-          name={ex.exercise.name}
-          primaryMuscle={ex.exercise.primary_muscle}
-          equipment={ex.exercise.equipment}
-          size="sm"
+        <ExerciseVideoModal
+          exercise={ex.exercise}
+          trigger={
+            <div
+              className="group relative cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              title={`Klik untuk melihat animasi gerakan & teknik ${ex.exercise.name}`}
+            >
+              <ExerciseVisual
+                name={ex.exercise.name}
+                primaryMuscle={ex.exercise.primary_muscle}
+                equipment={ex.exercise.equipment}
+                size="sm"
+              />
+              <span className="absolute inset-0 flex items-center justify-center rounded-md bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                <Play className="size-4 fill-white text-white drop-shadow-sm" />
+              </span>
+            </div>
+          }
         />
         <div className="min-w-0 flex-1">
           <h2 className="truncate font-display text-lg font-semibold">{ex.exercise.name}</h2>
@@ -58,13 +71,13 @@ export function SessionExerciseCard({ ex, previous, errors, onSave, onToggle, on
           trigger={
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               size="icon"
-              aria-label={`Animasi & teknik untuk ${ex.exercise.name}`}
-              className="size-8 text-primary hover:bg-primary/10"
-              title="Lihat animasi gerakan & panduan teknik"
+              aria-label={`Lihat animasi gerakan & panduan teknik ${ex.exercise.name}`}
+              className="size-8 rounded-full border-primary/40 text-primary hover:bg-primary/10 hover:text-primary transition shadow-xs"
+              title="Lihat animasi gerakan (popup)"
             >
-              <Video className="size-4" />
+              <Play className="size-3.5 fill-primary text-primary ml-0.5" />
             </Button>
           }
         />

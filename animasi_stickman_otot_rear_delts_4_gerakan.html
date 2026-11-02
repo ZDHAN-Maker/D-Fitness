@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Animasi Stickman - Kategori Rear Delts / Bahu Belakang (4 Gerakan)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 28px -5px rgba(239, 68, 68, 0.35), 0 0 14px -5px rgba(245, 158, 11, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
+
+    <!-- Header & Controls -->
+    <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3.5 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex items-start sm:items-center justify-between gap-3">
+                <div>
+                    <div class="flex items-center flex-wrap gap-2.5">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-sm">
+                            10
+                        </span>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                            Kategori: <span class="text-red-500">Rear Delts / Bahu Belakang</span>
+                        </h1>
+                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            4 Gerakan
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Animasi stickman singkat (1.5 detik/loop) dengan fokus Posterior Deltoid (Merah) serta Traps, Mid Back & Rotator Cuff (Kuning).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Legend & Interactive Toolbar -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3">
+                <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] animate-pulse"></span>
+                        <span class="font-medium text-slate-200">Utama: Rear Delts</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></span>
+                        <span class="font-medium text-slate-300">Sekunder: Traps / Mid Back / Rotator Cuff</span>
+                    </div>
+                </div>
+
+                <!-- Speed & Play Controls -->
+                <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+                    <button id="btnPlayPause" onclick="togglePlay()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition flex items-center gap-1.5">
+                        <span id="playIcon">⏸</span> <span id="playText">Jeda</span>
+                    </button>
+                    <button onclick="setSpeed(0.5)" id="spd-0.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">0.5x</button>
+                    <button onclick="setSpeed(1)" id="spd-1" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition">1x</button>
+                    <button onclick="setSpeed(1.5)" id="spd-1.5" class="spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">1.5x</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter, Search & Export Toolbar -->
+    <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-5 pb-2 space-y-3">
+        <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between bg-slate-900/70 border border-slate-800/80 p-3 rounded-2xl">
+            <!-- Equipment Filter Buttons -->
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs text-slate-400 mr-1 font-medium">Filter Alat:</span>
+                <button onclick="filterEquip('all')" data-eq="all" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition">Semua (4)</button>
+                <button onclick="filterEquip('band')" data-eq="band" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Band (1)</button>
+                <button onclick="filterEquip('cable')" data-eq="cable" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Cable (1)</button>
+                <button onclick="filterEquip('dumbbell')" data-eq="dumbbell" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Dumbbell (1)</button>
+                <button onclick="filterEquip('machine')" data-eq="machine" class="eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition">Machine (1)</button>
+            </div>
+
+            <!-- Search & Batch Download -->
+            <div class="flex flex-wrap items-center gap-2 justify-end">
+                <div class="relative flex-1 sm:w-56">
+                    <input type="text" id="searchInput" oninput="renderGrid()" placeholder="Cari gerakan atau ID (#42, Fly...)" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                </div>
+                <button onclick="downloadStandaloneHTML()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
+                    <span>💻</span> Unduh File .HTML
+                </button>
+                <button onclick="downloadAllSVGs()" class="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-red-600/20">
+                    <span>⬇</span> Unduh Semua SVG (4)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Exercises Grid -->
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 flex-1">
+        <div id="exerciseGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Cards injected via JS -->
+        </div>
+
+        <!-- Biomechanical Summary Note -->
+        <div class="mt-6 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-400">
+            <div class="space-y-1">
+                <p class="font-bold text-slate-200 flex items-center gap-2">
+                    <span class="text-red-400">💡</span> Catatan Biomekanika Kategori Rear Delts (Posterior Deltoid):
+                </p>
+                <p class="leading-relaxed">
+                    Keempat gerakan di atas berfokus pada pola <code class="text-red-300">movement_type: "pull"</code> dengan mekanika <strong>abduksi horizontal bahu</strong>. 
+                    <strong>Band Pull-Apart (#32)</strong> dan <strong>Reverse Pec Deck (#39)</strong> menjaga lengan hampir lurus untuk mengisolasi kepala belakang bahu, 
+                    <strong>Cable Face Pull (#42)</strong> menambahkan <em>rotasi eksternal bahu</em> untuk mengaktifkan <code class="text-amber-300">rotator cuff</code>, sedangkan 
+                    <strong>Dumbbell Rear Delt Fly (#107)</strong> melawan gravitasi secara langsung dari posisi <em>bent-over hip hinge</em>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Detail / Fokus View & Export SVG -->
+    <div id="focusModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+                <div>
+                    <span id="modalId" class="text-xs font-bold text-red-400 uppercase tracking-wider">ID #42</span>
+                    <h2 id="modalTitle" class="text-lg font-bold text-white">Cable Face Pull</h2>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <div class="p-5">
+                <div class="relative bg-slate-950 rounded-xl border border-slate-800 h-72 w-full overflow-hidden">
+                    <canvas id="modalCanvas"></canvas>
+                    <div id="modalPhaseBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/90 border border-slate-700 text-slate-300">
+                        Kontraksi
+                    </div>
+                </div>
+                <p id="modalDesc" class="mt-3 text-xs text-slate-300 leading-relaxed"></p>
+                <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Otot Utama:</span>
+                        <span id="modalPrimary" class="font-bold text-red-400 uppercase">REAR DELTS</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Otot Sekunder:</span>
+                        <span id="modalSecondary" class="font-semibold text-amber-400 capitalize">traps, rotator cuff</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Alat & Pola:</span>
+                        <span id="modalEquip" class="font-semibold text-sky-400 capitalize">cable • pull</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block text-[10px]">Tracking Mode:</span>
+                        <span id="modalTracking" class="font-mono text-slate-200">weight_reps</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 justify-end">
+                    <button onclick="exportAnimatedSVG(currentModalExerciseId)" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+                        <span>⬇</span> Unduh File Animasi Ringan (.SVG)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2">
+        <span>✓</span> <span id="toastMsg">File berhasil diunduh!</span>
+    </div>
+
+    <script>
+        // ============================================================================
+        // 1. DATA KATALOG 4 GERAKAN REAR DELTS (Sesuai File exercises_catalog.json)
+        // ============================================================================
+        const REAR_DELT_EXERCISES = [
+            {
+                id: 32,
+                name: "Band Pull-Apart",
+                primary_muscle: "rear delts",
+                secondary_muscles: ["traps", "mid back"],
+                equipment: "band",
+                difficulty: "beginner",
+                movement_type: "pull",
+                tracking_mode: "reps_only",
+                sub_focus: "Horizontal Abduction • Tegangan Karet Band",
+                desc: "Berdiri tegak memegang resistance band setinggi bahu dengan lengan lurus di depan, tarik kedua tangan membuka lebar ke samping hingga band menyentuh dada."
+            },
+            {
+                id: 42,
+                name: "Cable Face Pull",
+                primary_muscle: "rear delts",
+                secondary_muscles: ["traps", "rotator cuff"],
+                equipment: "cable",
+                difficulty: "beginner",
+                movement_type: "pull",
+                tracking_mode: "weight_reps",
+                sub_focus: "High Pulley Rope • External Rotation",
+                desc: "Tarik tali katrol atas (rope attachment) ke arah dahi/wajah sambil membuka siku tinggi ke samping dan memutar lengan bawah ke atas (rotasi eksternal)."
+            },
+            {
+                id: 107,
+                name: "Dumbbell Rear Delt Fly",
+                primary_muscle: "rear delts",
+                secondary_muscles: ["traps"],
+                equipment: "dumbbell",
+                difficulty: "beginner",
+                movement_type: "pull",
+                tracking_mode: "weight_reps",
+                sub_focus: "Bent-Over Hinge • Reverse Dumbbell Fly",
+                desc: "Membungkukkan badan (hip hinge) hingga punggung hampir sejajar lantai, angkat kedua dumbbell menyamping membentuk busur lebar dengan kekuatan bahu belakang."
+            },
+            {
+                id: 39,
+                name: "Reverse Pec Deck",
+                primary_muscle: "rear delts",
+                secondary_muscles: ["traps"],
+                equipment: "machine",
+                difficulty: "beginner",
+                movement_type: "pull",
+                tracking_mode: "weight_reps",
+                sub_focus: "Seated Machine Isolation • Busur Horizontal",
+                desc: "Duduk menghadap sandaran dada mesin pec deck, genggam handle di depan lalu dorong/buka kedua lengan ke belakang sejauh mungkin menggunakan bahu belakang."
+            }
+        ];
+
+        // ============================================================================
+        // 2. KINEMATIKA SENDI STICKMAN UNTUK 4 GERAKAN REAR DELTS (220x155 Viewport)
+        // t = 0 (Fase Awal / Lengan di Depan), t = 1 (Puncak Buka Bahu Belakang)
+        // ============================================================================
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+
+        function getPoseForExercise(id, t) {
+            switch (id) {
+                case 32: { // Band Pull-Apart (Tampilan Depan/Punggung Atas: Buka Karet Band Lebar ke Samping)
+                    const head = [110, 30];
+                    const shoulder = [110, 48];
+                    const shL = [96, 50];
+                    const shR = [124, 50];
+                    const hip = [110, 92];
+                    const kneeL = [100, 114]; const footL = [98, 134];
+                    const kneeR = [120, 114]; const footR = [122, 134];
+
+                    // Saat t=0 tangan rapat di depan dada [96..124], saat t=1 terentang lurus ke samping [42..178]
+                    const elbowL = lerpPt([88, 54], [70, 50], t);
+                    const handL = lerpPt([94, 56], [42, 48], t);
+                    const elbowR = lerpPt([132, 54], [150, 50], t);
+                    const handR = lerpPt([126, 56], [178, 48], t);
+
+                    return {
+                        view: 'front',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'band_front', handL, handR, tension: t }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Rentangan Band (Rear Delts, Traps & Mid Back)" : "Posisi Awal Lengan di Depan"
+                    };
+                }
+
+                case 42: { // Cable Face Pull (Tampilan Samping Menghadap Katrol Atas di Kanan, Tarik Tali ke Wajah)
+                    const head = lerpPt([80, 36], [74, 36], t);
+                    const shoulder = lerpPt([80, 52], [74, 52], t);
+                    const hip = [78, 90];
+                    const kneeL = [84, 112]; const footL = [88, 134];
+                    const kneeR = [72, 112]; const footR = [68, 134];
+
+                    // Siku ditarik tinggi ke belakang, tangan berputar ke dekat dahi/telinga (External Rotation)
+                    const elbowL = lerpPt([104, 48], [54, 48], t);
+                    const handL = lerpPt([128, 42], [68, 32], t);
+                    const elbowR = lerpPt([104, 52], [58, 54], t);
+                    const handR = lerpPt([128, 44], [72, 38], t);
+
+                    return {
+                        view: 'side_facepull',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'facepull_cable', pulleyX: 168, pulleyY: 34, handL, handR, lift: t }
+                        ],
+                        head, shoulder, shL: shoulder, shR: shoulder, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Tarikan ke Wajah & Rotasi Eksternal (Rear Delts + Rotator Cuff)" : "Uluran Tali Kabel Depan"
+                    };
+                }
+
+                case 107: { // Dumbbell Rear Delt Fly (Tampilan Depan Perspektif Membungkuk / Bent-Over Fly)
+                    // Kepala lebih rendah di depan karena posisi membungkuk 75 derajat
+                    const head = [110, 56];
+                    const shoulder = [110, 64];
+                    const shL = [96, 64];
+                    const shR = [124, 64];
+                    const hip = [110, 92];
+                    const kneeL = [98, 112]; const footL = [96, 134];
+                    const kneeR = [122, 112]; const footR = [124, 134];
+
+                    // Saat t=0 dumbbell tergantung di bawah dada, saat t=1 diangkat melengkung tinggi ke samping bahu
+                    const elbowL = lerpPt([92, 86], [68, 62], t);
+                    const handL = lerpPt([98, 108], [46, 56], t);
+                    const elbowR = lerpPt([128, 86], [152, 62], t);
+                    const handR = lerpPt([122, 108], [174, 56], t);
+
+                    return {
+                        view: 'front_bent',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'dumbbells_pair', handL, handR }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Puncak Bent-Over Fly (Kontraksi Rear Delts & Traps)" : "Fase Bawah (Dumbbell di Bawah Dada)"
+                    };
+                }
+
+                case 39: { // Reverse Pec Deck (Duduk Menghadap Mesin, Buka Lengan Pengungkit ke Samping-Belakang)
+                    const head = [110, 32];
+                    const shoulder = [110, 50];
+                    const shL = [96, 52];
+                    const shR = [124, 52];
+                    const hip = [110, 94];
+                    const kneeL = [94, 108]; const footL = [94, 134];
+                    const kneeR = [126, 108]; const footR = [126, 134];
+
+                    // Lengan membuka dari handle tengah di depan ke samping belakang
+                    const elbowL = lerpPt([92, 58], [68, 52], t);
+                    const handL = lerpPt([102, 58], [44, 50], t);
+                    const elbowR = lerpPt([128, 58], [152, 52], t);
+                    const handR = lerpPt([118, 58], [176, 50], t);
+
+                    return {
+                        view: 'front_machine',
+                        props: [
+                            { type: 'floor', y: 136 },
+                            { type: 'reverse_pec_deck_machine', handL, handR, lift: t }
+                        ],
+                        head, shoulder, shL, shR, hip,
+                        elbowL, handL, elbowR, handR,
+                        kneeL, footL, kneeR, footR,
+                        contraction: t,
+                        phaseText: t > 0.6 ? "🔥 Buka Lengan Maksimal (Isolasi Rear Delts & Traps)" : "Handle Merapat di Depan"
+                    };
+                }
+            }
+        }
+
+        // ============================================================================
+        // 3. RENDERER CANVAS STICKMAN DENGAN SOROTAN REAR DELTS, TRAPS, MID BACK & ROTATOR CUFF
+        // ============================================================================
+        function drawStickman(ctx, width, height, ex, t) {
+            ctx.clearRect(0, 0, width, height);
+
+            const scale = Math.min(width / 220, height / 155);
+            const offsetX = (width - 220 * scale) / 2;
+            const offsetY = (height - 155 * scale) / 2;
+
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+
+            const pose = getPoseForExercise(ex.id, t);
+            const sec = ex.secondary_muscles;
+            const c = pose.contraction;
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            function drawLimb(pt1, pt2, color, lineWidth, glowColor = null, glowBlur = 0) {
+                ctx.save();
+                if (glowColor && glowBlur > 0) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = glowBlur;
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth;
+                ctx.beginPath();
+                ctx.moveTo(pt1[0], pt1[1]);
+                ctx.lineTo(pt2[0], pt2[1]);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            const neutralColor = '#94a3b8';
+            const secondaryColor = '#f59e0b'; // Kuning / Oranye
+            const primaryColor = '#ef4444';   // Merah Menyala
+
+            const hasTraps = sec.includes('traps');
+            const hasMidBack = sec.includes('mid back');
+            const hasRotatorCuff = sec.includes('rotator cuff');
+
+            // 1. Gambar Props / Mesin Latar Belakang
+            pose.props.forEach(p => {
+                if (p.type === 'floor') {
+                    ctx.strokeStyle = '#1e293b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(15, p.y);
+                    ctx.lineTo(205, p.y);
+                    ctx.stroke();
+                } else if (p.type === 'reverse_pec_deck_machine') {
+                    // Rangka atas & tiang tengah mesin Pec Deck
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(64, 14); ctx.lineTo(156, 14);
+                    ctx.moveTo(110, 14); ctx.lineTo(110, 136);
+                    ctx.stroke();
+                    // Kursi duduk & sandaran dada
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 2;
+                    ctx.fillRect(96, 52, 28, 34);
+                    ctx.strokeRect(96, 52, 28, 34);
+                    ctx.fillRect(92, 96, 36, 6);
+                    // Lengan ayun mesin dari engsel atas ke tangan kiri & kanan
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(86, 14); ctx.lineTo(p.handL[0], p.handL[1]);
+                    ctx.moveTo(134, 14); ctx.lineTo(p.handR[0], p.handR[1]);
+                    ctx.stroke();
+                } else if (p.type === 'facepull_cable') {
+                    // Menara katrol tinggi di kanan
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 4.5;
+                    ctx.beginPath();
+                    ctx.moveTo(176, 16); ctx.lineTo(176, 136);
+                    ctx.moveTo(164, 16); ctx.lineTo(188, 16);
+                    ctx.stroke();
+                    // Beban tumpuk bergerak naik
+                    const stackY = 98 - p.lift * 32;
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(167, stackY, 18, 16);
+                    // Katrol atas
+                    ctx.fillStyle = '#64748b';
+                    ctx.beginPath();
+                    ctx.arc(p.pulleyX, p.pulleyY, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    // Kabel utama ke titik cabang tali (rope)
+                    const ropeSplit = [lerp(p.pulleyX, p.handL[0], 0.72), lerp(p.pulleyY, p.handL[1], 0.72)];
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([3, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(p.pulleyX, p.pulleyY);
+                    ctx.lineTo(ropeSplit[0], ropeSplit[1]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    // Dua ujung tali rope ke tangan kiri & kanan
+                    ctx.strokeStyle = '#e2e8f0';
+                    ctx.lineWidth = 2.2;
+                    ctx.beginPath();
+                    ctx.moveTo(ropeSplit[0], ropeSplit[1]); ctx.lineTo(p.handL[0], p.handL[1]);
+                    ctx.moveTo(ropeSplit[0], ropeSplit[1]); ctx.lineTo(p.handR[0], p.handR[1]);
+                    ctx.stroke();
+                }
+            });
+
+            // ====================================================================
+            // CABANG A: TAMPILAN SAMPING (Cable Face Pull #42)
+            // ====================================================================
+            if (pose.view === 'side_facepull') {
+                // Kaki belakang & depan
+                drawLimb(pose.hip, pose.kneeR, '#64748b', 4.2);
+                drawLimb(pose.kneeR, pose.footR, '#64748b', 3.8);
+                drawLimb(pose.hip, pose.kneeL, neutralColor, 4.6);
+                drawLimb(pose.kneeL, pose.footL, neutralColor, 4.2);
+
+                // Torso
+                drawLimb(pose.shoulder, pose.hip, '#cbd5e1', 6);
+
+                // Otot Sekunder 1: TRAPS (Bahu Atas/Leher - Kuning Menyala)
+                if (hasTraps) {
+                    drawLimb([pose.head[0] - 2, pose.head[1] + 6], [pose.shoulder[0] - 5, pose.shoulder[1] + 2], secondaryColor, 5.5 + 1.5 * c, secondaryColor, 8 * c);
+                }
+
+                // Lengan Belakang
+                drawLimb(pose.shoulder, pose.elbowR, '#64748b', 3.8);
+                drawLimb(pose.elbowR, pose.handR, '#64748b', 3.5);
+
+                // Otot Sekunder 2: ROTATOR CUFF (Infraspinatus / Teres Minor di Belikat Atas & Lengan Bawah Eksternal)
+                if (hasRotatorCuff) {
+                    const cuffPos = [pose.shoulder[0] - 6, pose.shoulder[1] + 6];
+                    ctx.save();
+                    ctx.fillStyle = secondaryColor;
+                    ctx.shadowColor = secondaryColor;
+                    ctx.shadowBlur = 9 * c;
+                    ctx.beginPath();
+                    ctx.arc(cuffPos[0], cuffPos[1], 4.2 + 1.8 * c, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // Lengan Atas & Lengan Bawah (Menyala Kuning saat Rotasi Eksternal)
+                drawLimb(pose.shoulder, pose.elbowL, primaryColor, 5.2 + 1.5 * c, primaryColor, 10 * c);
+                drawLimb(pose.elbowL, pose.handL, hasRotatorCuff ? secondaryColor : neutralColor, 4.2, secondaryColor, hasRotatorCuff ? 7 * c : 0);
+
+                // OTOT UTAMA: REAR DELTS (Kapsul Bahu Belakang Menyala Merah & Berdenyut)
+                const rearDeltPos = [pose.shoulder[0] - 3, pose.shoulder[1] + 1];
+                ctx.save();
+                ctx.strokeStyle = `rgba(239, 68, 68, ${0.35 + 0.55 * c})`;
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                ctx.arc(rearDeltPos[0], rearDeltPos[1], 7.5 + 5 * c, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = primaryColor;
+                ctx.shadowColor = primaryColor;
+                ctx.shadowBlur = 14 + 14 * c;
+                ctx.beginPath();
+                ctx.arc(rearDeltPos[0], rearDeltPos[1], 5.2 + 3 * c, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // Kepala
+                ctx.save();
+                ctx.fillStyle = '#0f172a';
+                ctx.strokeStyle = '#f8fafc';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(pose.head[0], pose.head[1], 8.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // ====================================================================
+            // CABANG B: TAMPILAN SIMETRIS DEPAN / ATAS-BELAKANG (#32, #107, #39)
+            // Menampilkan Kedua Bahu Belakang (Rear Delts Kiri & Kanan) Menyala Merah
+            // ====================================================================
+            else {
+                // 1. Kaki Kiri & Kanan
+                drawLimb(pose.hip, pose.kneeL, neutralColor, 4.6);
+                drawLimb(pose.kneeL, pose.footL, neutralColor, 4.2);
+                drawLimb(pose.hip, pose.kneeR, neutralColor, 4.6);
+                drawLimb(pose.kneeR, pose.footR, neutralColor, 4.2);
+
+                // 2. Torso & Tulang Belakang
+                drawLimb(pose.shoulder, pose.hip, '#cbd5e1', 6.5);
+                drawLimb(pose.shL, pose.shR, '#cbd5e1', 5.5);
+
+                // 3. Otot Sekunder: MID BACK (Belikat Tengah - Kuning Menyala pada Band Pull-Apart #32)
+                if (hasMidBack) {
+                    const midBackPt = lerpPt(pose.shoulder, pose.hip, 0.32);
+                    ctx.save();
+                    ctx.fillStyle = secondaryColor;
+                    ctx.shadowColor = secondaryColor;
+                    ctx.shadowBlur = 10 * c;
+                    ctx.beginPath();
+                    ctx.ellipse(midBackPt[0], midBackPt[1], 7 + 3 * c, 4.5 + 1.5 * c, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // 4. Otot Sekunder: TRAPS (Trapezius Atas/Tengah di Pangkal Leher-Bahu - Kuning Menyala)
+                if (hasTraps) {
+                    const neckBase = [pose.shoulder[0], pose.shoulder[1] - 5];
+                    drawLimb(pose.shL, neckBase, secondaryColor, 5 + 2 * c, secondaryColor, 9 * c);
+                    drawLimb(pose.shR, neckBase, secondaryColor, 5 + 2 * c, secondaryColor, 9 * c);
+                }
+
+                // 5. Lengan Atas & Lengan Bawah Kiri-Kanan
+                drawLimb(pose.shL, pose.elbowL, primaryColor, 4.8 + 1.5 * c, primaryColor, 8 * c);
+                drawLimb(pose.elbowL, pose.handL, neutralColor, 4);
+                drawLimb(pose.shR, pose.elbowR, primaryColor, 4.8 + 1.5 * c, primaryColor, 8 * c);
+                drawLimb(pose.elbowR, pose.handR, neutralColor, 4);
+
+                // 6. OTOT UTAMA: REAR DELTS KIRI & KANAN (MERAH MENYALA & BERDENYUT)
+                [pose.shL, pose.shR].forEach(shPt => {
+                    ctx.save();
+                    // Cincin denyut Rear Delts
+                    ctx.strokeStyle = `rgba(239, 68, 68, ${0.3 + 0.55 * c})`;
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(shPt[0], shPt[1], 7 + 4.5 * c, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    // Inti otot Rear Delt
+                    ctx.fillStyle = primaryColor;
+                    ctx.shadowColor = primaryColor;
+                    ctx.shadowBlur = 14 + 12 * c;
+                    ctx.beginPath();
+                    ctx.arc(shPt[0], shPt[1], 4.8 + 2.8 * c, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+
+                // 7. Kepala Stickman
+                ctx.save();
+                ctx.fillStyle = '#0f172a';
+                ctx.strokeStyle = '#f8fafc';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(pose.head[0], pose.head[1], 8.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+
+                // 8. Props Depan (Karet Resistance Band atau Sepasang Dumbbell)
+                pose.props.forEach(p => {
+                    if (p.type === 'band_front') {
+                        ctx.save();
+                        ctx.strokeStyle = '#38bdf8';
+                        ctx.lineWidth = 2.4 + p.tension * 1.6;
+                        ctx.shadowColor = '#38bdf8';
+                        ctx.shadowBlur = 6 * p.tension;
+                        ctx.beginPath();
+                        ctx.moveTo(p.handL[0], p.handL[1]);
+                        ctx.lineTo(p.handR[0], p.handR[1]);
+                        ctx.stroke();
+                        ctx.restore();
+                    } else if (p.type === 'dumbbells_pair') {
+                        [p.handL, p.handR].forEach(hPt => {
+                            ctx.save();
+                            ctx.fillStyle = '#38bdf8';
+                            ctx.strokeStyle = '#e0f2fe';
+                            ctx.lineWidth = 1.6;
+                            ctx.beginPath();
+                            ctx.roundRect(hPt[0] - 6, hPt[1] - 3, 12, 6, 2);
+                            ctx.fill();
+                            ctx.stroke();
+                            ctx.restore();
+                        });
+                    }
+                });
+            }
+
+            ctx.restore();
+        }
+
+        // ============================================================================
+        // 4. LOGIKA UI GRID, FILTER ALAT, DAN LOOP ANIMASI
+        // ============================================================================
+        let isPlaying = true;
+        let speedMultiplier = 1.0;
+        let activeEquipmentFilter = 'all';
+        let animTime = 0;
+        let lastTimestamp = performance.now();
+        let currentModalExerciseId = null;
+
+        function filterEquip(eq) {
+            activeEquipmentFilter = eq;
+            document.querySelectorAll('.eq-btn').forEach(btn => {
+                if (btn.dataset.eq === eq) {
+                    btn.className = 'eq-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/40 transition';
+                } else {
+                    btn.className = 'eq-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/70 text-slate-300 hover:bg-slate-800 border border-transparent transition';
+                }
+            });
+            renderGrid();
+        }
+
+        function getFilteredExercises() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            return REAR_DELT_EXERCISES.filter(ex => {
+                const matchEq = activeEquipmentFilter === 'all' || ex.equipment === activeEquipmentFilter;
+                const matchQuery = ex.name.toLowerCase().includes(query) || String(ex.id).includes(query);
+                return matchEq && matchQuery;
+            });
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('exerciseGrid');
+            const filtered = getFilteredExercises();
+
+            grid.innerHTML = filtered.map(ex => {
+                const secBadges = ex.secondary_muscles.map(m =>
+                    `<span class="px-2.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-medium capitalize">${m}</span>`
+                ).join('');
+
+                return `
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden flex flex-col transition duration-200 card-glow">
+                    <!-- Top Card Header -->
+                    <div class="px-5 py-3.5 border-b border-slate-800/80 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-800 text-red-400 text-xs font-mono font-bold">#${ex.id}</span>
+                            <h3 class="font-bold text-base text-white truncate" title="${ex.name}">${ex.name}</h3>
+                        </div>
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border bg-emerald-500/15 text-emerald-400 border-emerald-500/30 shrink-0">
+                            Pemula (Beginner)
+                        </span>
+                    </div>
+
+                    <!-- Stickman Canvas Viewport -->
+                    <div class="relative bg-slate-950/90 h-60 w-full cursor-pointer group" onclick="openFocusModal(${ex.id})">
+                        <canvas id="canvas-${ex.id}" data-id="${ex.id}"></canvas>
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-slate-900/85 border border-slate-800 text-xs font-medium text-slate-300 capitalize">
+                            🏋️ ${ex.equipment} • ${ex.movement_type}
+                        </span>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-red-500/10 border border-red-500/30 text-[11px] font-semibold text-red-300">
+                            ${ex.sub_focus}
+                        </span>
+                        <div class="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition bg-slate-900/90 border border-slate-700 px-2.5 py-1 rounded-md text-xs text-slate-200">
+                            🔍 Perbesar / Unduh SVG
+                        </div>
+                    </div>
+
+                    <!-- Muscle Target & Action Footer -->
+                    <div class="p-4 flex-1 flex flex-col justify-between gap-3.5 bg-slate-900/50">
+                        <div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-3">${ex.desc}</p>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-2.5 py-1 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold uppercase">
+                                    🎯 ${ex.primary_muscle}
+                                </span>
+                                ${secBadges}
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                            <span class="text-xs text-slate-400 font-mono">tracking: <strong class="text-slate-200">${ex.tracking_mode}</strong></span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openFocusModal(${ex.id})" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition">
+                                    Detail
+                                </button>
+                                <button onclick="exportAnimatedSVG(${ex.id})" class="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-red-600/20">
+                                    <span>⬇</span> SVG
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            resizeAllCanvases();
+        }
+
+        function resizeAllCanvases() {
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+            });
+            const modalCanvas = document.getElementById('modalCanvas');
+            if (modalCanvas && !document.getElementById('focusModal').classList.contains('hidden')) {
+                const rect = modalCanvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                modalCanvas.width = rect.width * dpr;
+                modalCanvas.height = rect.height * dpr;
+            }
+        }
+
+        window.addEventListener('resize', resizeAllCanvases);
+
+        function animateLoop(timestamp) {
+            const dt = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (isPlaying) {
+                animTime += dt * speedMultiplier;
+            }
+
+            // Siklus ~1.5 detik dengan penahanan puncak (squeeze) bahu belakang
+            const rawSin = (1 - Math.cos(animTime * Math.PI * 1.33)) / 2;
+            const phase = Math.pow(rawSin, 0.82);
+
+            document.querySelectorAll('canvas[data-id]').forEach(canvas => {
+                const id = Number(canvas.dataset.id);
+                const ex = REAR_DELT_EXERCISES.find(item => item.id === id);
+                if (ex) {
+                    const ctx = canvas.getContext('2d');
+                    drawStickman(ctx, canvas.width, canvas.height, ex, phase);
+                }
+            });
+
+            if (currentModalExerciseId !== null) {
+                const ex = REAR_DELT_EXERCISES.find(item => item.id === currentModalExerciseId);
+                const modalCanvas = document.getElementById('modalCanvas');
+                if (ex && modalCanvas) {
+                    const ctx = modalCanvas.getContext('2d');
+                    drawStickman(ctx, modalCanvas.width, modalCanvas.height, ex, phase);
+                    const pose = getPoseForExercise(ex.id, phase);
+                    document.getElementById('modalPhaseBadge').textContent = pose.phaseText;
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('playIcon').textContent = isPlaying ? '⏸' : '▶';
+            document.getElementById('playText').textContent = isPlaying ? 'Jeda' : 'Putar';
+        }
+
+        function setSpeed(spd) {
+            speedMultiplier = spd;
+            document.querySelectorAll('.spd-btn').forEach(btn => {
+                btn.className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition';
+            });
+            document.getElementById(`spd-${spd}`).className = 'spd-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition';
+        }
+
+        function openFocusModal(id) {
+            const ex = REAR_DELT_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+            currentModalExerciseId = id;
+            document.getElementById('modalId').textContent = `ID #${ex.id} • ${ex.difficulty.toUpperCase()}`;
+            document.getElementById('modalTitle').textContent = ex.name;
+            document.getElementById('modalDesc').textContent = ex.desc;
+            document.getElementById('modalPrimary').textContent = ex.primary_muscle.toUpperCase();
+            document.getElementById('modalSecondary').textContent = ex.secondary_muscles.join(', ');
+            document.getElementById('modalEquip').textContent = `${ex.equipment} • ${ex.movement_type}`;
+            document.getElementById('modalTracking').textContent = ex.tracking_mode;
+
+            document.getElementById('focusModal').classList.remove('hidden');
+            resizeAllCanvases();
+        }
+
+        function closeModal() {
+            currentModalExerciseId = null;
+            document.getElementById('focusModal').classList.add('hidden');
+        }
+
+        // ============================================================================
+        // 5. EKSPOR FILE ANIMASI .SVG MANDIRI & FILE .HTML LENGKAP
+        // ============================================================================
+        function generateSVGString(ex) {
+            const p0 = getPoseForExercise(ex.id, 0);
+            const pM = getPoseForExercise(ex.id, 0.5);
+            const p1 = getPoseForExercise(ex.id, 1);
+
+            function animLine3(a0, b0, aM, bM, a1, b1, stroke, width) {
+                return `<line x1="${a0[0].toFixed(1)}" y1="${a0[1].toFixed(1)}" x2="${b0[0].toFixed(1)}" y2="${b0[1].toFixed(1)}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round">
+                    <animate attributeName="x1" values="${a0[0].toFixed(1)};${aM[0].toFixed(1)};${a1[0].toFixed(1)};${aM[0].toFixed(1)};${a0[0].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="y1" values="${a0[1].toFixed(1)};${aM[1].toFixed(1)};${a1[1].toFixed(1)};${aM[1].toFixed(1)};${a0[1].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="x2" values="${b0[0].toFixed(1)};${bM[0].toFixed(1)};${b1[0].toFixed(1)};${bM[0].toFixed(1)};${b0[0].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="y2" values="${b0[1].toFixed(1)};${bM[1].toFixed(1)};${b1[1].toFixed(1)};${bM[1].toFixed(1)};${b0[1].toFixed(1)}" dur="1.5s" repeatCount="indefinite"/>
+                </line>`;
+            }
+
+            const sec = ex.secondary_muscles;
+
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 155" width="440" height="310" style="background:#090d16; font-family:sans-serif;">
+    <defs>
+        <filter id="rearDeltGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+    </defs>
+    <text x="12" y="18" fill="#f8fafc" font-size="8" font-weight="bold">#${ex.id} ${ex.name}</text>
+    <text x="12" y="28" fill="#ef4444" font-size="6.5" font-weight="bold">Primary: REAR DELTS | Secondary: ${sec.join(', ')}</text>
+    <line x1="15" y1="136" x2="205" y2="136" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    ${animLine3(p0.hip, p0.kneeL, pM.hip, pM.kneeL, p1.hip, p1.kneeL, '#94a3b8', 4.6)}
+    ${animLine3(p0.kneeL, p0.footL, pM.kneeL, pM.footL, p1.kneeL, p1.footL, '#94a3b8', 4.2)}
+    ${animLine3(p0.hip, p0.kneeR, pM.hip, pM.kneeR, p1.hip, p1.kneeR, '#64748b', 4.4)}
+    ${animLine3(p0.kneeR, p0.footR, pM.kneeR, pM.footR, p1.kneeR, p1.footR, '#64748b', 4)}
+    ${animLine3(p0.shoulder, p0.hip, pM.shoulder, pM.hip, p1.shoulder, p1.hip, '#cbd5e1', 6.2)}
+    <!-- Secondary Traps Highlight -->
+    ${animLine3(p0.shL, [p0.shoulder[0], p0.shoulder[1] - 5], pM.shL, [pM.shoulder[0], pM.shoulder[1] - 5], p1.shL, [p1.shoulder[0], p1.shoulder[1] - 5], '#f59e0b', 5.5)}
+    ${animLine3(p0.shR, [p0.shoulder[0], p0.shoulder[1] - 5], pM.shR, [pM.shoulder[0], pM.shoulder[1] - 5], p1.shR, [p1.shoulder[0], p1.shoulder[1] - 5], '#f59e0b', 5.5)}
+    <!-- Arms & Primary Rear Delts -->
+    ${animLine3(p0.elbowL, p0.handL, pM.elbowL, pM.handL, p1.elbowL, p1.handL, '#94a3b8', 4)}
+    ${animLine3(p0.elbowR, p0.handR, pM.elbowR, pM.handR, p1.elbowR, p1.handR, '#94a3b8', 4)}
+    <g filter="url(#rearDeltGlow)">
+        ${animLine3(p0.shL, p0.elbowL, pM.shL, pM.elbowL, p1.shL, p1.elbowL, '#ef4444', 5.5)}
+        ${animLine3(p0.shR, p0.elbowR, pM.shR, pM.elbowR, p1.shR, p1.elbowR, '#ef4444', 5.5)}
+        <circle cx="${p0.shL[0].toFixed(1)}" cy="${p0.shL[1].toFixed(1)}" r="5" fill="#ef4444">
+            <animate attributeName="r" values="4.8;7.6;4.8" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="${p0.shR[0].toFixed(1)}" cy="${p0.shR[1].toFixed(1)}" r="5" fill="#ef4444">
+            <animate attributeName="r" values="4.8;7.6;4.8" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+    <circle cx="${p0.head[0].toFixed(1)}" cy="${p0.head[1].toFixed(1)}" r="8" fill="#0f172a" stroke="#f8fafc" stroke-width="3"/>
+</svg>`;
+        }
+
+        function exportAnimatedSVG(id) {
+            const ex = REAR_DELT_EXERCISES.find(item => item.id === id);
+            if (!ex) return;
+
+            const svgContent = generateSVGString(ex);
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stickman_${ex.id}_${ex.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Animasi "${ex.name}.svg" berhasil diunduh!`);
+        }
+
+        function downloadAllSVGs() {
+            const list = getFilteredExercises();
+            list.forEach((ex, idx) => {
+                setTimeout(() => {
+                    exportAnimatedSVG(ex.id);
+                }, idx * 280);
+            });
+            showToast(`Mengunduh ${list.length} file SVG kategori Rear Delts...`);
+        }
+
+        function downloadStandaloneHTML() {
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rear_delts_stickman_animations.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('File "rear_delts_stickman_animations.html" berhasil diunduh!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        window.onload = function () {
+            renderGrid();
+            requestAnimationFrame(animateLoop);
+        };
+    </script>
+</body>
+</html>
