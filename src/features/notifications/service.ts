@@ -48,7 +48,21 @@ export async function deleteNotification(id: string) {
   if (error) throw error;
 }
 
-const DEFAULT_PREFS: NotificationPrefs = { enabled: true, workout_reminders: true, nutrition_reminders: true, hydration_reminders: true, recovery_alerts: true, quiet_hours_start: "22:00", quiet_hours_end: "07:00", max_per_day: 3 };
+const DEFAULT_PREFS: NotificationPrefs = {
+  enabled: true,
+  workout_reminders: true,
+  nutrition_reminders: true,
+  hydration_reminders: true,
+  recovery_alerts: true,
+  quiet_hours_start: "22:00",
+  quiet_hours_end: "07:00",
+  max_per_day: 3,
+  workout_time: "07:00",
+  nutrition_time: "17:00",
+  hydration_time: "14:00",
+  min_sleep_hours: 6.0,
+  min_streak_days: 3,
+};
 
 export async function getPrefs(): Promise<NotificationPrefs> {
   const supabase = await createClient();
@@ -64,13 +78,42 @@ export async function getPrefs(): Promise<NotificationPrefs> {
     quiet_hours_start: String(data.quiet_hours_start).slice(0, 5),
     quiet_hours_end: String(data.quiet_hours_end).slice(0, 5),
     max_per_day: Number(data.max_per_day),
+    workout_time: data.workout_time ? String(data.workout_time).slice(0, 5) : "07:00",
+    nutrition_time: data.nutrition_time ? String(data.nutrition_time).slice(0, 5) : "17:00",
+    hydration_time: data.hydration_time ? String(data.hydration_time).slice(0, 5) : "14:00",
+    min_sleep_hours:
+      data.min_sleep_hours !== undefined && data.min_sleep_hours !== null ? Number(data.min_sleep_hours) : 6.0,
+    min_streak_days:
+      data.min_streak_days !== undefined && data.min_streak_days !== null ? Number(data.min_streak_days) : 3,
   };
 }
 
 export async function savePrefs(userId: string, v: NotificationPrefsInput) {
   const supabase = await createClient();
-  const { error } = await supabase.from("notification_preferences").upsert({ user_id: userId, ...v }, { onConflict: "user_id" });
-  if (error) throw error;
+  const { error } = await supabase
+    .from("notification_preferences")
+    .upsert({ user_id: userId, ...v }, { onConflict: "user_id" });
+
+  if (error) {
+    if (error.code === "42703" || error.message.includes("column")) {
+      const base = {
+        enabled: v.enabled,
+        workout_reminders: v.workout_reminders,
+        nutrition_reminders: v.nutrition_reminders,
+        hydration_reminders: v.hydration_reminders,
+        recovery_alerts: v.recovery_alerts,
+        quiet_hours_start: v.quiet_hours_start,
+        quiet_hours_end: v.quiet_hours_end,
+        max_per_day: v.max_per_day,
+      };
+      const { error: retryErr } = await supabase
+        .from("notification_preferences")
+        .upsert({ user_id: userId, ...base }, { onConflict: "user_id" });
+      if (retryErr) throw retryErr;
+      return;
+    }
+    throw error;
+  }
 }
 
 /** Topics that count against the daily cap. Achievement / goal-reached messages are events, not reminders. */

@@ -2745,3 +2745,14 @@ create policy push_subscriptions_update_own on public.push_subscriptions
   for update to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 
 create index if not exists push_subscriptions_user_id_idx on public.push_subscriptions(user_id);
+
+
+-- ======================================================================
+-- 022_custom_notification_schedules.sql
+-- ======================================================================
+alter table public.notification_preferences
+  add column if not exists workout_time time not null default '07:00',
+  add column if not exists nutrition_time time not null default '17:00',
+  add column if not exists hydration_time time not null default '14:00',
+  add column if not exists min_sleep_hours numeric(3,1) not null default 6.0,
+  add column if not exists min_streak_days smallint not null default 3;

@@ -59,6 +59,11 @@ export const notificationPrefsSchema = z.object({
   quiet_hours_start: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM"),
   quiet_hours_end: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM"),
   max_per_day: z.number().int("Whole number").min(0, "At least 0").max(10, "At most 10"),
+  workout_time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM").optional().default("07:00"),
+  nutrition_time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM").optional().default("17:00"),
+  hydration_time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM").optional().default("14:00"),
+  min_sleep_hours: z.number().min(4, "At least 4 hours").max(12, "At most 12 hours").optional().default(6),
+  min_streak_days: z.number().int("Whole number").min(1, "At least 1 day").max(30, "At most 30 days").optional().default(3),
 });
 
 export type GoalInput = z.infer<typeof goalSchema>;

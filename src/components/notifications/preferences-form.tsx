@@ -17,7 +17,14 @@ const TOGGLES = [
 ] as const;
 
 export function PreferencesForm({ initial }: { initial: NotificationPrefs }) {
-  const [p, setP] = useState(initial);
+  const [p, setP] = useState<NotificationPrefs>({
+    workout_time: "07:00",
+    nutrition_time: "17:00",
+    hydration_time: "14:00",
+    min_sleep_hours: 6.0,
+    min_streak_days: 3,
+    ...initial,
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<{ ok: boolean; text: string }>();
   const [pending, startTransition] = useTransition();
@@ -34,7 +41,7 @@ export function PreferencesForm({ initial }: { initial: NotificationPrefs }) {
     setErrors({});
     startTransition(async () => {
       const res = await savePrefsAction(parsed.data);
-      setStatus(res.ok ? { ok: true, text: "Saved." } : { ok: false, text: res.error });
+      setStatus(res.ok ? { ok: true, text: "Pengaturan berhasil disimpan." } : { ok: false, text: res.error });
     });
   };
 
@@ -50,26 +57,131 @@ export function PreferencesForm({ initial }: { initial: NotificationPrefs }) {
 
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-4 rounded-lg border bg-card p-4">
-      <h2 className="font-display text-lg font-semibold">Preferences</h2>
-      {check("n-enabled", "Notifications", "Turn everything off with one switch.", p.enabled, (v) => setP({ ...p, enabled: v }))}
+      <div>
+        <h2 className="font-display text-lg font-semibold">Pengaturan Notifikasi Manual</h2>
+        <p className="text-xs text-muted-foreground">Sesuaikan kapan dan kategori apa saja yang ingin diingatkan ke HP Anda.</p>
+      </div>
+
+      {check("n-enabled", "Aktifkan Semua Notifikasi", "Nyalakan atau matikan semua jenis notifikasi secara global.", p.enabled, (v) => setP({ ...p, enabled: v }))}
+
       <div className="flex flex-col divide-y border-y">
         {TOGGLES.map((t) => check(`n-${t.key}`, t.label, t.help, p[t.key], (v) => setP({ ...p, [t.key]: v }), !p.enabled))}
       </div>
-      <div className="grid gap-3 sm:grid-cols-3">
-        <Field id="n-qs" label="Quiet hours start" error={errors.quiet_hours_start}>
-          <Input {...fieldAria("n-qs", errors.quiet_hours_start)} type="time" value={p.quiet_hours_start} onChange={(e) => setP({ ...p, quiet_hours_start: e.target.value })} />
-        </Field>
-        <Field id="n-qe" label="Quiet hours end" error={errors.quiet_hours_end}>
-          <Input {...fieldAria("n-qe", errors.quiet_hours_end)} type="time" value={p.quiet_hours_end} onChange={(e) => setP({ ...p, quiet_hours_end: e.target.value })} />
-        </Field>
-        <Field id="n-max" label="Max reminders per day" error={errors.max_per_day}>
-          <Input {...fieldAria("n-max", errors.max_per_day)} type="number" inputMode="numeric" min="0" max="10" value={p.max_per_day} onChange={(e) => setP({ ...p, max_per_day: e.target.value === "" ? Number.NaN : Number(e.target.value) })} />
-        </Field>
+
+      {/* Jadwal Jam Pengingat Spesifik */}
+      <div className="flex flex-col gap-3 pt-1">
+        <h3 className="text-sm font-semibold text-foreground">Jadwal Jam Pengingat Spesifik</h3>
+        <p className="text-xs text-muted-foreground -mt-2">
+          Atur jam berapa sistem harus mulai mengecek dan mengirimkan notifikasi ke HP Anda.
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Field id="n-wt" label="Jam Pengingat Latihan" error={errors.workout_time}>
+            <Input
+              {...fieldAria("n-wt", errors.workout_time)}
+              type="time"
+              disabled={!p.enabled || !p.workout_reminders}
+              value={p.workout_time ?? "07:00"}
+              onChange={(e) => setP({ ...p, workout_time: e.target.value })}
+            />
+          </Field>
+          <Field id="n-nt" label="Jam Cek Protein / Makan" error={errors.nutrition_time}>
+            <Input
+              {...fieldAria("n-nt", errors.nutrition_time)}
+              type="time"
+              disabled={!p.enabled || !p.nutrition_reminders}
+              value={p.nutrition_time ?? "17:00"}
+              onChange={(e) => setP({ ...p, nutrition_time: e.target.value })}
+            />
+          </Field>
+          <Field id="n-ht" label="Jam Cek Minum Air" error={errors.hydration_time}>
+            <Input
+              {...fieldAria("n-ht", errors.hydration_time)}
+              type="time"
+              disabled={!p.enabled || !p.hydration_reminders}
+              value={p.hydration_time ?? "14:00"}
+              onChange={(e) => setP({ ...p, hydration_time: e.target.value })}
+            />
+          </Field>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 pt-1">
+          <Field id="n-ms" label="Batas Minimal Tidur (Jam)" error={errors.min_sleep_hours}>
+            <Input
+              {...fieldAria("n-ms", errors.min_sleep_hours)}
+              type="number"
+              step="0.5"
+              min="4"
+              max="12"
+              disabled={!p.enabled || !p.recovery_alerts}
+              value={p.min_sleep_hours ?? 6}
+              onChange={(e) => setP({ ...p, min_sleep_hours: e.target.value === "" ? Number.NaN : Number(e.target.value) })}
+            />
+          </Field>
+          <Field id="n-stk" label="Minimal Streak Beruntun (Hari)" error={errors.min_streak_days}>
+            <Input
+              {...fieldAria("n-stk", errors.min_streak_days)}
+              type="number"
+              min="1"
+              max="30"
+              disabled={!p.enabled || !p.workout_reminders}
+              value={p.min_streak_days ?? 3}
+              onChange={(e) => setP({ ...p, min_streak_days: e.target.value === "" ? Number.NaN : Number(e.target.value) })}
+            />
+          </Field>
+        </div>
       </div>
-      <p className="text-xs text-muted-foreground">Nothing is created during quiet hours, and each topic is sent at most once a day.</p>
-      <div className="flex items-center gap-3">
-        <Button type="submit" disabled={pending}>{pending ? <Loader2 className="animate-spin" /> : null} Save preferences</Button>
-        {status ? <p role={status.ok ? "status" : "alert"} className={`text-sm font-medium ${status.ok ? "text-fiber" : "text-destructive"}`}>{status.text}</p> : null}
+
+      {/* Jam Tenang & Batas Harian */}
+      <div className="flex flex-col gap-3 pt-2 border-t">
+        <h3 className="text-sm font-semibold text-foreground">Jam Tenang & Batas Pengiriman</h3>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Field id="n-qs" label="Jam Tenang Mulai" error={errors.quiet_hours_start}>
+            <Input
+              {...fieldAria("n-qs", errors.quiet_hours_start)}
+              type="time"
+              disabled={!p.enabled}
+              value={p.quiet_hours_start}
+              onChange={(e) => setP({ ...p, quiet_hours_start: e.target.value })}
+            />
+          </Field>
+          <Field id="n-qe" label="Jam Tenang Selesai" error={errors.quiet_hours_end}>
+            <Input
+              {...fieldAria("n-qe", errors.quiet_hours_end)}
+              type="time"
+              disabled={!p.enabled}
+              value={p.quiet_hours_end}
+              onChange={(e) => setP({ ...p, quiet_hours_end: e.target.value })}
+            />
+          </Field>
+          <Field id="n-max" label="Maksimal Notifikasi / Hari" error={errors.max_per_day}>
+            <Input
+              {...fieldAria("n-max", errors.max_per_day)}
+              type="number"
+              inputMode="numeric"
+              min="0"
+              max="10"
+              disabled={!p.enabled}
+              value={p.max_per_day}
+              onChange={(e) => setP({ ...p, max_per_day: e.target.value === "" ? Number.NaN : Number(e.target.value) })}
+            />
+          </Field>
+        </div>
+      </div>
+
+      <p className="text-xs text-muted-foreground">
+        Tidak ada notifikasi yang dikirimkan selama jam tenang tidur, dan setiap topik pengingat hanya dikirim maksimal 1 kali sehari.
+      </p>
+
+      <div className="flex items-center gap-3 pt-2">
+        <Button type="submit" disabled={pending} className="cursor-pointer">
+          {pending ? <Loader2 className="animate-spin mr-1.5 size-4" /> : null} Simpan Pengaturan
+        </Button>
+        {status ? (
+          <p role={status.ok ? "status" : "alert"} className={`text-sm font-medium ${status.ok ? "text-emerald-400" : "text-destructive"}`}>
+            {status.text}
+          </p>
+        ) : null}
       </div>
     </form>
   );

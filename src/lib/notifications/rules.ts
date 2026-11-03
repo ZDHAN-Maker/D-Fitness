@@ -15,6 +15,11 @@ export type NotificationPrefs = {
   quiet_hours_start: string; // "22:00" or "22:00:00"
   quiet_hours_end: string;
   max_per_day: number;
+  workout_time?: string;
+  nutrition_time?: string;
+  hydration_time?: string;
+  min_sleep_hours?: number;
+  min_streak_days?: number;
 };
 
 export type NotificationContext = {
@@ -74,31 +79,36 @@ export function planNotifications(ctx: NotificationContext): NotificationDraft[]
   const out: NotificationDraft[] = [];
 
   // 1. Short night: say it in the morning, before training.
-  if (prefs.recovery_alerts && ctx.sleepMinutes !== null && ctx.sleepMinutes > 0 && ctx.sleepMinutes < THRESHOLDS.shortSleepMinutes && between(minutes, 6 * 60, 12 * 60)) {
+  const minSleep = (prefs.min_sleep_hours ?? (THRESHOLDS.shortSleepMinutes / 60)) * 60;
+  if (prefs.recovery_alerts && ctx.sleepMinutes !== null && ctx.sleepMinutes > 0 && ctx.sleepMinutes < minSleep && between(minutes, 6 * 60, 12 * 60)) {
     out.push({ type: "recovery", priority: 1, dedupeKey: `sleep:${date}`, title: "Short night", body: `You only slept ${formatDuration(ctx.sleepMinutes)}. Consider reducing today's training intensity.` });
   }
 
   // 2. Scheduled workout not started yet.
-  if (prefs.workout_reminders && ctx.scheduledPlan && !ctx.workoutDoneOrActive && between(minutes, 7 * 60, 20 * 60)) {
+  const workoutStartMin = prefs.workout_time ? toMinutes(prefs.workout_time) : 7 * 60;
+  if (prefs.workout_reminders && ctx.scheduledPlan && !ctx.workoutDoneOrActive && between(minutes, workoutStartMin, 20 * 60)) {
     out.push({ type: "workout_reminder", priority: 2, dedupeKey: `workout:${date}`, title: "Workout today", body: `${ctx.scheduledPlan.name} is scheduled today.` });
   }
 
   // 3. A real streak that ends tonight.
+  const streakMin = prefs.min_streak_days ?? THRESHOLDS.streakMin;
   const s = ctx.workoutStreak;
-  if (prefs.workout_reminders && !ctx.workoutDoneOrActive && s.current >= THRESHOLDS.streakMin && s.lastActivityDate === addDays(date, -1) && between(minutes, 18 * 60, 21 * 60)) {
+  if (prefs.workout_reminders && !ctx.workoutDoneOrActive && s.current >= streakMin && s.lastActivityDate === addDays(date, -1) && between(minutes, 18 * 60, 21 * 60)) {
     out.push({ type: "streak_risk", priority: 3, dedupeKey: `streak:${date}`, title: "Keep your streak", body: `Your ${s.current}-day workout streak ends today unless you train.` });
   }
 
   // 4. Protein gap: only for people who are logging food today (never nag someone who is not tracking).
+  const nutritionStartMin = prefs.nutrition_time ? toMinutes(prefs.nutrition_time) : 17 * 60;
   const n = ctx.nutrition;
   const proteinLeft = n.proteinTargetG - n.proteinG;
-  if (prefs.nutrition_reminders && n.itemsCount > 0 && minutes >= 17 * 60 && proteinLeft >= THRESHOLDS.proteinGapMinGrams && proteinLeft >= n.proteinTargetG * THRESHOLDS.proteinGapMinShare) {
+  if (prefs.nutrition_reminders && n.itemsCount > 0 && minutes >= nutritionStartMin && proteinLeft >= THRESHOLDS.proteinGapMinGrams && proteinLeft >= n.proteinTargetG * THRESHOLDS.proteinGapMinShare) {
     out.push({ type: "protein_gap", priority: 4, dedupeKey: `protein:${date}`, title: "Protein check", body: `You still need approximately ${roundTo(proteinLeft, 5)}g protein to hit today's target.` });
   }
 
   // 5. Hydration behind pace: compare with your usual intake (or the target if there is no history).
+  const hydrationStartMin = prefs.hydration_time ? toMinutes(prefs.hydration_time) : 14 * 60;
   const w = ctx.water;
-  if (prefs.hydration_reminders && minutes >= 14 * 60 && minutes <= 21 * 60) {
+  if (prefs.hydration_reminders && minutes >= hydrationStartMin && minutes <= 21 * 60) {
     const basis = w.usualDailyMl && w.usualDailyMl > 0 ? w.usualDailyMl : w.targetMl;
     const fraction = Math.min(1, Math.max(0, (minutes - DAY_START) / (DAY_END - DAY_START)));
     const gap = basis * fraction - w.todayMl;
