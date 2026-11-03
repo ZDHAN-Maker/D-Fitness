@@ -3,8 +3,16 @@
 import { useEffect, useState } from "react";
 import { Bell, BellOff, BellRing, CheckCircle2, Info, Loader2, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { subscribePushAction, unsubscribePushAction, sendTestPushAction } from "@/features/notifications/actions";
+import {
+  subscribePushAction,
+  unsubscribePushAction,
+  sendTestPushAction,
+  getVapidPublicKeyAction,
+} from "@/features/notifications/actions";
 import { urlB64ToUint8Array } from "@/lib/notifications/push-utils";
+
+const FALLBACK_VAPID_PUBLIC_KEY =
+  "BOELI0yCxNeIJoLztwewwn1yhB9UfePEkZ8HNOWXsQa_O9L_9zOiCIZ_m0fs8e53VrM4d-Qro_j0QO0S5xZ44fY";
 
 export function PushNotificationManager() {
   const [isSupported, setIsSupported] = useState<boolean>(true);
@@ -87,14 +95,19 @@ export function PushNotificationManager() {
           return;
         }
 
-        const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+        let vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
         if (!vapidPublicKey) {
-          setFeedback({
-            ok: false,
-            message: "Kunci VAPID public belum dikonfigurasi pada server.",
-          });
-          setLoading(false);
-          return;
+          try {
+            const keyRes = await getVapidPublicKeyAction();
+            if (keyRes.ok && keyRes.data.publicKey) {
+              vapidPublicKey = keyRes.data.publicKey;
+            }
+          } catch {
+            // fallback will be used below
+          }
+        }
+        if (!vapidPublicKey) {
+          vapidPublicKey = FALLBACK_VAPID_PUBLIC_KEY;
         }
 
         const convertedVapidKey = urlB64ToUint8Array(vapidPublicKey);

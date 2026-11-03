@@ -1,16 +1,23 @@
 import webpush from "web-push";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-const privateKey = process.env.VAPID_PRIVATE_KEY;
-const subject = process.env.VAPID_SUBJECT || "mailto:uprise419@gmail.com";
+const DEFAULT_VAPID_PUBLIC_KEY =
+  "BOELI0yCxNeIJoLztwewwn1yhB9UfePEkZ8HNOWXsQa_O9L_9zOiCIZ_m0fs8e53VrM4d-Qro_j0QO0S5xZ44fY";
+const DEFAULT_VAPID_PRIVATE_KEY = "xBs2R8HonGhN0lcmEyXx4OjI4unr_amWykwNdahtE-4";
+const DEFAULT_VAPID_SUBJECT = "mailto:uprise419@gmail.com";
 
-if (publicKey && privateKey) {
-  try {
-    webpush.setVapidDetails(subject, publicKey, privateKey);
-  } catch (err) {
-    console.error("[push-service] Failed to set VAPID details:", err);
-  }
+export const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || DEFAULT_VAPID_PUBLIC_KEY;
+export const privateKey = process.env.VAPID_PRIVATE_KEY || DEFAULT_VAPID_PRIVATE_KEY;
+export const subject = process.env.VAPID_SUBJECT || DEFAULT_VAPID_SUBJECT;
+
+try {
+  webpush.setVapidDetails(subject, publicKey, privateKey);
+} catch (err) {
+  console.error("[push-service] Failed to set VAPID details:", err);
+}
+
+export function getVapidPublicKey(): string {
+  return publicKey;
 }
 
 export type PushPayload = {
