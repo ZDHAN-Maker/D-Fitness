@@ -8,7 +8,7 @@ import { notificationPrefsSchema } from "@/lib/validations/goals";
 import { getProfileAndSettings } from "@/features/profile/queries";
 import { syncProgress } from "@/features/goals/service";
 import { deleteNotification, generateNotifications, markAllRead, markRead, savePrefs } from "@/features/notifications/service";
-import { saveDeviceSubscription, removeDeviceSubscription, sendPushToUser } from "@/features/notifications/push-service";
+import { saveDeviceSubscription, removeDeviceSubscription, sendPushToUser, getVapidPublicKey } from "@/features/notifications/push-service";
 import { todayInTimeZone } from "@/utils/date";
 
 const refresh = () => {
@@ -63,6 +63,12 @@ export async function syncAppStateAction(): Promise<ActionResult<SyncOutcome>> {
     const changed = sync.goalsUpdated > 0 || sync.goalsCompleted.length > 0 || sync.achievements.length > 0 || gen.created > 0;
     if (changed) refresh();
     return { created: gen.created, goalsCompleted: sync.goalsCompleted, achievements: sync.achievements, changed };
+  });
+}
+
+export async function getVapidPublicKeyAction(): Promise<ActionResult<{ publicKey: string }>> {
+  return runAction(async () => {
+    return { publicKey: getVapidPublicKey() };
   });
 }
 
