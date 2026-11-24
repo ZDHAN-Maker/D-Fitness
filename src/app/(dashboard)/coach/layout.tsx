@@ -9,7 +9,7 @@ export default async function CoachLayout({ children }: { children: React.ReactN
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <header className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold md:text-4xl">AI Coach</h1>
+        <h1 className="text-3xl font-bold md:text-4xl">Smart Fitness &amp; Coach</h1>
         <CoachTabs />
       </header>
       <AiBanner configured={cfg.configured} missing={cfg.missing} hasKey={Boolean(cfg.apiKey)} usage={usage} limits={{ daily: cfg.dailyLimit, vision: cfg.visionDailyLimit }} />

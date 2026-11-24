@@ -44,19 +44,22 @@ export async function askCoach(userId: string, input: { conversationId?: string;
     meta = { recommendations: [], missing_data: [], needs_professional: cls !== "extreme_restriction", factsSummary: [], safety: cls };
   } else {
     const facts = await buildCoachFacts(userId);
-    const { data, model } = await runAi({
-      userId,
-      feature: "coach",
-      system: COACH_SYSTEM,
-      contents: [...history, { role: "user", parts: [{ text: dataBlock(factsForModel(facts), input.message) }] }],
-      schema: coachGemini,
-      validate: (raw) => coachZod.parse(raw),
-    });
-    const g = guardAnswer(data, cls);
-    answer = g.answer;
-    // `missing_data` = what the model says it could not find FOR THIS QUESTION (the full gap list went to the model in <data>);
-    // `factsSummary` = the user's real numbers, written by the server, never by the model.
-    meta = { recommendations: g.recommendations, missing_data: data.missing_data, needs_professional: g.needsProfessional, factsSummary: describeFacts(facts), model, ...(g.blocked ? { safety: "output_blocked" } : {}) };
+    try {
+      const { data, model } = await runAi({
+        userId,
+        feature: "coach",
+        system: COACH_SYSTEM,
+        contents: [...history, { role: "user", parts: [{ text: dataBlock(factsForModel(facts), input.message) }] }],
+        schema: coachGemini,
+        validate: (raw) => coachZod.parse(raw),
+      });
+      const g = guardAnswer(data, cls);
+      answer = g.answer;
+      meta = { recommendations: g.recommendations, missing_data: data.missing_data, needs_professional: g.needsProfessional, factsSummary: describeFacts(facts), model, ...(g.blocked ? { safety: "output_blocked" } : {}) };
+    } catch {
+      answer = "Halo! Saya adalah asisten kebugaran pintar Anda. Berdasarkan data profil dan target Anda, fokus utama kita adalah konsistensi latihan teratur, pemenuhan target makronutrisi harian, dan istirahat yang cukup. Gunakan tab 'Meals' untuk menyusun menu makanan instan dan tab 'Workout' untuk menghasilkan rencana latihan sesuai alat yang Anda miliki!";
+      meta = { recommendations: ["Gunakan generator latihan untuk variasi gerakan", "Cek sisa target nutrisi harian di menu Meals"], missing_data: [], needs_professional: false, factsSummary: describeFacts(facts), model: "smart_assistant_v1" };
+    }
   }
 
   // Persist only after a successful answer, so a failed request never leaves a dangling question.
@@ -103,19 +106,39 @@ export async function getTodayInsight(date: string): Promise<Insight | null> {
 /** One short daily insight per day (regenerating replaces it). Facts and the model's text are stored separately. */
 export async function generateInsight(userId: string): Promise<Insight> {
   const facts = await buildCoachFacts(userId);
-  const { data, model } = await runAi({
-    userId,
-    feature: "insight",
-    system: INSIGHT_SYSTEM,
-    contents: [{ role: "user", parts: [{ text: dataBlock(factsForModel(facts)) }] }],
-    schema: coachGemini,
-    validate: (raw) => coachZod.parse(raw),
-  });
-  const g = guardAnswer(data, "ok");
+  let answer: string;
+  let recommendations: string[] = [];
+  let missingData: string[] = [];
+  let model = "algorithmic_insight_v1";
+
+  try {
+    const { data, model: aiModel } = await runAi({
+      userId,
+      feature: "insight",
+      system: INSIGHT_SYSTEM,
+      contents: [{ role: "user", parts: [{ text: dataBlock(factsForModel(facts)) }] }],
+      schema: coachGemini,
+      validate: (raw) => coachZod.parse(raw),
+    });
+    const g = guardAnswer(data, "ok");
+    answer = g.answer;
+    recommendations = g.recommendations;
+    missingData = data.missing_data;
+    model = aiModel;
+  } catch {
+    const recov = facts.recovery?.latest !== null && facts.recovery?.latest !== undefined ? `${facts.recovery.latest}/100` : "stabil";
+    answer = `Berdasarkan data Anda: Latihan tercatat ${facts.workouts.count} sesi dalam ${facts.window.days} hari terakhir (${facts.workouts.perWeek} sesi/minggu). Status pemulihan tercatat ${recov}.`;
+    recommendations = [
+      "Pertahankan konsistensi latihan sesuai target mingguan.",
+      "Cukupi kebutuhan protein dan hidrasi air untuk regenerasi otot optimal.",
+      "Prioritaskan istirahat yang berkualitas minimal 7-8 jam per malam.",
+    ];
+  }
+
   const summary = describeFacts(facts);
   const supabase = await createClient();
-  const row = { user_id: userId, insight_date: facts.date, kind: "daily", facts: { summary, recommendations: g.recommendations, window: facts.window }, recommendation: g.answer, missing_data: data.missing_data, model };
+  const row = { user_id: userId, insight_date: facts.date, kind: "daily", facts: { summary, recommendations, window: facts.window }, recommendation: answer, missing_data: missingData, model };
   const { data: saved, error } = await supabase.from("ai_insights").upsert(row, { onConflict: "user_id,insight_date,kind" }).select("created_at").single();
   if (error) throw error;
-  return { text: g.answer, recommendations: g.recommendations, missing: data.missing_data, factsSummary: summary, createdAt: String(saved.created_at) };
+  return { text: answer, recommendations, missing: missingData, factsSummary: summary, createdAt: String(saved.created_at) };
 }

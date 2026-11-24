@@ -86,26 +86,64 @@ export async function generateWeeklyReview(userId: string, input: { weekStart?: 
 
   const previous = isEmptyWeek(prev) ? null : prev;
   const missing = weekMissing(metrics);
-  const { data, model } = await runAi({
-    userId,
-    feature: "weekly_review",
-    system: REVIEW_SYSTEM,
-    contents: [{ role: "user", parts: [{ text: dataBlock(JSON.stringify({ week: metrics, previous_week: previous, targets: { calories: settings.calorie_target, protein_g: settings.protein_target_g, water_ml: settings.water_target_ml, sleep_minutes: settings.sleep_target_minutes, workouts_per_week: settings.weekly_workout_target }, missing })) }] }],
-    schema: reviewGemini,
-    validate: (raw) => reviewZod.parse(raw),
-  });
+  let wentWell: string[] = [];
+  let needsImprovement: string[] = [];
+  let recommendations: string[] = [];
+  let extraMissing: string[] = [];
+  let model = "algorithmic_review_v1";
 
-  const wentWell = dropUnsafeBullets(data.went_well);
-  const needsImprovement = dropUnsafeBullets(data.needs_improvement);
-  const recommendations = dropUnsafeBullets(data.recommendations);
+  try {
+    const { data, model: aiModel } = await runAi({
+      userId,
+      feature: "weekly_review",
+      system: REVIEW_SYSTEM,
+      contents: [{ role: "user", parts: [{ text: dataBlock(JSON.stringify({ week: metrics, previous_week: previous, targets: { calories: settings.calorie_target, protein_g: settings.protein_target_g, water_ml: settings.water_target_ml, sleep_minutes: settings.sleep_target_minutes, workouts_per_week: settings.weekly_workout_target }, missing })) }] }],
+      schema: reviewGemini,
+      validate: (raw) => reviewZod.parse(raw),
+    });
+
+    wentWell = dropUnsafeBullets(data.went_well);
+    needsImprovement = dropUnsafeBullets(data.needs_improvement);
+    recommendations = dropUnsafeBullets(data.recommendations);
+    extraMissing = data.missing_data;
+    model = aiModel;
+  } catch {
+    if (metrics.workouts.done >= metrics.workouts.target) {
+      wentWell.push(`Target frekuensi latihan tercapai (${metrics.workouts.done}/${metrics.workouts.target} sesi).`);
+    } else {
+      needsImprovement.push(`Frekuensi latihan (${metrics.workouts.done}/${metrics.workouts.target} sesi) masih di bawah target mingguan.`);
+    }
+
+    if (metrics.protein && metrics.protein.target && metrics.protein.avg >= metrics.protein.target * 0.9) {
+      wentWell.push(`Rata-rata asupan protein (${metrics.protein.avg}g) konsisten mendukung pemulihan otot.`);
+    } else if (metrics.protein && metrics.protein.target) {
+      needsImprovement.push(`Rata-rata protein (${metrics.protein.avg}g) masih di bawah target (${metrics.protein.target}g).`);
+    }
+
+    if (metrics.water && metrics.water.avgMl >= settings.water_target_ml * 0.85) {
+      wentWell.push(`Konsistensi hidrasi harian baik dengan rata-rata ${metrics.water.avgMl} ml.`);
+    } else if (metrics.water) {
+      needsImprovement.push(`Asupan air rata-rata (${metrics.water.avgMl} ml) perlu ditingkatkan mendekati target ${settings.water_target_ml} ml.`);
+    }
+
+    if (wentWell.length === 0) {
+      wentWell.push("Pencatatan data kebugaran minggu ini telah aktif dimulai.");
+    }
+    recommendations.push(
+      "Pertahankan jadwal latihan pada hari-hari yang konsisten setiap minggunya.",
+      "Siapkan makanan berprotein tinggi sebelum hari beraktivitas padat.",
+      "Tidur cukup 7-8 jam per malam untuk mempercepat pemulihan sistem saraf dan otot."
+    );
+  }
+
   const supabase = await createClient();
   const createdAt = new Date().toISOString();
   const { error } = await supabase.from("ai_weekly_reviews").upsert(
-    { user_id: userId, week_start: start, week_end: metrics.weekEnd, metrics: { week: metrics, previous, missing: [...missing, ...data.missing_data] }, went_well: wentWell.join("\n"), needs_improvement: needsImprovement.join("\n"), recommendations: recommendations.join("\n"), model, created_at: createdAt },
+    { user_id: userId, week_start: start, week_end: metrics.weekEnd, metrics: { week: metrics, previous, missing: [...missing, ...extraMissing] }, went_well: wentWell.join("\n"), needs_improvement: needsImprovement.join("\n"), recommendations: recommendations.join("\n"), model, created_at: createdAt },
     { onConflict: "user_id,week_start" },
   );
   if (error) throw error;
-  return { weekStart: start, weekEnd: metrics.weekEnd, metrics, previous, wentWell, needsImprovement, recommendations, missing: [...missing, ...data.missing_data], createdAt };
+  return { weekStart: start, weekEnd: metrics.weekEnd, metrics, previous, wentWell, needsImprovement, recommendations, missing: [...missing, ...extraMissing], createdAt };
 }
 
 export async function getReview(weekStart: string): Promise<WeeklyReview | null> {

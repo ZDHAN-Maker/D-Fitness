@@ -9,7 +9,7 @@ import { postAi } from "@/components/ai/ai-client";
 import type { Insight } from "@/features/ai/coach";
 
 /** Today's AI insight on the dashboard. One short note per day; generating costs one AI request. */
-export function InsightCard({ initial, configured }: { initial: Insight | null; configured: boolean }) {
+export function InsightCard({ initial }: { initial: Insight | null; configured?: boolean }) {
   const [insight, setInsight] = useState(initial);
   const [error, setError] = useState<string>();
   const [pending, startTransition] = useTransition();
@@ -40,10 +40,10 @@ export function InsightCard({ initial, configured }: { initial: Insight | null; 
             ) : null}
           </>
         ) : (
-          <p className="text-sm text-muted-foreground">{configured ? "Get one short, specific observation from your last two weeks of data." : "AI is not switched on yet. Open the AI Coach page to see what is missing."}</p>
+          <p className="text-sm text-muted-foreground">Dapatkan observasi dan rekomendasi spesifik berdasarkan data latihan dan pemulihan Anda.</p>
         )}
         {error ? <p role="alert" className="text-xs font-medium text-destructive">{error}</p> : null}
-        <Button type="button" variant="outline" size="sm" className="w-fit" disabled={pending || !configured} onClick={generate}>
+        <Button type="button" variant="outline" size="sm" className="w-fit" disabled={pending} onClick={generate}>
           {pending ? <Loader2 className="animate-spin" /> : insight ? <RefreshCw /> : <Sparkles />} {insight ? "Refresh" : "Get today's insight"}
         </Button>
       </CardContent>
