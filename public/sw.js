@@ -28,7 +28,14 @@ self.addEventListener("push", (event) => {
     body: data.body,
     icon: "/icon",
     badge: "/icon",
-    vibrate: [100, 50, 100],
+    vibrate: data.vibrate || [500, 200, 500, 200, 500, 200, 800, 200, 800],
+    requireInteraction: data.requireInteraction !== undefined ? data.requireInteraction : true,
+    silent: false,
+    sound: data.sound || "/sounds/alarm.wav",
+    actions: data.actions || [
+      { action: "open", title: "Buka D'GYM" },
+      { action: "close", title: "Tutup" },
+    ],
     data: {
       url: data.url || "/notifications",
       dateOfArrival: Date.now(),
@@ -42,6 +49,10 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
+
+  if (event.action === "close") {
+    return;
+  }
 
   const targetUrl = event.notification.data?.url || "/notifications";
 
