@@ -146,8 +146,10 @@ export async function deleteLogItem(itemId: string) {
 export async function afterFoodLogged(date: string, userToday: string) {
   try {
     const supabase = await createClient();
-    if (date === userToday) await supabase.rpc("update_streak", { p_type: "nutrition", p_date: date });
-    await supabase.rpc("evaluate_achievements");
+    await Promise.all([
+      supabase.rpc("evaluate_achievements"),
+      date === userToday ? supabase.rpc("update_streak", { p_type: "nutrition", p_date: date }) : Promise.resolve(),
+    ]);
   } catch (e) {
     console.error("[after-food-logged]", e);
   }

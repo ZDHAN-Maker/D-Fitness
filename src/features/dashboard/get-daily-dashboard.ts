@@ -56,7 +56,7 @@ type NutritionRow = {
 export async function getDailyDashboard(settings: UserSettings, date: string): Promise<DailyDashboard> {
   const supabase = await createClient();
 
-  const [nutritionRes, waterRes, sessions, scheduled, recentPR, weights, day, goals, streaks, insight] = await Promise.all([
+  const [nutritionRes, waterRes, sessions, scheduled, recentPR, weights, day, goals, streaks, insight, fallbackWeight] = await Promise.all([
     supabase.rpc("daily_nutrition_totals", { p_date: date }),
     supabase.rpc("daily_water_total", { p_date: date }),
     // today's session (in progress or completed), newest first
@@ -68,6 +68,7 @@ export async function getDailyDashboard(settings: UserSettings, date: string): P
     listGoals(),
     listStreaks(date),
     getTodayInsight(date).catch(() => null), // a failing insight lookup must never break the dashboard
+    getLatestWeight().catch(() => null),
   ]);
   if (nutritionRes.error) throw nutritionRes.error;
   if (waterRes.error) throw waterRes.error;
@@ -75,7 +76,7 @@ export async function getDailyDashboard(settings: UserSettings, date: string): P
 
   // Weight: latest entry (even if older than 14 days) and the change across the last 14 days.
   const trend = calculateTrend(weights.map((w) => ({ date: w.date, value: w.weightKg })));
-  const latestW = weights.at(-1) ?? (await getLatestWeight().then((w) => (w ? { date: w.date, weightKg: w.weightKg } : null)));
+  const latestW = weights.at(-1) ?? (fallbackWeight ? { date: fallbackWeight.date, weightKg: fallbackWeight.weightKg } : null);
   const weight: WeightSummary | null = latestW ? { latestKg: latestW.weightKg, date: latestW.date, change: trend?.change ?? null, changeDays: trend?.days ?? null } : null;
 
   const rows = sessions.data ?? [];
