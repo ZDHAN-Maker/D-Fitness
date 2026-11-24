@@ -12,10 +12,16 @@ import { formatWater } from "@/utils/format";
 
 const PRESETS = [250, 500, 750, 1000];
 
-type Props = { date: string; totalMl: number; targetMl: number; compact?: boolean };
+type Props = {
+  date: string;
+  totalMl: number;
+  targetMl: number;
+  compact?: boolean;
+  onOptimisticChange?: (total: number) => void;
+};
 
 /** One-thumb water logging: big preset buttons, optimistic total, undo. `compact` = the dashboard version. */
-export function WaterQuickAdd({ date, totalMl, targetMl, compact = false }: Props) {
+export function WaterQuickAdd({ date, totalMl, targetMl, compact = false, onOptimisticChange }: Props) {
   const [total, setTotal] = useState(totalMl);
   const [custom, setCustom] = useState("");
   const [error, setError] = useState<string>();
@@ -28,16 +34,28 @@ export function WaterQuickAdd({ date, totalMl, targetMl, compact = false }: Prop
   const add = (ml: number) => {
     setError(undefined);
     setNote(undefined);
-    const before = total;
-    setTotal(before + ml); // optimistic
+    setTotal((prev) => {
+      const next = prev + ml;
+      onOptimisticChange?.(next);
+      return next;
+    });
+
     startTransition(async () => {
       const res = await addWaterAction({ date, amountMl: ml });
       if (!res.ok) {
-        setTotal(before);
+        setTotal((prev) => {
+          const rollback = Math.max(0, prev - ml);
+          onOptimisticChange?.(rollback);
+          return rollback;
+        });
         return setError(res.error);
       }
-      setTotal(res.data.totalMl);
-      if (res.data.reached && before < res.data.targetMl) setNote("Daily target reached. Nice work!");
+      setTotal((prev) => {
+        const next = Math.max(prev, res.data.totalMl);
+        onOptimisticChange?.(next);
+        return next;
+      });
+      if (res.data.reached) setNote("Daily target reached. Nice work!");
     });
   };
 
@@ -59,11 +77,21 @@ export function WaterQuickAdd({ date, totalMl, targetMl, compact = false }: Prop
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
           {PRESETS.slice(0, 2).map((ml) => (
-            <Button key={ml} type="button" variant="secondary" size="sm" disabled={pending} onClick={() => add(ml)} aria-label={`Add ${ml} millilitres of water`}>
+            <Button
+              key={ml}
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => add(ml)}
+              aria-label={`Add ${ml} millilitres of water`}
+            >
               + {ml} ml
             </Button>
           ))}
-          <Link href="/hydration" className="ml-auto text-sm font-medium text-primary underline-offset-4 hover:underline">More</Link>
+          <div className="ml-auto flex items-center gap-2">
+            {pending ? <Loader2 className="size-3.5 animate-spin text-muted-foreground" aria-label="Saving..." /> : null}
+            <Link href="/hydration" className="text-sm font-medium text-primary underline-offset-4 hover:underline">More</Link>
+          </div>
         </div>
         {error ? <p role="alert" className="text-xs font-medium text-destructive">{error}</p> : null}
         {note ? <p role="status" className="text-xs font-medium text-fiber">{note}</p> : null}
@@ -76,7 +104,10 @@ export function WaterQuickAdd({ date, totalMl, targetMl, compact = false }: Prop
       <div className="rounded-lg border bg-card p-5">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-muted-foreground">Today</p>
-          <Droplets className="size-5 text-water" aria-hidden="true" />
+          <div className="flex items-center gap-2">
+            {pending ? <Loader2 className="size-4 animate-spin text-muted-foreground" aria-label="Saving..." /> : null}
+            <Droplets className="size-5 text-water" aria-hidden="true" />
+          </div>
         </div>
         <p className="tabular mt-1 font-display text-5xl font-bold leading-none" aria-live="polite">
           {formatWater(p.currentMl)}
@@ -88,7 +119,14 @@ export function WaterQuickAdd({ date, totalMl, targetMl, compact = false }: Prop
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label="Add water">
         {PRESETS.map((ml) => (
-          <Button key={ml} type="button" size="lg" className="h-16 flex-col gap-0 text-lg" disabled={pending} onClick={() => add(ml)} aria-label={`Add ${ml} millilitres`}>
+          <Button
+            key={ml}
+            type="button"
+            size="lg"
+            className="h-16 flex-col gap-0 text-lg"
+            onClick={() => add(ml)}
+            aria-label={`Add ${ml} millilitres`}
+          >
             <span className="tabular font-bold">{ml >= 1000 ? `${ml / 1000} L` : `${ml} ml`}</span>
           </Button>
         ))}
@@ -99,11 +137,11 @@ export function WaterQuickAdd({ date, totalMl, targetMl, compact = false }: Prop
           <label htmlFor="custom-ml" className="text-sm font-medium">Other amount (ml)</label>
           <Input id="custom-ml" type="number" inputMode="numeric" min="1" max="5000" step="10" value={custom} onChange={(e) => setCustom(e.target.value)} aria-invalid={custom !== "" && !customOk} className="mt-1.5" />
         </div>
-        <Button type="submit" variant="secondary" disabled={!customOk || pending}>
+        <Button type="submit" variant="secondary" disabled={!customOk}>
           {pending ? <Loader2 className="animate-spin" /> : null}
           Add
         </Button>
-        <Button type="button" variant="outline" disabled={pending || total === 0} onClick={undo} aria-label="Undo the last entry">
+        <Button type="button" variant="outline" disabled={total === 0} onClick={undo} aria-label="Undo the last entry">
           <Undo2 /> Undo
         </Button>
       </form>

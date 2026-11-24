@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Droplets } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ui/progress-bar";
@@ -6,7 +9,13 @@ import { WaterQuickAdd } from "@/components/hydration/water-quick-add";
 import { formatWater } from "@/utils/format";
 
 export function WaterToday({ currentMl, targetMl, date }: { currentMl: number; targetMl: number; date: string }) {
-  const p = calculateWaterProgress(currentMl, targetMl);
+  const [total, setTotal] = useState(currentMl);
+
+  useEffect(() => {
+    setTotal(currentMl);
+  }, [currentMl]);
+
+  const p = calculateWaterProgress(total, targetMl);
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between">
@@ -20,7 +29,7 @@ export function WaterToday({ currentMl, targetMl, date }: { currentMl: number; t
         </p>
         <ProgressBar value={p.currentMl} max={p.targetMl} colorClass="bg-water" label="Water today" />
         <p className="text-sm text-muted-foreground">{p.remainingMl > 0 ? `${formatWater(p.remainingMl)} to go` : "Target reached"}</p>
-        <WaterQuickAdd compact date={date} totalMl={currentMl} targetMl={targetMl} />
+        <WaterQuickAdd compact date={date} totalMl={total} targetMl={targetMl} onOptimisticChange={setTotal} />
       </CardContent>
     </Card>
   );
