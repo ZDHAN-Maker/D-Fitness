@@ -51,7 +51,6 @@ export function RecipeForm({ initial = { name: "", description: "", instructions
       const res = await saveRecipeAction({ id: initial.id, ...v, ingredients: drafts.map(toIngredientInput) });
       if (!res.ok) return setServerError(res.error);
       router.push("/nutrition/recipes");
-      router.refresh();
     });
   });
 

@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     await requireApiUser();
     const v = waterSchema.parse(await request.json());
     const result = await addWater(v.date, v.amountMl);
-    revalidatePath("/hydration", "layout");
-    revalidatePath("/dashboard");
+    revalidatePath("/hydration", "page");
+    revalidatePath("/dashboard", "page");
     return jsonOk(result, { status: 201 });
   } catch (err) {
     return jsonError(err);

@@ -29,7 +29,7 @@ export async function PUT(request: Request, ctx: Ctx) {
     const id = await idOf(ctx);
     const body = (await request.json()) as Record<string, unknown>;
     await savePlan(planSchema.parse({ ...body, id }));
-    revalidatePath("/workout", "layout");
+    revalidatePath("/workout", "page");
     return jsonOk({ id });
   } catch (err) {
     return jsonError(err);
@@ -42,7 +42,7 @@ export async function DELETE(request: Request, ctx: Ctx) {
     assertSameOrigin(request);
     await requireApiUser();
     await deletePlan(await idOf(ctx));
-    revalidatePath("/workout", "layout");
+    revalidatePath("/workout", "page");
     return jsonOk({ deleted: true });
   } catch (err) {
     return jsonError(err);

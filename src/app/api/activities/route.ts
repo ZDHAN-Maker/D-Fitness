@@ -29,8 +29,8 @@ export async function POST(request: Request) {
     const id = await logActivity(user.id, input);
     const { profile } = await getProfileAndSettings(user.id);
     await afterActivityLogged(id, input.date, todayInTimeZone(profile?.timezone ?? "UTC"));
-    revalidatePath("/activity", "layout");
-    revalidatePath("/dashboard");
+    revalidatePath("/activity", "page");
+    revalidatePath("/dashboard", "page");
     return jsonOk({ id }, { status: 201 });
   } catch (err) {
     return jsonError(err);

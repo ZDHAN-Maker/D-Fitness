@@ -127,7 +127,6 @@ export function ActiveWorkout({ session, previous: initialPrevious, facets, cate
     setFinishing(false);
     if (result) {
       router.push(`/workout/session/${session.id}`);
-      router.refresh();
     }
   }, [result, router, session.id]);
 

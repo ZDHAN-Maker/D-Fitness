@@ -10,8 +10,8 @@ import { confirmScan, discardScan } from "@/features/ai/scan";
 import { z } from "zod";
 
 const refreshFood = () => {
-  revalidatePath("/nutrition", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/nutrition", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 export async function logMealAction(input: unknown): Promise<ActionResult> {
@@ -27,7 +27,7 @@ export async function addGeneratedWorkoutToPlanAction(input: unknown): Promise<A
     const user = await requireUser();
     const v = addGeneratedSchema.parse(input);
     const planId = await addGeneratedToPlan(user.id, v.generatedId, v.name);
-    revalidatePath("/workout", "layout");
+    revalidatePath("/workout", "page");
     return { planId };
   });
 }

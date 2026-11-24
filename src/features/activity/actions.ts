@@ -10,9 +10,9 @@ import { afterActivityLogged, deleteActivity, logActivity, updateActivity } from
 import { todayInTimeZone } from "@/utils/date";
 
 const refresh = () => {
-  revalidatePath("/activity", "layout");
-  revalidatePath("/workout", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/activity", "page");
+  revalidatePath("/workout", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 export async function saveActivityAction(input: unknown): Promise<ActionResult<{ id: string }>> {

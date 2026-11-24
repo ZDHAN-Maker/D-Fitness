@@ -18,8 +18,7 @@ export function GoalStatusControls({ id, status }: { id: string; status: "active
     startTransition(async () => {
       setError(undefined);
       const res = await setGoalStatusAction({ id, status: next });
-      if (!res.ok) return setError(res.error);
-      router.refresh();
+      if (!res.ok) setError(res.error);
     });
 
   return (
@@ -33,7 +32,7 @@ export function GoalStatusControls({ id, status }: { id: string; status: "active
         {status === "active" || status === "paused" ? (
           <Button type="button" variant="ghost" size="sm" disabled={pending} onClick={() => change("abandoned")}><XCircle /> Stop tracking</Button>
         ) : null}
-        <DeleteButton label="goal" action={() => deleteGoalAction(id)} onDone={() => { router.push("/goals"); router.refresh(); }} />
+        <DeleteButton label="goal" action={() => deleteGoalAction(id)} onDone={() => router.push("/goals")} />
       </div>
       {error ? <p role="alert" className="text-xs font-medium text-destructive">{error}</p> : null}
     </div>
@@ -41,7 +40,6 @@ export function GoalStatusControls({ id, status }: { id: string; status: "active
 }
 
 export function ManualProgressForm({ goalId, today, unit }: { goalId: string; today: string; unit: string | null }) {
-  const router = useRouter();
   const [date, setDate] = useState(today);
   const [value, setValue] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -62,10 +60,7 @@ export function ManualProgressForm({ goalId, today, unit }: { goalId: string; to
     startTransition(async () => {
       const res = await addGoalProgressAction(payload);
       setStatus(res.ok ? { ok: true, text: "Updated." } : { ok: false, text: res.error });
-      if (res.ok) {
-        setValue("");
-        router.refresh();
-      }
+      if (res.ok) setValue("");
     });
   };
 

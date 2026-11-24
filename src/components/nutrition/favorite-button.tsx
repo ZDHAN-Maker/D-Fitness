@@ -8,12 +8,11 @@ import { cn } from "@/lib/utils";
 
 export function FavoriteButton({ food, initial, className }: { food: FoodRef; initial: boolean; className?: string }) {
   const [fav, setFav] = useState(initial);
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   return (
     <button
       type="button"
-      disabled={pending}
       aria-pressed={fav}
       aria-label={fav ? "Remove from favourites" : "Add to favourites"}
       onClick={(e) => {

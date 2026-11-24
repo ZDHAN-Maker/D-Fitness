@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     assertSameOrigin(request);
     const user = await requireApiUser();
     await saveMeasurement(user.id, measurementSchema.parse(await request.json()));
-    revalidatePath("/body", "layout");
+    revalidatePath("/body", "page");
     return jsonOk({ saved: true }, { status: 201 });
   } catch (err) {
     return jsonError(err);

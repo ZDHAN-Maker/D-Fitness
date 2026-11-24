@@ -15,8 +15,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
     const v = completeWorkoutSchema.parse({ ...body, sessionId: (await params).id });
     const result = await completeWorkout(v.sessionId, v.effort, v.notes);
-    revalidatePath("/workout", "layout");
-    revalidatePath("/dashboard");
+    revalidatePath("/workout", "page");
+    revalidatePath("/dashboard", "page");
     return jsonOk(result);
   } catch (err) {
     return jsonError(err);

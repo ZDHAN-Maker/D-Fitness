@@ -10,10 +10,8 @@ import { addManualProgress, createGoal, deleteGoal, setGoalStatus, syncProgress,
 import { todayInTimeZone } from "@/utils/date";
 
 const refresh = () => {
-  revalidatePath("/goals", "layout");
-  revalidatePath("/dashboard");
-  revalidatePath("/achievements");
-  revalidatePath("/notifications");
+  revalidatePath("/goals", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 async function todayFor(userId: string) {

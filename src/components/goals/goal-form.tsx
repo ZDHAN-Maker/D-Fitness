@@ -103,7 +103,6 @@ export function GoalForm({ initial, templates, facets, categories, today }: Prop
       const res = await saveGoalAction(payload);
       if (!res.ok) return setServerError(res.error);
       router.push(`/goals/${res.data.id}`);
-      router.refresh();
     });
   };
 

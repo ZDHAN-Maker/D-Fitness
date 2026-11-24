@@ -29,8 +29,8 @@ export async function POST(request: Request) {
     const result = await addLogItem(user.id, input);
     const { profile } = await getProfileAndSettings(user.id);
     await afterFoodLogged(input.date, todayInTimeZone(profile?.timezone ?? "UTC"));
-    revalidatePath("/nutrition", "layout");
-    revalidatePath("/dashboard");
+    revalidatePath("/nutrition", "page");
+    revalidatePath("/dashboard", "page");
     return jsonOk(result, { status: 201 });
   } catch (err) {
     return jsonError(err);

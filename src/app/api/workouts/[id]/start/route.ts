@@ -14,7 +14,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const planId = z.string().uuid().parse((await params).id);
     const { profile } = await getProfileAndSettings(user.id);
     const sessionId = await startWorkout({ planId, date: todayInTimeZone(profile?.timezone ?? "UTC") });
-    revalidatePath("/workout", "layout");
+    revalidatePath("/workout", "page");
     return jsonOk({ sessionId }, { status: 201 });
   } catch (err) {
     return jsonError(err);

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, fieldAria } from "@/components/ui/field";
@@ -16,7 +15,6 @@ const INPUT_LIMIT = 30 * 1024 * 1024; // refuse absurd originals before decoding
 
 /** Resize in the browser, upload straight to the private bucket, then register path + metadata on the server. */
 export function PhotoUploader({ userId, today }: { userId: string; today: string }) {
-  const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = useState(today);
   const [pose, setPose] = useState("front");
@@ -61,7 +59,6 @@ export function PhotoUploader({ userId, today }: { userId: string; today: string
       if (preview) URL.revokeObjectURL(preview);
       setPreview(undefined);
       if (fileRef.current) fileRef.current.value = "";
-      router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
     } finally {

@@ -48,7 +48,7 @@ export async function updateSettingsAction(input: unknown): Promise<ActionResult
       .eq("user_id", user.id);
     if (settings.error) throw settings.error;
 
-    revalidatePath("/dashboard");
-    revalidatePath("/settings");
+    revalidatePath("/dashboard", "page");
+    revalidatePath("/settings", "page");
   });
 }

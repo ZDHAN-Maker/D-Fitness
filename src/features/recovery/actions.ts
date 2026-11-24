@@ -8,8 +8,8 @@ import { isoDate } from "@/lib/validations/nutrition";
 import { clearDay, saveCheckIn } from "@/features/recovery/service";
 
 const refresh = () => {
-  revalidatePath("/recovery", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/recovery", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 export async function saveCheckInAction(input: unknown): Promise<ActionResult> {

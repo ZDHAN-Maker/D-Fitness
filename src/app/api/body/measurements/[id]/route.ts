@@ -10,7 +10,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     assertSameOrigin(request);
     await requireApiUser();
     await deleteMeasurement(z.string().uuid().parse((await params).id));
-    revalidatePath("/body", "layout");
+    revalidatePath("/body", "page");
     return jsonOk({ deleted: true });
   } catch (err) {
     return jsonError(err);
