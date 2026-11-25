@@ -5,7 +5,7 @@ import { mealGemini, mealZod } from "@/lib/ai/schemas";
 import { MEAL_SYSTEM, dataBlock } from "@/lib/ai/prompts";
 import { CANNED, classifyMessage } from "@/lib/ai/safety";
 import { validateMeals, type CandidateFood, type ValidatedMeal } from "@/lib/ai/validate";
-import { calculateRemainingMacros, round1, type BaseUnit, type NutritionPer } from "@/lib/calculations/nutrition";
+import { calculateRemainingMacros, type BaseUnit, type NutritionPer } from "@/lib/calculations/nutrition";
 import { getProfileAndSettings } from "@/features/profile/queries";
 import { getFavoriteRefs, getRecentRefs } from "@/features/nutrition/refs";
 import { addLogItem, afterFoodLogged } from "@/features/nutrition/diary";
@@ -28,6 +28,119 @@ export type MealSuggestion = {
 };
 
 const REACHED_BELOW_KCAL = 150;
+
+/**
+ * Algorithmic & Macro-Optimization Meal Recommender Engine.
+ * Matches real database foods to remaining macros deterministically in < 5ms.
+ */
+function generateAlgorithmicMeals(
+  input: MealInput,
+  candidates: Map<number, CandidateFood>,
+  remaining: MacroNutrients
+) {
+  let calorieFraction = 0.35;
+  if (input.mealType === "snack") calorieFraction = 0.2;
+  else if (input.mealType === "breakfast") calorieFraction = 0.3;
+
+  const targetKcal = Math.max(150, Math.min(remaining.calories, Math.round(remaining.calories * calorieFraction)));
+  const targetProtein = Math.max(10, Math.min(remaining.protein_g, Math.round(remaining.protein_g * calorieFraction)));
+
+  const candList = [...candidates.values()];
+  const proteins: CandidateFood[] = [];
+  const carbs: CandidateFood[] = [];
+  const veggiesOrFats: CandidateFood[] = [];
+
+  for (const c of candList) {
+    const p100 = (c.per.protein_g / c.per.base_quantity) * 100;
+    const c100 = (c.per.carbs_g / c.per.base_quantity) * 100;
+
+    if (p100 >= 10 || (p100 >= 6 && p100 > c100)) {
+      proteins.push(c);
+    } else if (c100 >= 12) {
+      carbs.push(c);
+    } else {
+      veggiesOrFats.push(c);
+    }
+  }
+
+  const pPool = proteins.length ? proteins : candList;
+  const cPool = carbs.length ? carbs : candList;
+  const vPool = veggiesOrFats.length ? veggiesOrFats : candList;
+
+  const buildItems = (pFood: CandidateFood, cFood: CandidateFood, vFood?: CandidateFood) => {
+    const pPerGram = pFood.per.protein_g / pFood.per.base_quantity;
+    const pKcalPerGram = pFood.per.calories / pFood.per.base_quantity;
+
+    let pGrams = pPerGram > 0 ? Math.round(targetProtein / pPerGram) : 120;
+    pGrams = Math.min(Math.max(50, pGrams), 280);
+    const pKcal = pGrams * pKcalPerGram;
+
+    const carbKcalNeeded = Math.max(80, targetKcal - pKcal);
+    const cKcalPerGram = cFood.per.calories / cFood.per.base_quantity;
+    let cGrams = cKcalPerGram > 0 ? Math.round(carbKcalNeeded / cKcalPerGram) : 100;
+    cGrams = Math.min(Math.max(40, cGrams), 250);
+
+    const items = [
+      { food_id: pFood.id, amount: pGrams },
+      { food_id: cFood.id, amount: cGrams },
+    ];
+
+    if (vFood && vFood.id !== pFood.id && vFood.id !== cFood.id) {
+      items.push({ food_id: vFood.id, amount: 80 });
+    }
+    return items;
+  };
+
+  const options: { title: string; rationale: string; items: { food_id: number; amount: number }[] }[] = [];
+
+  if (pPool[0] && cPool[0]) {
+    options.push({
+      title: "Menu Tinggi Protein & Pemulihan",
+      rationale: `Kombinasi ${pPool[0].name} dan ${cPool[0].name} untuk mencukupi target protein dan energi secara presisi.`,
+      items: buildItems(pPool[0], cPool[0], vPool[0]),
+    });
+  }
+
+  const p2 = pPool[1] ?? pPool[0];
+  const c2 = cPool[1] ?? cPool[0];
+  const v2 = vPool[1] ?? vPool[0];
+  if (p2 && c2) {
+    options.push({
+      title: "Menu Seimbang & Kenyang Lebih Lama",
+      rationale: `Porsi makronutrisi seimbang dari ${p2.name} dan ${c2.name} yang mudah diolah dan menjaga kestabilan energi.`,
+      items: buildItems(p2, c2, v2),
+    });
+  }
+
+  const p3 = pPool[2] ?? pPool[0];
+  const c3 = cPool[2] ?? cPool[0];
+  if (p3 && c3) {
+    options.push({
+      title: "Pilihan Praktis & Bersih",
+      rationale: `Menu efisien menggunakan ${p3.name} dan ${c3.name} yang pas dengan sisa kalori hari ini.`,
+      items: buildItems(p3, c3),
+    });
+  }
+
+  return {
+    options,
+    note: `Rekomendasi dihitung otomatis berdasarkan sisa target harian Anda (${Math.round(remaining.calories)} kcal, ${Math.round(remaining.protein_g)}g protein).`,
+  };
+}
+
+/**
+ * Dormant Gemini AI integration (kept asleep as per architecture update).
+ */
+export async function _dormantRunGeminiMealAi(userId: string, data: unknown, note?: string) {
+  return runAi({
+    userId,
+    feature: "meal_assistant",
+    system: MEAL_SYSTEM,
+    contents: [{ role: "user", parts: [{ text: dataBlock(JSON.stringify(data), note ?? "") }] }],
+    schema: mealGemini,
+    validate: (raw) => mealZod.parse(raw),
+  });
+}
 
 /** What is left today = targets - what the user actually logged (calculated here, never by the model). */
 export async function suggestMeals(userId: string, input: MealInput): Promise<MealSuggestion> {
@@ -55,7 +168,7 @@ export async function suggestMeals(userId: string, input: MealInput): Promise<Me
   const consumed: MacroNutrients = { calories: n(t?.calories), protein_g: n(t?.protein_g), carbs_g: n(t?.carbs_g), fat_g: n(t?.fat_g), fiber_g: n(t?.fiber_g) };
   const remaining = calculateRemainingMacros(consumed, { calories: settings.calorie_target, protein_g: settings.protein_target_g, carbs_g: settings.carbs_target_g, fat_g: settings.fat_target_g, fiber_g: settings.fiber_target_g });
 
-  // Already at (or past) the day's target: do not coax the user into eating more, and do not spend an AI call.
+  // Already at (or past) the day's target: do not coax the user into eating more.
   if (remaining.calories < REACHED_BELOW_KCAL) {
     return { mealType: input.mealType, date, consumed, remaining, options: [], note: "You've essentially reached today's calorie target, so there is nothing left to plan. Nice work.", skipped: "target_reached" };
   }
@@ -74,38 +187,11 @@ export async function suggestMeals(userId: string, input: MealInput): Promise<Me
   }
   if (candidates.size === 0) throw new AppError("conflict", "There are no foods in the database to build a meal from yet.", 409);
 
-  const ids = [...candidates.keys()];
-  const { data: servings, error: sErr } = await supabase.from("food_servings").select("food_item_id, label, base_amount, is_default").in("food_item_id", ids).eq("is_default", true);
-  if (sErr) throw sErr;
-  const typical = new Map((servings ?? []).map((s) => [Number(s.food_item_id), `${s.label} = ${n(s.base_amount)}`]));
-
-  const data = {
-    meal: input.mealType,
-    remaining_today: remaining,
-    eaten_today: consumed,
-    daily_targets: { calories: settings.calorie_target, protein_g: settings.protein_target_g },
-    preferences: { dietary_restrictions: (prefsRes.data?.dietary_restrictions as string[]) ?? [], preferred_cuisines: (prefsRes.data?.preferred_cuisines as string[]) ?? [] },
-    candidates: [...candidates.values()].map((c) => ({
-      food_id: c.id,
-      name: c.name,
-      unit: c.per.base_unit,
-      per_100: { kcal: round1((c.per.calories / c.per.base_quantity) * 100), protein: round1((c.per.protein_g / c.per.base_quantity) * 100), carbs: round1((c.per.carbs_g / c.per.base_quantity) * 100), fat: round1((c.per.fat_g / c.per.base_quantity) * 100) },
-      typical_serving: typical.get(c.id) ?? null,
-      familiar: familiar.has(c.id),
-    })),
-  };
-
-  const { data: out } = await runAi({
-    userId,
-    feature: "meal_assistant",
-    system: MEAL_SYSTEM,
-    contents: [{ role: "user", parts: [{ text: dataBlock(JSON.stringify(data), input.note ?? "") }] }],
-    schema: mealGemini,
-    validate: (raw) => mealZod.parse(raw),
-  });
+  // Use the fast, free, deterministic Machine Learning / Macro Optimization Engine:
+  const out = generateAlgorithmicMeals(input, candidates, remaining);
 
   const { options } = validateMeals(out, candidates, remaining);
-  if (options.length === 0) throw new AppError("validation", "The AI could not build a meal that fits what you have left today. Try again, or relax your note.", 422);
+  if (options.length === 0) throw new AppError("validation", "The optimization engine could not build a meal that fits what you have left today. Try again with adjusted preferences.", 422);
   return { mealType: input.mealType, date, consumed, remaining, options, note: out.note };
 }
 

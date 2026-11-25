@@ -239,6 +239,7 @@
         // ============================================================================
         function lerp(a, b, t) { return a + (b - a) * t; }
         function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+        function rotPt(pivot, len, ang) { return [pivot[0] + Math.cos(ang) * len, pivot[1] + Math.sin(ang) * len]; }
 
         function getPoseForExercise(id, t) {
             switch (id) {
@@ -251,11 +252,11 @@
                     const kneeL = [100, 114]; const footL = [98, 134];
                     const kneeR = [120, 114]; const footR = [122, 134];
 
-                    // Saat t=0 tangan rapat di depan dada [96..124], saat t=1 terentang lurus ke samping [42..178]
-                    const elbowL = lerpPt([88, 54], [70, 50], t);
-                    const handL = lerpPt([94, 56], [42, 48], t);
-                    const elbowR = lerpPt([132, 54], [150, 50], t);
-                    const handR = lerpPt([126, 56], [178, 48], t);
+                    // Tangan memegang band setinggi bahu dan merentangkan ke samping tanpa kolaps sendi
+                    const elbowL = lerpPt([82, 54], [70, 50], t);
+                    const handL = lerpPt([66, 56], [42, 48], t);
+                    const elbowR = lerpPt([138, 54], [150, 50], t);
+                    const handR = lerpPt([154, 56], [178, 48], t);
 
                     return {
                         view: 'front',
@@ -278,11 +279,12 @@
                     const kneeL = [84, 112]; const footL = [88, 134];
                     const kneeR = [72, 112]; const footR = [68, 134];
 
-                    // Siku ditarik tinggi ke belakang, tangan berputar ke dekat dahi/telinga (External Rotation)
-                    const elbowL = lerpPt([104, 48], [54, 48], t);
-                    const handL = lerpPt([128, 42], [68, 32], t);
-                    const elbowR = lerpPt([104, 52], [58, 54], t);
-                    const handR = lerpPt([128, 44], [72, 38], t);
+                    // Siku berotasi tinggi ke belakang, tangan melakukan rotasi eksternal ke pelipis/dahi
+                    const elbowL = rotPt(shoulder, 22, lerp(-0.17, -2.85, t));
+                    const handL = rotPt(elbowL, 22, lerp(-0.24, -0.60, t));
+                    const shR = [shoulder[0] + 4, shoulder[1] + 2];
+                    const elbowR = rotPt(shR, 20, lerp(-0.17, -2.80, t));
+                    const handR = rotPt(elbowR, 20, lerp(-0.24, -0.55, t));
 
                     return {
                         view: 'side_facepull',
@@ -290,7 +292,7 @@
                             { type: 'floor', y: 136 },
                             { type: 'facepull_cable', pulleyX: 168, pulleyY: 34, handL, handR, lift: t }
                         ],
-                        head, shoulder, shL: shoulder, shR: shoulder, hip,
+                        head, shoulder, shL: shoulder, shR, hip,
                         elbowL, handL, elbowR, handR,
                         kneeL, footL, kneeR, footR,
                         contraction: t,
@@ -308,11 +310,11 @@
                     const kneeL = [98, 112]; const footL = [96, 134];
                     const kneeR = [122, 112]; const footR = [124, 134];
 
-                    // Saat t=0 dumbbell tergantung di bawah dada, saat t=1 diangkat melengkung tinggi ke samping bahu
-                    const elbowL = lerpPt([92, 86], [68, 62], t);
-                    const handL = lerpPt([98, 108], [46, 56], t);
-                    const elbowR = lerpPt([128, 86], [152, 62], t);
-                    const handR = lerpPt([122, 108], [174, 56], t);
+                    // Mengangkat dumbbell melengkung busur lebar ke samping dengan rotasi bahu
+                    const elbowL = rotPt(shL, 24, lerp(1.75, 3.21, t));
+                    const handL = rotPt(elbowL, 22, lerp(1.30, 2.87, t));
+                    const elbowR = rotPt(shR, 24, lerp(Math.PI - 1.75, Math.PI - 3.21, t));
+                    const handR = rotPt(elbowR, 22, lerp(Math.PI - 1.30, Math.PI - 2.87, t));
 
                     return {
                         view: 'front_bent',
@@ -337,11 +339,11 @@
                     const kneeL = [94, 108]; const footL = [94, 134];
                     const kneeR = [126, 108]; const footR = [126, 134];
 
-                    // Lengan membuka dari handle tengah di depan ke samping belakang
-                    const elbowL = lerpPt([92, 58], [68, 52], t);
-                    const handL = lerpPt([102, 58], [44, 50], t);
-                    const elbowR = lerpPt([128, 58], [152, 52], t);
-                    const handR = lerpPt([118, 58], [176, 50], t);
+                    // Lengan membuka pengungkit mesin dari depan ke samping belakang dengan panjang lengan stabil
+                    const elbowL = lerpPt([82, 54], [70, 52], t);
+                    const handL = lerpPt([66, 56], [44, 50], t);
+                    const elbowR = lerpPt([138, 54], [150, 52], t);
+                    const handR = lerpPt([154, 56], [176, 50], t);
 
                     return {
                         view: 'front_machine',

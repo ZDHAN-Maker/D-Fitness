@@ -27,8 +27,8 @@ export async function POST(request: Request) {
     assertSameOrigin(request);
     const user = await requireApiUser();
     await saveWeight(user.id, weightSchema.parse(await request.json()));
-    revalidatePath("/body", "layout");
-    revalidatePath("/dashboard");
+    revalidatePath("/body", "page");
+    revalidatePath("/dashboard", "page");
     return jsonOk({ saved: true }, { status: 201 });
   } catch (err) {
     return jsonError(err);

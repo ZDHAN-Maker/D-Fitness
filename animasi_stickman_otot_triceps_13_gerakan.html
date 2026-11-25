@@ -330,6 +330,7 @@
         // ============================================================================
         function lerp(a, b, t) { return a + (b - a) * t; }
         function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+        function rotPt(pivot, len, ang) { return [pivot[0] + Math.cos(ang) * len, pivot[1] + Math.sin(ang) * len]; }
 
         function getPoseForExercise(id, t) {
             switch (id) {
@@ -339,8 +340,8 @@
                     const head = [130, 56];
                     const kneeL = [86, 108]; const footL = [84, 134];
                     const elbowL = [86, 66]; // Terkunci sejajar torso
-                    // Tangan berayun dari bawah siku [94, 92] ke lurus di belakang [58, 66]
-                    const handL = lerpPt([94, 92], [58, 66], t);
+                    // Tangan berayun dari bawah siku ke lurus di belakang dengan rotasi sendi siku
+                    const handL = rotPt(elbowL, 28, lerp(1.27, Math.PI, t));
                     return {
                         view: 'side',
                         props: [
@@ -430,7 +431,8 @@
                     const kneeR = [82, 98]; const footR = [68, 98];
                     const elbowR = [116, 84]; const handR = [116, 98];
                     const elbowL = [84, 68];
-                    const handL = lerpPt([90, 94], [56, 66], t);
+                    // Tangan berayun rotasi siku dari bawah ke lurus horizontal belakang
+                    const handL = rotPt(elbowL, 27, lerp(1.34, 3.07, t));
                     return {
                         view: 'side',
                         props: [
@@ -453,7 +455,8 @@
                     const kneeL = [116, 112]; const footL = [122, 134];
                     const kneeR = [94, 112]; const footR = [88, 134];
                     const elbowL = [114, 34]; // Mengarah ke atas depan
-                    const handL = lerpPt([94, 48], [136, 18], t);
+                    // Forearm berputar dari belakang kepala (tekuk) menjulur ke atas depan (ekstensi)
+                    const handL = rotPt(elbowL, 25, lerp(-3.75, -0.63, t));
                     return {
                         view: 'side',
                         props: [
@@ -475,7 +478,8 @@
                     const kneeL = [108, 114]; const footL = [110, 134];
                     const kneeR = [100, 114]; const footR = [100, 134];
                     const elbowL = [102, 30]; // Siku terkunci di samping atas kepala
-                    const handL = lerpPt([86, 50], [102, 8], t);
+                    // Forearm berputar dari belakang leher menjulur vertikal lurus ke atas
+                    const handL = rotPt(elbowL, 24, lerp(-4.04, -1.571, t));
                     return {
                         view: 'side',
                         props: [
@@ -496,7 +500,8 @@
                     const head = [102, 46];
                     const kneeL = [126, 98]; const footL = [128, 134];
                     const elbowL = [98, 36];
-                    const handL = lerpPt([80, 54], [98, 12], t);
+                    // Forearm berputar dari belakang kepala menjulur vertikal lurus ke atas
+                    const handL = rotPt(elbowL, 24, lerp(-3.927, -1.571, t));
                     return {
                         view: 'side',
                         props: [
@@ -543,9 +548,9 @@
                     const hip = [102, 90];
                     const kneeL = [94, 112]; const footL = [92, 134];
                     const kneeR = [110, 112]; const footR = [112, 134];
-                    // Lengan kanan aktif mendorong kabel dari dada [116, 58] ke samping paha [122, 92]
+                    // Lengan kanan aktif mendorong kabel: siku di rusuk [118, 70], forearm berputar dari dada ke samping paha
                     const elbowR = [118, 70];
-                    const handR = lerpPt([112, 56], [122, 92], t);
+                    const handR = rotPt(elbowR, 22, lerp(-2.36, -4.88, t));
                     // Lengan kiri bertolak pinggang (non-aktif)
                     const elbowL = [78, 68];
                     const handL = [88, 84];
@@ -570,8 +575,8 @@
                     const kneeL = [140, 96]; const footL = [144, 134];
                     // Siku tetap terkunci di atas bahu [66, 68]
                     const elbowL = [66, 68];
-                    // Tangan berayun dari dekat dahi [46, 82] ke lurus vertikal [66, 42]
-                    const handL = lerpPt([46, 82], [66, 42], t);
+                    // Tangan berayun dari dekat dahi ke lurus vertikal dengan rotasi sendi siku
+                    const handL = rotPt(elbowL, 25, lerp(-3.75, -1.571, t));
                     return {
                         view: 'side',
                         props: [
@@ -593,8 +598,9 @@
                     const hip = [78, 86];
                     const kneeL = [82, 110]; const footL = [84, 134];
                     const elbowL = [86, 68]; // Siku terkunci di rusuk
-                    const handL = lerpPt([104, 54], [84, 92], t);
-                    const handR = lerpPt([106, 56], [96, 90], t); // Ujung tali kedua melebar saat di bawah
+                    // Tali ditekan ke bawah dengan rotasi sendi siku; tangan kanan melebar di bawah
+                    const handL = rotPt(elbowL, 24, lerp(-0.66, 1.65, t));
+                    const handR = rotPt(elbowL, 24, lerp(-0.66, 1.14, t));
                     return {
                         view: 'side',
                         props: [

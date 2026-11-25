@@ -205,3 +205,301 @@ export async function generateNotifications(userId: string): Promise<GenerateRes
 
   return { created: data?.length ?? 0 };
 }
+
+export type BackgroundNotificationResult = {
+  ok: boolean;
+  usersProcessed: number;
+  notificationsCreated: number;
+  pushesSent: number;
+  pushesFailed: number;
+  timestamp: string;
+};
+
+/**
+ * Background cron job processor.
+ * Runs with service-role admin privileges (bypassing RLS).
+ * Scans active push subscribers, evaluates contextual rules per user,
+ * inserts notifications into DB, and fires Web Push alarms to their devices.
+ */
+export async function processBackgroundNotifications(
+  targetUserId?: string
+): Promise<BackgroundNotificationResult> {
+  let admin;
+  try {
+    admin = createAdminClient();
+  } catch (err) {
+    console.warn("[notifications-cron] Service role client unavailable:", err);
+    return {
+      ok: false,
+      usersProcessed: 0,
+      notificationsCreated: 0,
+      pushesSent: 0,
+      pushesFailed: 0,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  let userIds: string[] = [];
+
+  if (targetUserId) {
+    userIds = [targetUserId];
+  } else {
+    const { data: subs, error: subsErr } = await admin
+      .from("push_subscriptions")
+      .select("user_id");
+
+    if (subsErr) {
+      console.error("[notifications-cron] Failed to query subscriptions:", subsErr);
+      return {
+        ok: false,
+        usersProcessed: 0,
+        notificationsCreated: 0,
+        pushesSent: 0,
+        pushesFailed: 0,
+        timestamp: new Date().toISOString(),
+      };
+    }
+
+    if (!subs || subs.length === 0) {
+      return {
+        ok: true,
+        usersProcessed: 0,
+        notificationsCreated: 0,
+        pushesSent: 0,
+        pushesFailed: 0,
+        timestamp: new Date().toISOString(),
+      };
+    }
+
+    userIds = Array.from(new Set(subs.map((s) => s.user_id as string)));
+  }
+
+  let totalNotifications = 0;
+  let totalPushesSent = 0;
+  let totalPushesFailed = 0;
+  let processedCount = 0;
+
+  for (const uid of userIds) {
+    try {
+      const [profileRes, settingsRes, prefsRes] = await Promise.all([
+        admin.from("profiles").select("*").eq("id", uid).maybeSingle(),
+        admin.from("user_settings").select("*").eq("user_id", uid).maybeSingle(),
+        admin.from("notification_preferences").select("*").eq("user_id", uid).maybeSingle(),
+      ]);
+
+      const profile = profileRes.data;
+      const settings = settingsRes.data;
+      if (!profile || !settings) continue;
+
+      const tz = profile.timezone || "Asia/Jakarta";
+      const date = todayInTimeZone(tz);
+      const minutes = minutesInTimeZone(tz);
+
+      const rawPrefs = prefsRes.data;
+      const prefs: NotificationPrefs = rawPrefs
+        ? {
+            enabled: Boolean(rawPrefs.enabled),
+            workout_reminders: Boolean(rawPrefs.workout_reminders),
+            nutrition_reminders: Boolean(rawPrefs.nutrition_reminders),
+            hydration_reminders: Boolean(rawPrefs.hydration_reminders),
+            recovery_alerts: Boolean(rawPrefs.recovery_alerts),
+            quiet_hours_start: String(rawPrefs.quiet_hours_start).slice(0, 5),
+            quiet_hours_end: String(rawPrefs.quiet_hours_end).slice(0, 5),
+            max_per_day: Number(rawPrefs.max_per_day),
+            workout_time: rawPrefs.workout_time ? String(rawPrefs.workout_time).slice(0, 5) : "07:00",
+            nutrition_time: rawPrefs.nutrition_time ? String(rawPrefs.nutrition_time).slice(0, 5) : "17:00",
+            hydration_time: rawPrefs.hydration_time ? String(rawPrefs.hydration_time).slice(0, 5) : "14:00",
+            min_sleep_hours:
+              rawPrefs.min_sleep_hours !== null && rawPrefs.min_sleep_hours !== undefined
+                ? Number(rawPrefs.min_sleep_hours)
+                : 6.0,
+            min_streak_days:
+              rawPrefs.min_streak_days !== null && rawPrefs.min_streak_days !== undefined
+                ? Number(rawPrefs.min_streak_days)
+                : 3,
+          }
+        : DEFAULT_PREFS;
+
+      if (!prefs.enabled) continue;
+      if (isQuietHours(minutes, prefs.quiet_hours_start, prefs.quiet_hours_end)) continue;
+
+      const since = new Date(Date.now() - 36 * 3600_000).toISOString();
+      const { data: recentRowsData } = await admin
+        .from("notifications")
+        .select("dedupe_key, type, created_at")
+        .eq("user_id", uid)
+        .gte("created_at", since);
+
+      const recentRows = (recentRowsData ?? []) as { dedupe_key: string | null; type: string; created_at: string }[];
+      const sentToday = recentRows.filter(
+        (r) => REMINDER_TYPES.has(r.type) && todayInTimeZone(tz, new Date(r.created_at)) === date
+      ).length;
+
+      if (prefs.max_per_day - sentToday <= 0) continue;
+
+      const fromDateWater = addDays(date, -6);
+      const [plansRes, sessionsRes, foodLogsRes, waterRes, sleepRes, streakRes, goalsRes] = await Promise.all([
+        admin
+          .from("workout_plans")
+          .select("id, name")
+          .eq("user_id", uid)
+          .eq("is_archived", false)
+          .contains("scheduled_days", [weekdayOf(date)]),
+        admin
+          .from("workout_sessions")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", uid)
+          .eq("logged_on", date)
+          .in("status", ["in_progress", "completed"]),
+        admin
+          .from("food_logs")
+          .select("id, food_log_items(id, protein_g)")
+          .eq("user_id", uid)
+          .eq("logged_on", date),
+        admin
+          .from("water_logs")
+          .select("amount_ml, logged_on")
+          .eq("user_id", uid)
+          .gte("logged_on", fromDateWater)
+          .lte("logged_on", date),
+        admin
+          .from("sleep_logs")
+          .select("duration_minutes")
+          .eq("user_id", uid)
+          .eq("sleep_date", date)
+          .maybeSingle(),
+        admin
+          .from("streaks")
+          .select("current_count, last_activity_date")
+          .eq("user_id", uid)
+          .eq("streak_type", "workout")
+          .maybeSingle(),
+        admin
+          .from("goals")
+          .select("id, title, direction, start_value, current_value, target_value, start_date, target_date, status")
+          .eq("user_id", uid)
+          .eq("status", "active")
+          .gte("target_date", date)
+          .lte("target_date", addDays(date, 7)),
+      ]);
+
+      let foodItemsCount = 0;
+      let foodProteinG = 0;
+      for (const log of (foodLogsRes.data ?? []) as Array<{ food_log_items: Array<{ protein_g: number | null }> }>) {
+        const items = log.food_log_items ?? [];
+        foodItemsCount += items.length;
+        for (const it of items) {
+          foodProteinG += Number(it.protein_g ?? 0);
+        }
+      }
+
+      const waterMap = new Map<string, number>();
+      for (const w of (waterRes.data ?? []) as Array<{ amount_ml: number; logged_on: string }>) {
+        const dStr = String(w.logged_on).slice(0, 10);
+        waterMap.set(dStr, (waterMap.get(dStr) ?? 0) + Number(w.amount_ml));
+      }
+      const todayWaterMl = waterMap.get(date) ?? 0;
+      const priorDaysWater: number[] = [];
+      for (let i = 1; i <= 6; i++) {
+        const d = addDays(date, -i);
+        const val = waterMap.get(d) ?? 0;
+        if (val > 0) priorDaysWater.push(val);
+      }
+      const usualWaterMl = priorDaysWater.length >= 2 ? average(priorDaysWater) : null;
+
+      const ctx: NotificationContext = {
+        date,
+        minutes,
+        prefs,
+        sentToday,
+        existingKeys: new Set(recentRows.map((r) => r.dedupe_key).filter((k): k is string => Boolean(k))),
+        scheduledPlan: plansRes.data?.[0] ? { name: (plansRes.data[0] as { name: string }).name } : null,
+        workoutDoneOrActive: (sessionsRes.count ?? 0) > 0,
+        nutrition: {
+          itemsCount: foodItemsCount,
+          proteinG: foodProteinG,
+          proteinTargetG: Number(settings.protein_target_g ?? 120),
+        },
+        water: {
+          todayMl: todayWaterMl,
+          targetMl: Number(settings.water_target_ml ?? 2500),
+          usualDailyMl: usualWaterMl,
+        },
+        sleepMinutes: sleepRes.data?.duration_minutes ? Number(sleepRes.data.duration_minutes) : null,
+        workoutStreak: {
+          current: Number(streakRes.data?.current_count ?? 0),
+          lastActivityDate: streakRes.data?.last_activity_date
+            ? String(streakRes.data.last_activity_date).slice(0, 10)
+            : null,
+        },
+        goalsDue: ((goalsRes.data ?? []) as Row[]).map((g) => ({
+          id: String(g.id),
+          title: String(g.title),
+          daysLeft: Math.round(
+            (Date.parse(String(g.target_date) + "T00:00:00Z") - Date.parse(date + "T00:00:00Z")) / 86_400_000
+          ),
+          progressPct: goalProgressPct({
+            direction: g.direction as "increase" | "decrease",
+            start_value: g.start_value === null ? null : Number(g.start_value),
+            current_value: g.current_value === null ? null : Number(g.current_value),
+            target_value: Number(g.target_value),
+            start_date: String(g.start_date).slice(0, 10),
+            target_date: String(g.target_date).slice(0, 10),
+            status: String(g.status),
+          }),
+        })),
+      };
+
+      const drafts = planNotifications(ctx);
+      processedCount++;
+
+      if (drafts.length === 0) continue;
+
+      const { data: insertedRows, error: insertError } = await admin
+        .from("notifications")
+        .upsert(
+          drafts.map((d) => ({
+            user_id: uid,
+            type: d.type,
+            title: d.title,
+            body: d.body,
+            dedupe_key: d.dedupeKey,
+          })),
+          { onConflict: "user_id,dedupe_key", ignoreDuplicates: true }
+        )
+        .select("id");
+
+      if (insertError) {
+        console.error(`[notifications-cron] Failed to insert notifications for ${uid}:`, insertError);
+        continue;
+      }
+
+      const createdCount = insertedRows?.length ?? 0;
+      totalNotifications += createdCount;
+
+      if (createdCount > 0) {
+        for (const d of drafts) {
+          const pushRes = await sendPushToUser(uid, {
+            title: d.title,
+            body: d.body,
+            url: "/notifications",
+            tag: d.type,
+          });
+          totalPushesSent += pushRes.sent;
+          totalPushesFailed += pushRes.failed;
+        }
+      }
+    } catch (userErr) {
+      console.error(`[notifications-cron] Error processing user ${uid}:`, userErr);
+    }
+  }
+
+  return {
+    ok: true,
+    usersProcessed: processedCount,
+    notificationsCreated: totalNotifications,
+    pushesSent: totalPushesSent,
+    pushesFailed: totalPushesFailed,
+    timestamp: new Date().toISOString(),
+  };
+}

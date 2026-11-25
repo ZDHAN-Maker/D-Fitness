@@ -10,8 +10,8 @@ import { goalStatusSchema, manualProgressSchema } from "@/lib/validations/goals"
 type Ctx = { params: Promise<{ id: string }> };
 const idOf = async (c: Ctx) => z.string().uuid().parse((await c.params).id);
 const refresh = () => {
-  revalidatePath("/goals", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/goals", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 /** GET /api/goals/:id — the goal plus its progress history. */

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReviewPanel } from "@/components/ai/review-panel";
 import { requireUser } from "@/lib/auth/session";
-import { tryGetAiConfig } from "@/lib/ai/config";
 import { isEmptyWeek, weekBounds } from "@/lib/ai/review";
 import { computeWeekMetrics, getReview, listReviews, resolveWeek } from "@/features/ai/review";
 import { getProfileAndSettings } from "@/features/profile/queries";
@@ -34,7 +33,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: Promi
         {tab(`/coach/review?week=${lastWeek}`, "Last week", start === lastWeek)}
         {tab(`/coach/review?week=${thisWeek}`, "This week so far", start === thisWeek)}
       </ul>
-      <ReviewPanel key={start} weekStart={start} metrics={metrics} initial={review} empty={isEmptyWeek(metrics)} disabled={!tryGetAiConfig().configured} />
+      <ReviewPanel key={start} weekStart={start} metrics={metrics} initial={review} empty={isEmptyWeek(metrics)} disabled={false} />
       {history.length ? (
         <section aria-label="Saved reviews" className="flex flex-col gap-2">
           <h2 className="text-lg font-semibold">Saved reviews</h2>

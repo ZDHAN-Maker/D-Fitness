@@ -126,8 +126,10 @@ export async function deleteActivity(id: string) {
 export async function afterActivityLogged(activityId: string, date: string, userToday: string) {
   try {
     const supabase = await createClient();
-    await supabase.rpc("record_activity_prs", { p_activity_log_id: activityId });
-    if (date === userToday) await supabase.rpc("update_streak", { p_type: "workout", p_date: date });
+    await Promise.all([
+      supabase.rpc("record_activity_prs", { p_activity_log_id: activityId }),
+      date === userToday ? supabase.rpc("update_streak", { p_type: "workout", p_date: date }) : Promise.resolve(),
+    ]);
     await supabase.rpc("evaluate_achievements");
   } catch (e) {
     console.error("[after-activity-logged]", e);

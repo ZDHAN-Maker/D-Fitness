@@ -242,6 +242,7 @@
         // ============================================================================
         function lerp(a, b, t) { return a + (b - a) * t; }
         function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+        function rotPt(pivot, len, ang) { return [pivot[0] + Math.cos(ang) * len, pivot[1] + Math.sin(ang) * len]; }
 
         // Interpolasi multi-keyframe (untuk gerakan kompleks seperti Burpees)
         function multiPoseLerp(poses, cycle) {
@@ -267,44 +268,62 @@
         function getPoseForExercise(id, rawTime) {
             // cycle berjalan 0..1 berulang setiap ~1.2 detik (atau 1.8 detik untuk Burpees)
             switch (id) {
-                case 67: { // Burpees (4 Fase: Squat Thrust -> Push-up Plank -> Squat Frog -> Vertical Jump)
+                case 67: { // Burpees (6 Fase Halus: Squat -> Plank -> Squat -> Ayun Lengan -> Lompat -> Mendarat)
                     const cycle = (rawTime * 0.65) % 1;
                     const keyframes = [
                         { // 0: Squat Hands Down
                             phaseName: "1. Squat Thrust",
                             intensity: 0.7,
-                            head: [94, 72], shoulder: [90, 86], hip: [72, 108],
-                            elbowL: [94, 106], handL: [98, 128],
-                            elbowR: [92, 106], handR: [96, 128],
-                            kneeL: [94, 108], footL: [84, 128],
-                            kneeR: [90, 108], footR: [80, 128]
+                            head: [96, 76], shoulder: [92, 90], hip: [70, 96],
+                            elbowL: [96, 108], handL: [100, 128],
+                            elbowR: [94, 108], handR: [98, 128],
+                            kneeL: [74, 116], footL: [82, 128],
+                            kneeR: [72, 116], footR: [80, 128]
                         },
                         { // 1: Plank / Bottom Push-up (Chest & Core Active)
                             phaseName: "2. Push-up / Plank",
                             intensity: 1.0,
-                            head: [118, 96], shoulder: [104, 102], hip: [68, 108],
-                            elbowL: [96, 114], handL: [102, 128],
-                            elbowR: [94, 114], handR: [100, 128],
+                            head: [116, 96], shoulder: [104, 102], hip: [68, 108],
+                            elbowL: [98, 114], handL: [102, 128],
+                            elbowR: [96, 114], handR: [100, 128],
                             kneeL: [46, 118], footL: [26, 128],
                             kneeR: [44, 118], footR: [24, 128]
                         },
-                        { // 2: Squat Tuck Ready to Jump
+                        { // 2: Squat Tuck Recovery
                             phaseName: "3. Tuck Recovery",
                             intensity: 0.75,
-                            head: [98, 68], shoulder: [92, 82], hip: [74, 106],
-                            elbowL: [94, 102], handL: [100, 122],
-                            elbowR: [92, 102], handR: [98, 122],
-                            kneeL: [96, 106], footL: [86, 128],
-                            kneeR: [92, 106], footR: [82, 128]
+                            head: [96, 76], shoulder: [92, 90], hip: [70, 96],
+                            elbowL: [96, 108], handL: [100, 128],
+                            elbowR: [94, 108], handR: [98, 128],
+                            kneeL: [74, 116], footL: [82, 128],
+                            kneeR: [72, 116], footR: [80, 128]
                         },
-                        { // 3: Explosive Jump Up (Quads & Cardio Peak)
-                            phaseName: "4. Explosive Jump!",
+                        { // 3: Ayunan Lengan Naik (Transisi Lepas Landas)
+                            phaseName: "4. Ayunan Naik",
+                            intensity: 0.85,
+                            head: [92, 46], shoulder: [92, 60], hip: [92, 84],
+                            elbowL: [110, 56], handL: [126, 50],
+                            elbowR: [112, 56], handR: [128, 50],
+                            kneeL: [92, 104], footL: [92, 126],
+                            kneeR: [94, 104], footR: [94, 126]
+                        },
+                        { // 4: Explosive Jump Up!
+                            phaseName: "5. Explosive Jump!",
                             intensity: 1.0,
-                            head: [92, 22], shoulder: [92, 36], hip: [92, 70],
-                            elbowL: [88, 18], handL: [86, 6],
-                            elbowR: [96, 18], handR: [98, 6],
-                            kneeL: [90, 92], footL: [88, 112],
-                            kneeR: [94, 92], footR: [96, 112]
+                            head: [92, 22], shoulder: [92, 36], hip: [92, 68],
+                            elbowL: [92, 18], handL: [94, 2],
+                            elbowR: [94, 18], handR: [96, 2],
+                            kneeL: [92, 88], footL: [92, 110],
+                            kneeR: [94, 88], footR: [94, 110]
+                        },
+                        { // 5: Mendarat & Kembali Jongkok
+                            phaseName: "6. Landing",
+                            intensity: 0.8,
+                            head: [92, 54], shoulder: [92, 68], hip: [88, 90],
+                            elbowL: [106, 62], handL: [124, 66],
+                            elbowR: [108, 62], handR: [126, 66],
+                            kneeL: [90, 110], footL: [90, 128],
+                            kneeR: [92, 110], footR: [92, 128]
                         }
                     ];
                     const pose = multiPoseLerp(keyframes, cycle);
@@ -322,12 +341,14 @@
                     const shoulder = [94, 42 - bounce];
                     const hip = [92, 78 - bounce];
 
-                    // Kaki Kiri & Kanan bergantian terangkat tinggi ke dada
-                    const kneeL = lerpPt([122, 66 - bounce], [90, 104 - bounce], n);
-                    const footL = lerpPt([116, 96 - bounce], [88, 128 - bounce * 0.4], n);
+                    // Kaki Kiri & Kanan berotasi pada panggul terangkat tinggi ke dada dengan panjang paha konstan
+                    const thighAngL = lerp(-0.30, 1.50, n);
+                    const kneeL = [hip[0] + Math.cos(thighAngL) * 26, hip[1] + Math.sin(thighAngL) * 26];
+                    const footL = [kneeL[0] - 2, kneeL[1] + 26];
 
-                    const kneeR = lerpPt([90, 104 - bounce], [122, 66 - bounce], n);
-                    const footR = lerpPt([88, 128 - bounce * 0.4], [116, 96 - bounce], n);
+                    const thighAngR = lerp(1.50, -0.30, n);
+                    const kneeR = [hip[0] + Math.cos(thighAngR) * 26, hip[1] + Math.sin(thighAngR) * 26];
+                    const footR = [kneeR[0] - 2, kneeR[1] + 26];
 
                     // Ayunan lengan sprint berlawanan dengan kaki
                     const elbowL = lerpPt([78, 58 - bounce], [108, 56 - bounce], n);
@@ -359,10 +380,10 @@
 
                     // Tangan di samping pinggul memutar pergelangan
                     const wristCircle = Math.sin(angle) * 3;
-                    const elbowL = [82, 66 - lift];
-                    const handL = [74, 74 - lift + wristCircle];
-                    const elbowR = [118, 66 - lift];
-                    const handR = [126, 74 - lift + wristCircle];
+                    const elbowL = [86, 64 - lift];
+                    const handL = [72, 74 - lift + wristCircle];
+                    const elbowR = [114, 64 - lift];
+                    const handR = [128, 74 - lift + wristCircle];
 
                     // Lutut sedikit mengeper, engkel/betis memantul
                     const kneeL = [94, 104 - lift];
@@ -395,13 +416,17 @@
                     const head = [100, 32 - bounce];
                     const shoulder = [100, 48 - bounce];
                     const hip = [100, 82 - bounce];
+                    const shL = [92, 48 - bounce];
+                    const shR = [108, 48 - bounce];
 
-                    // Bahu kiri & kanan untuk tampak depan
-                    const elbowL = lerpPt([84, 68 - bounce], [76, 30 - bounce], t);
-                    const handL = lerpPt([80, 86 - bounce], [94, 12 - bounce], t);
+                    // Ayunan melingkar kedua lengan mengitari bahu ke atas kepala tanpa kolaps sendi
+                    const angL = lerp(1.95, 3.98, t);
+                    const elbowL = [shL[0] + Math.cos(angL) * 20, shL[1] + Math.sin(angL) * 20];
+                    const handL = [elbowL[0] + Math.cos(angL - 0.1) * 22, elbowL[1] + Math.sin(angL - 0.1) * 22];
 
-                    const elbowR = lerpPt([116, 68 - bounce], [124, 30 - bounce], t);
-                    const handR = lerpPt([120, 86 - bounce], [106, 12 - bounce], t);
+                    const angR = lerp(Math.PI - 1.95, Math.PI - 3.98, t);
+                    const elbowR = [shR[0] + Math.cos(angR) * 20, shR[1] + Math.sin(angR) * 20];
+                    const handR = [elbowR[0] + Math.cos(angR + 0.1) * 22, elbowR[1] + Math.sin(angR + 0.1) * 22];
 
                     const kneeL = lerpPt([95, 106 - bounce], [80, 104 - bounce], t);
                     const footL = lerpPt([95, 128 - bounce * 0.5], [66, 128 - bounce * 0.3], t);
@@ -411,7 +436,7 @@
 
                     return {
                         props: [{ type: 'floor', y: 130 }],
-                        head, shoulder, hip,
+                        head, shoulder, shL, shR, hip,
                         elbowL, handL, elbowR, handR,
                         kneeL, footL, kneeR, footR,
                         phaseName: t > 0.6 ? "🔥 Abduksi Bahu & Betis" : "Posisi Rapat Awal",
@@ -422,6 +447,7 @@
 
                 case 22: { // Rowing Machine (Catch -> Drive -> Finish -> Recovery di atas Mesin Dayung)
                     const t = (1 - Math.cos(rawTime * Math.PI * 1.6)) / 2; // 0 = Catch (maju), 1 = Finish (tarik belakang)
+                    const armPull = Math.pow(t, 2.0); // Tarikan lengan terjadi di akhir dorongan kaki
 
                     // Kaki terikat tetap di foot stretcher [64, 118]
                     const foot = [64, 118];
@@ -430,12 +456,12 @@
                     // Lutut menekuk tinggi saat Catch, lurus saat Finish
                     const knee = lerpPt([76, 80], [102, 106], t);
                     // Bahu condong ke depan saat Catch, condong sedikit ke belakang saat Finish
-                    const shoulder = lerpPt([76, 66], [150, 68], t);
-                    const head = lerpPt([74, 50], [154, 52], t);
+                    const shoulder = lerpPt([76, 66], [144, 68], t);
+                    const head = lerpPt([74, 50], [148, 52], t);
 
-                    // Tangan memegang handle rantai: lurus ke roda depan saat Catch, ditarik ke rusuk saat Finish
-                    const hand = lerpPt([56, 76], [134, 82], t);
-                    const elbow = lerpPt([66, 72], [156, 80], t);
+                    // Siku berotasi mengitari bahu dan menarik handle rantai ke rusuk dengan panjang lengan konstan
+                    const elbow = rotPt(shoulder, 20, lerp(2.85, 0.65, armPull));
+                    const hand = rotPt(elbow, 20, lerp(2.95, Math.PI, armPull));
 
                     return {
                         props: [

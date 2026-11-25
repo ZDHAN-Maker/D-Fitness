@@ -25,6 +25,10 @@ export type PushPayload = {
   body: string;
   url?: string;
   tag?: string;
+  sound?: string;
+  requireInteraction?: boolean;
+  vibrate?: number[];
+  actions?: Array<{ action: string; title: string }>;
 };
 
 export type DeviceSubscriptionInput = {
@@ -134,6 +138,13 @@ export async function sendPushToUser(
     body: payload.body,
     url: payload.url || "/notifications",
     tag: payload.tag || "dgym-reminder",
+    sound: payload.sound || "/sounds/alarm.wav",
+    requireInteraction: payload.requireInteraction !== undefined ? payload.requireInteraction : true,
+    vibrate: payload.vibrate || [500, 200, 500, 200, 500, 200, 800, 200, 800],
+    actions: payload.actions || [
+      { action: "open", title: "Buka D'GYM" },
+      { action: "close", title: "Tutup" },
+    ],
   });
 
   await Promise.all(

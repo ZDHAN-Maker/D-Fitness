@@ -18,8 +18,8 @@ import { z } from "zod";
 
 /** Server Actions are thin: authenticate -> validate (Zod) -> call the service -> revalidate. */
 const refresh = () => {
-  revalidatePath("/nutrition", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/nutrition", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 export async function logFoodAction(input: unknown): Promise<ActionResult<{ itemId: string }>> {
@@ -88,7 +88,7 @@ export async function toggleFavoriteAction(ref: unknown): Promise<ActionResult<{
   return runAction(async () => {
     const user = await requireUser();
     const result = await toggleFavorite(user.id, foodRefSchema.parse(ref));
-    revalidatePath("/nutrition", "layout");
+    revalidatePath("/nutrition", "page");
     return result;
   });
 }

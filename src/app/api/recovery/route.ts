@@ -35,8 +35,8 @@ export async function POST(request: Request) {
     const user = await requireApiUser();
     const v = checkInSchema.parse(await request.json());
     await saveCheckIn(user.id, v);
-    revalidatePath("/recovery", "layout");
-    revalidatePath("/dashboard");
+    revalidatePath("/recovery", "page");
+    revalidatePath("/dashboard", "page");
     return jsonOk(await getDay(v.date), { status: 201 });
   } catch (err) {
     return jsonError(err);

@@ -7,8 +7,8 @@ import { activitySchema } from "@/lib/validations/activity";
 
 type Ctx = { params: Promise<{ id: string }> };
 const refresh = () => {
-  revalidatePath("/activity", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/activity", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 /** PATCH /api/activities/:id */

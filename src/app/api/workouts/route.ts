@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     await requireApiUser();
     const body = (await request.json()) as Record<string, unknown>;
     const id = await savePlan(planSchema.parse({ ...body, id: undefined }));
-    revalidatePath("/workout", "layout");
+    revalidatePath("/workout", "page");
     return jsonOk({ id }, { status: 201 });
   } catch (err) {
     return jsonError(err);

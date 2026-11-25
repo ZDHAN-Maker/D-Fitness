@@ -107,7 +107,6 @@ export function PlanBuilder({ initial, facets, categories }: Props) {
       const res = await savePlanAction(payload);
       if (!res.ok) return setServerError(res.error);
       router.push("/workout/plans");
-      router.refresh();
     });
   };
 

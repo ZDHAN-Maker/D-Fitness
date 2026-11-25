@@ -12,8 +12,7 @@ import { saveDeviceSubscription, removeDeviceSubscription, sendPushToUser, getVa
 import { todayInTimeZone } from "@/utils/date";
 
 const refresh = () => {
-  revalidatePath("/notifications", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/notifications", "page");
 };
 
 export async function markReadAction(id: unknown): Promise<ActionResult> {

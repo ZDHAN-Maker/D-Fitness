@@ -11,8 +11,8 @@ import type { PreviousPerformance, SessionExerciseView, SetView } from "@/featur
 
 const uuid = z.string().uuid();
 const refresh = () => {
-  revalidatePath("/workout", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/workout", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 export async function savePlanAction(input: unknown): Promise<ActionResult<{ id: string }>> {
@@ -85,7 +85,6 @@ export async function completeWorkoutAction(input: unknown): Promise<ActionResul
     const v = completeWorkoutSchema.parse(input);
     const result = await completeWorkout(v.sessionId, v.effort, v.notes);
     refresh();
-    revalidatePath("/achievements");
     return result;
   });
 }

@@ -62,7 +62,6 @@ export function ActivityForm({ types, initial, latestWeightKg }: Props) {
       const res = await saveActivityAction(payload);
       if (!res.ok) return setServerError(res.error);
       router.push("/activity");
-      router.refresh();
     });
   };
 

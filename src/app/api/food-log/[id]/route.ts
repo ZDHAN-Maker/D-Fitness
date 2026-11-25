@@ -7,8 +7,8 @@ import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };
 const refresh = () => {
-  revalidatePath("/nutrition", "layout");
-  revalidatePath("/dashboard");
+  revalidatePath("/nutrition", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 /** PATCH /api/food-log/:id — change amount and/or meal. */

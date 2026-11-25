@@ -96,7 +96,6 @@ export function CustomFoodForm({ initial = EMPTY }: { initial?: CustomFoodInitia
       const res = await saveCustomFoodAction(payload);
       if (!res.ok) return setServerError(res.error);
       router.push("/nutrition/custom");
-      router.refresh();
     });
   });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, BellOff, BellRing, CheckCircle2, Info, Loader2, Smartphone } from "lucide-react";
+import { Bell, BellOff, BellRing, CheckCircle2, Info, Loader2, Smartphone, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   subscribePushAction,
@@ -20,6 +20,7 @@ export function PushNotificationManager() {
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [testLoading, setTestLoading] = useState<boolean>(false);
+  const [isPlayingSound, setIsPlayingSound] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<{ ok: boolean; message: string } | null>(null);
   const [isIOS, setIsIOS] = useState<boolean>(false);
   const [isStandalone, setIsStandalone] = useState<boolean>(false);
@@ -153,10 +154,35 @@ export function PushNotificationManager() {
     }
   };
 
+  const handlePlaySound = () => {
+    try {
+      setIsPlayingSound(true);
+      const audio = new Audio("/sounds/alarm.wav");
+      audio.onended = () => setIsPlayingSound(false);
+      audio.onerror = () => setIsPlayingSound(false);
+      void audio.play().catch(() => setIsPlayingSound(false));
+      if ("vibrate" in navigator) {
+        navigator.vibrate([500, 200, 500, 200, 500, 200, 800, 200, 800]);
+      }
+    } catch {
+      setIsPlayingSound(false);
+    }
+  };
+
   const handleSendTest = async () => {
     setFeedback(null);
     setTestLoading(true);
     try {
+      try {
+        const audio = new Audio("/sounds/alarm.wav");
+        void audio.play().catch(() => {});
+        if ("vibrate" in navigator) {
+          navigator.vibrate([500, 200, 500, 200, 500, 200, 800, 200, 800]);
+        }
+      } catch {
+        // Ignore autoplay restrictions
+      }
+
       const res = await sendTestPushAction();
       if (!res.ok) {
         setFeedback({
@@ -219,7 +245,7 @@ export function PushNotificationManager() {
               )}
             </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Terima pemberitahuan langsung di status bar dan layar kunci HP Anda (pengingat jadwal latihan, target air minum, gap protein).
+              Terima alarm pengingat otomatis di status bar dan layar kunci HP Anda (jadwal latihan, minum air, target nutrisi) secara berkala di latar belakang tanpa harus membuka aplikasi terlebih dahulu.
             </p>
           </div>
         </div>
@@ -277,20 +303,36 @@ export function PushNotificationManager() {
         </Button>
 
         {isSubscribed && (
-          <Button
-            type="button"
-            onClick={handleSendTest}
-            disabled={testLoading}
-            variant="secondary"
-            className="cursor-pointer"
-          >
-            {testLoading ? (
-              <Loader2 className="size-4 animate-spin mr-1.5" />
-            ) : (
-              <BellRing className="size-4 mr-1.5 text-amber-400" />
-            )}
-            Kirim Notifikasi Uji Coba ke HP
-          </Button>
+          <>
+            <Button
+              type="button"
+              onClick={handleSendTest}
+              disabled={testLoading}
+              variant="secondary"
+              className="cursor-pointer"
+            >
+              {testLoading ? (
+                <Loader2 className="size-4 animate-spin mr-1.5" />
+              ) : (
+                <BellRing className="size-4 mr-1.5 text-amber-400" />
+              )}
+              Kirim Notifikasi Uji Coba ke HP
+            </Button>
+            <Button
+              type="button"
+              onClick={handlePlaySound}
+              disabled={isPlayingSound}
+              variant="outline"
+              className="cursor-pointer"
+            >
+              <Volume2
+                className={`size-4 mr-1.5 ${
+                  isPlayingSound ? "text-emerald-400 animate-pulse" : "text-sky-400"
+                }`}
+              />
+              {isPlayingSound ? "Membunyikan Alarm..." : "Tes Suara Alarm"}
+            </Button>
+          </>
         )}
       </div>
     </section>

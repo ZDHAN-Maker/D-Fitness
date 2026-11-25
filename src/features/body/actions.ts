@@ -8,16 +8,19 @@ import { measurementSchema, photoMetaSchema, weightSchema } from "@/lib/validati
 import { deleteMeasurement, deletePhoto, deleteWeight, registerPhoto, saveMeasurement, saveWeight } from "@/features/body/service";
 
 const uuid = z.string().uuid();
-const refresh = () => {
-  revalidatePath("/body", "layout");
-  revalidatePath("/dashboard");
+const refreshWeight = () => {
+  revalidatePath("/body", "page");
+  revalidatePath("/dashboard", "page");
+};
+const refreshBody = () => {
+  revalidatePath("/body", "page");
 };
 
 export async function saveWeightAction(input: unknown): Promise<ActionResult> {
   return runAction(async () => {
     const user = await requireUser();
     await saveWeight(user.id, weightSchema.parse(input));
-    refresh();
+    refreshWeight();
   });
 }
 
@@ -25,7 +28,7 @@ export async function deleteWeightAction(id: unknown): Promise<ActionResult> {
   return runAction(async () => {
     await requireUser();
     await deleteWeight(uuid.parse(id));
-    refresh();
+    refreshWeight();
   });
 }
 
@@ -33,7 +36,7 @@ export async function saveMeasurementAction(input: unknown): Promise<ActionResul
   return runAction(async () => {
     const user = await requireUser();
     await saveMeasurement(user.id, measurementSchema.parse(input));
-    refresh();
+    refreshBody();
   });
 }
 
@@ -41,7 +44,7 @@ export async function deleteMeasurementAction(id: unknown): Promise<ActionResult
   return runAction(async () => {
     await requireUser();
     await deleteMeasurement(uuid.parse(id));
-    refresh();
+    refreshBody();
   });
 }
 
@@ -50,7 +53,7 @@ export async function registerPhotoAction(input: unknown): Promise<ActionResult<
   return runAction(async () => {
     const user = await requireUser();
     const id = await registerPhoto(user.id, photoMetaSchema.parse(input));
-    refresh();
+    refreshBody();
     return { id };
   });
 }
@@ -59,6 +62,6 @@ export async function deletePhotoAction(id: unknown): Promise<ActionResult> {
   return runAction(async () => {
     await requireUser();
     await deletePhoto(uuid.parse(id));
-    refresh();
+    refreshBody();
   });
 }

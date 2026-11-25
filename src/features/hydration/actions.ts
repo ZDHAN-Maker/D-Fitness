@@ -9,9 +9,8 @@ import { isoDate } from "@/lib/validations/nutrition";
 import { addWater, deleteWater, undoLastWater, type WaterAdd } from "@/features/hydration/service";
 
 const refresh = () => {
-  revalidatePath("/hydration", "layout");
-  revalidatePath("/dashboard");
-  revalidatePath("/achievements");
+  revalidatePath("/hydration", "page");
+  revalidatePath("/dashboard", "page");
 };
 
 export async function addWaterAction(input: unknown): Promise<ActionResult<WaterAdd>> {

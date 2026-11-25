@@ -28,8 +28,8 @@ export async function POST(request: Request) {
     const id = await createGoal(user.id, input);
     const { profile } = await getProfileAndSettings(user.id);
     const sync = await syncProgress(todayInTimeZone(profile?.timezone ?? "UTC"));
-    revalidatePath("/goals", "layout");
-    revalidatePath("/dashboard");
+    revalidatePath("/goals", "page");
+    revalidatePath("/dashboard", "page");
     return jsonOk({ id, sync }, { status: 201 });
   } catch (err) {
     return jsonError(err);

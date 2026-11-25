@@ -327,6 +327,7 @@
         // ============================================================================
         function lerp(a, b, t) { return a + (b - a) * t; }
         function lerpPt(p1, p2, t) { return [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)]; }
+        function rotPt(pivot, len, ang) { return [pivot[0] + Math.cos(ang) * len, pivot[1] + Math.sin(ang) * len]; }
 
         // Mengembalikan posisi sendi pada fase t (0.0 = awal, 1.0 = puncak kontraksi)
         // Format koordinat: [x, y] pada kanvas 200x150
@@ -367,13 +368,15 @@
                     const footL = lerpPt([135, 85], [170, 110], s);
                     const kneeR = lerpPt([135, 105], [115, 78], s);
                     const footR = lerpPt([170, 110], [135, 85], s);
-                    const elbowL = lerpPt([78, 82], [45, 92], s);
-                    const elbowR = lerpPt([45, 92], [78, 82], s);
+                    const handL = [head[0] - 2, head[1]];
+                    const handR = [head[0] - 2, head[1]];
+                    const elbowL = lerpPt([40, 75 - Math.abs(alt) * 8], [68, 73 - Math.abs(alt) * 8], s);
+                    const elbowR = lerpPt([68, 73 - Math.abs(alt) * 8], [40, 75 - Math.abs(alt) * 8], s);
                     return {
                         props: [{ type: 'floor', y: 126 }],
                         head, shoulder, hip,
-                        elbowL, handL: head,
-                        elbowR, handR: head,
+                        elbowL, handL,
+                        elbowR, handR,
                         kneeL, footL, kneeR, footR,
                         contraction: 0.4 + 0.6 * Math.abs(alt)
                     };
@@ -384,7 +387,7 @@
                     const shoulder = lerpPt([105, 52], [82, 82], t);
                     const head = lerpPt([102, 36], [72, 92], t);
                     const hand = lerpPt([95, 42], [68, 92], t);
-                    const elbow = lerpPt([92, 60], [72, 98], t);
+                    const elbow = lerpPt([90, 62], [82, 108], t);
                     return {
                         props: [
                             { type: 'floor', y: 126 },
@@ -427,8 +430,8 @@
                     const foot = [158, 98];
                     const shoulder = lerpPt([68, 114], [106, 64], t);
                     const head = lerpPt([54, 118], [105, 48], t);
-                    const hand = lerpPt([75, 104], [114, 68], t);
-                    const elbow = lerpPt([72, 118], [102, 78], t);
+                    const hand = lerpPt([76, 102], [114, 68], t);
+                    const elbow = lerpPt([80, 122], [118, 80], t);
                     return {
                         props: [
                             { type: 'bench_decline', x1: 48, y1: 122, x2: 142, y2: 82, x3: 162, y3: 100 },
@@ -621,8 +624,10 @@
                     const shoulder = lerpPt([96, 50], [86, 48], t);
                     const head = lerpPt([96, 38], [76, 42], t);
                     const hip = lerpPt([96, 86], [92, 78], t);
-                    const knee = lerpPt([96, 114], [104, 52], t);
-                    const foot = lerpPt([96, 140], [100, 22], t);
+                    // Kaki berayun melingkar mengitari panggul hingga menyentuh palang atas tanpa deformasi
+                    const legAngle = lerp(1.571, -1.48, t);
+                    const knee = rotPt(hip, 28, legAngle);
+                    const foot = rotPt(knee, 26, legAngle);
                     return {
                         props: [{ type: 'pullup_bar', x: 96, y: 18 }],
                         head, shoulder, hip,

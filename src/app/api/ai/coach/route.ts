@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Record<string, unknown>;
     if (body.insight === true) {
       const insight = await generateInsight(user.id);
-      revalidatePath("/dashboard");
+      revalidatePath("/dashboard", "page");
       return jsonOk(insight);
     }
     return jsonOk(await askCoach(user.id, coachInputSchema.parse(body)));
